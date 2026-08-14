@@ -214,14 +214,19 @@ a:focus-visible, button:focus-visible, input:focus-visible{
 
 /* ---------------- SOURCES ---------------- */
 .sources{background:var(--charcoal-soft); color:var(--cream); padding:80px 0;}
-.sources-inner{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start;}
-@media (max-width:800px){ .sources-inner{grid-template-columns:1fr;} }
+.sources-inner{display:flex; flex-direction:column; gap:36px;}
+.sources-text{max-width:60ch;}
 .sources h2{color:var(--cream);}
 .sources-text p{color:#CFC6B3;}
-.sources-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:16px;}
+.sources-list{
+  list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+}
+@media (max-width:900px){ .sources-list{grid-template-columns:1fr 1fr;} }
+@media (max-width:600px){ .sources-list{grid-template-columns:1fr;} }
 .sources-list li{
   padding:16px 18px; background:rgba(250,247,240,0.06);
-  border-left:3px solid var(--saffron); border-radius:6px; font-size:.95rem;
+  border-left:3px solid var(--saffron); border-radius:6px; font-size:.88rem; line-height:1.4;
 }
 .tag{
   display:inline-block; margin-left:8px; font-size:.7rem; text-transform:uppercase;
