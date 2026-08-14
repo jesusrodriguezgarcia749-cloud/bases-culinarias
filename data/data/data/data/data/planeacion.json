@@ -1,0 +1,49 @@
+{
+  "asignatura": "Bases Culinarias",
+  "clave": "0101",
+  "ciclo": "Primer cuatrimestre",
+  "horas_totales": { "con_docente": 73, "independiente": 55, "creditos": 8 },
+  "duracion_semanas": 16,
+  "horas_semana_aprox": { "con_docente": 4.5, "independiente": 3.5 },
+  "criterios_evaluacion": {
+    "parcial": { "asistencia": "10%", "participacion": "20%", "examen_escrito": "30%", "investigaciones_y_ensayos": "40%" },
+    "final": { "entrega_de_ensayos": "35%", "investigaciones_elaboradas": "35%", "examen_final": "30%" }
+  },
+  "patron_actividades": {
+    "con_docente": ["Lectura y análisis de textos", "Definición de términos y conceptos", "Participación activa en clase", "Ejercicios sugeridos por el docente durante la clase"],
+    "independiente": ["Investigación documental", "Consulta de materiales", "Elaboración de redes conceptuales u otros organizadores", "Elaboración de reportes y ensayos"]
+  },
+  "distribucion_bloques": [
+    {
+      "bloque": 1,
+      "nombre": "Conceptos y definiciones de cocina",
+      "semanas": "1-5",
+      "num_subtemas": 5,
+      "horas_docente_aprox": 23,
+      "horas_independiente_aprox": 17
+    },
+    {
+      "bloque": 2,
+      "nombre": "Conocimiento y manipulación de materias primas",
+      "semanas": "6-10",
+      "num_subtemas": 4,
+      "horas_docente_aprox": 23,
+      "horas_independiente_aprox": 17
+    },
+    {
+      "bloque": 3,
+      "nombre": "Desarrollo de habilidades para la cocina",
+      "semanas": "11-15",
+      "num_subtemas": "4 (con 4 subsubtemas en 3.2)",
+      "horas_docente_aprox": 23,
+      "horas_independiente_aprox": 17
+    },
+    {
+      "bloque": "cierre",
+      "nombre": "Integración y evaluación final",
+      "semanas": "16",
+      "horas_docente_aprox": 4,
+      "horas_independiente_aprox": 4
+    }
+  ]
+}
