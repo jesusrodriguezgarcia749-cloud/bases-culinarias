@@ -9,6 +9,7 @@
 }
 @media (max-width:860px){
   .compendio-layout{grid-template-columns:1fr;}
+  .compendio-side{position:static; top:auto;}
 }
 
 /* --- sidebar / índice --- */
