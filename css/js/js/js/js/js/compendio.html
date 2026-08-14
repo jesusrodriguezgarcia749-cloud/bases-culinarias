@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compendio — Bases Culinarias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/compendio.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">BC</span>
+      <span class="brand-text">Bases Culinarias</span>
+    </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="compendio.html" aria-current="page">Compendio</a>
+      <a href="actividades.html">Actividades</a>
+      <a href="biblioteca.html">Biblioteca</a>
+      <a href="admin.html" class="nav-admin">Panel docente</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="compendio-layout wrap">
+
+  <aside class="compendio-side" aria-label="Índice del compendio">
+    <div class="side-search">
+      <input id="side-search-input" type="search" placeholder="Buscar tema…" autocomplete="off">
+    </div>
+    <nav id="toc" class="toc"><!-- se rellena por JS --></nav>
+  </aside>
+
+  <main class="compendio-main">
+    <div id="no-results" class="no-results" hidden>
+      <p>No encontramos coincidencias. Prueba con otra palabra clave.</p>
+    </div>
+    <div id="content-root"><!-- se rellena por JS --></div>
+  </main>
+
+</div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Compendio digital · Bases Culinarias · Material de apoyo docente, uso interno.</p>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/compendio.js"></script>
+</body>
+</html>
