@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bases Culinarias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/tema.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">BC</span>
+      <span class="brand-text">Bases Culinarias</span>
+    </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="compendio.html">Compendio</a>
+      <a href="actividades.html">Actividades</a>
+      <a href="biblioteca.html">Biblioteca</a>
+      <a href="admin.html" class="nav-admin">Panel docente</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="search-band">
+  <div class="wrap">
+    <form class="search-form" id="tema-search-form" role="search" aria-label="Buscar en el compendio">
+      <label for="tema-search-input" class="sr-only">Buscar tema o subtema</label>
+      <input id="tema-search-input" type="search" placeholder="Buscar: fondos, mise en place, pastas…" autocomplete="off">
+      <button type="submit">Buscar</button>
+    </form>
+  </div>
+</section>
+
+<main class="wrap tema-main">
+  <a href="compendio.html" class="back-link">← Volver al compendio</a>
+
+  <div id="tema-root"><!-- se rellena por JS --></div>
+
+  <nav class="tema-pager" id="tema-pager" aria-label="Navegación entre subtemas">
+    <!-- se rellena por JS -->
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Compendio digital · Bases Culinarias · Material de apoyo docente, uso interno.</p>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/tema.js"></script>
+</body>
+</html>
