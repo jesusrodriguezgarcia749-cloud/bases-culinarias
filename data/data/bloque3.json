@@ -1,0 +1,72 @@
+{
+  "bloque": 3,
+  "nombre": "Desarrollo de habilidades para la cocina",
+  "introduccion": "El último bloque lleva el conocimiento conceptual y el conocimiento de materia prima hacia la habilidad práctica: cómo se manipula, corta, y transforma cada tipo de ingrediente en el punto de partida de un platillo. Es el bloque donde el compendio se vuelve manual de destrezas.",
+  "subtemas": [
+    {
+      "id": "3.1",
+      "titulo": "Conocimientos generales para la elaboración de platillos",
+      "contenido": [
+        "Antes de trabajar cada familia de ingredientes por separado, es necesario dominar un conjunto de habilidades transversales: técnicas de corte (juliana, brunoise, chiffonade, entre otras), técnicas de cocción por concentración, expansión y método mixto, y el manejo seguro de herramientas de cocina (cuchillos, mandolinas, equipos de calor).",
+        "Estas habilidades son transversales porque se aplican sin importar la familia de ingrediente: la misma técnica de corte en juliana sirve para una zanahoria, un pimiento o una pechuga de pollo, y la misma lógica de sellado por calor concentrado aplica a una carne roja o a un filete de pescado, con ajustes de tiempo y temperatura.",
+        "El dominio de estas habilidades generales es lo que permite a un cocinero adaptarse rápido a un ingrediente nuevo: no está aprendiendo una técnica distinta por cada alimento, sino aplicando un repertorio ya conocido a un caso particular."
+      ],
+      "actividad_docente": "Práctica guiada de cortes básicos sobre un vegetal de bajo costo (zanahoria o papa), evaluando uniformidad y técnica de sujeción del cuchillo.",
+      "actividad_independiente": "Elaborar un glosario ilustrado (dibujo o foto propia) de al menos 8 técnicas de corte, con sus medidas aproximadas y un uso típico de cada una.",
+      "horas_docente": 6,
+      "horas_independiente": 4
+    },
+    {
+      "id": "3.2.1",
+      "titulo": "Carnes, aves, pescados y mariscos",
+      "contenido": [
+        "Cada uno de estos grupos requiere un manejo diferenciado. Las carnes rojas se benefician de técnicas de sellado y reposo para retener jugos; las aves requieren atención especial a la cocción completa por razones de seguridad alimentaria; los pescados, al tener poco tejido conectivo, se cocinan en tiempos mucho más cortos que las carnes rojas; los mariscos son extremadamente sensibles a la sobrecocción, que los vuelve gomosos casi de inmediato.",
+        "El despiece y los cortes específicos de cada proteína (por ejemplo, los distintos cortes de res según su uso: parrilla, guisado, molienda) determinan directamente qué técnica de cocción es apropiada — un corte con mucho tejido conectivo necesita cocción larga y húmeda; un corte magro y tierno se arruina con esa misma técnica.",
+        "La seguridad alimentaria es innegociable en este grupo: temperaturas internas mínimas de cocción, cadena de frío ininterrumpida, y separación estricta de superficies de trabajo entre proteína cruda y alimentos listos para consumo."
+      ],
+      "actividad_docente": "Demostración de identificación de cortes de una proteína (res o pollo) y su técnica de cocción recomendada según el corte.",
+      "actividad_independiente": "Investigación documental: elaborar una tabla de temperaturas internas seguras de cocción para carne de res, cerdo, pollo y pescado, citando la fuente.",
+      "horas_docente": 6,
+      "horas_independiente": 4
+    },
+    {
+      "id": "3.2.2",
+      "titulo": "Vegetales y frutos",
+      "contenido": [
+        "Los vegetales y frutos se ven afectados por el calor de forma muy distinta a las proteínas: pierden agua, cambian de color por efecto de sus pigmentos (clorofila, carotenoides), y su textura pasa de crujiente a suave según el tiempo de cocción.",
+        "Técnicas como el blanqueado (breve inmersión en agua hirviendo seguida de choque térmico en agua helada) se usan específicamente para fijar el color de vegetales verdes antes de una cocción posterior o para congelarlos sin que pierdan calidad.",
+        "La oxidación —el oscurecimiento de frutas y vegetales cortados al exponerse al aire— se controla con ácido (jugo de limón, vinagre) o refrigeración inmediata, un conocimiento básico para el manejo de mise en place de vegetales de hoja o frutas de pulpa clara."
+      ],
+      "actividad_docente": "Práctica de blanqueado de un vegetal verde, comparando color y textura antes y después del choque térmico.",
+      "actividad_independiente": "Reporte breve documentando un experimento casero: cortar una fruta u hortaliza propensa a oxidarse, dejar una mitad al aire libre y tratar la otra con ácido, registrando resultados con fotos.",
+      "horas_docente": 5,
+      "horas_independiente": 3
+    },
+    {
+      "id": "3.2.3",
+      "titulo": "Semillas y cereales",
+      "contenido": [
+        "Este grupo incluye arroz, trigo, maíz, avena y leguminosas, entre otros. Su manejo depende en gran medida de su contenido de almidón: al hervir, el almidón absorbe agua y se gelatiniza, lo que da a estos alimentos su textura característica.",
+        "El tipo de grano (largo, corto, redondo, integral) determina el resultado final: un arroz de grano largo queda suelto, mientras uno redondo, rico en almidón, tiende a aglutinarse — de ahí que cada variedad tenga un uso culinario distinto (guarnición vs. risotto vs. sushi).",
+        "Las leguminosas secas generalmente requieren remojo previo para reducir tiempo de cocción y mejorar digestibilidad, mientras que los cereales precocidos o instantáneos alteran ese proceso tradicional a cambio de rapidez."
+      ],
+      "actividad_docente": "Comparación práctica de cocción de dos tipos de arroz (grano largo vs. grano corto) observando diferencias de textura y comportamiento.",
+      "actividad_independiente": "Elaborar una ficha técnica de 3 tipos de cereal o leguminosa, incluyendo tiempo de cocción, proporción de agua y uso culinario recomendado.",
+      "horas_docente": 5,
+      "horas_independiente": 4
+    },
+    {
+      "id": "3.2.4",
+      "titulo": "Hierbas y especias",
+      "contenido": [
+        "Las hierbas aromáticas (frescas, de sabor delicado) y las especias (generalmente secas, de sabor concentrado) cumplen la función de perfumar, resaltar sabor o aportar color a una preparación, pero se manejan de forma distinta: las hierbas frescas suelen agregarse al final de la cocción para no perder su aroma volátil; muchas especias, en cambio, se benefician de un breve tueste o cocción en grasa para liberar su aroma antes de incorporarse al resto del platillo.",
+        "El uso de hierbas y especias es también cultural: definen la identidad de una cocina regional más que cualquier otro grupo de ingredientes (el comino y el achiote en la cocina yucateca, por ejemplo, frente al tomillo y el romero en la cocina mediterránea).",
+        "El exceso es el error más común de un cocinero en formación: una especia o hierba debe apoyar el sabor del ingrediente principal, no dominarlo — la dosificación se aprende con práctica y prueba constante."
+      ],
+      "actividad_docente": "Cata comparativa de especias enteras vs. tostadas, identificando el cambio de aroma antes y después del tueste.",
+      "actividad_independiente": "Investigación documental sobre 5 hierbas o especias representativas de la gastronomía regional del alumno (Campeche/Península de Yucatán), su uso tradicional y un platillo donde son protagonistas.",
+      "horas_docente": 5,
+      "horas_independiente": 4
+    }
+  ]
+}
