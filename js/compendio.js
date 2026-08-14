@@ -1,6 +1,7 @@
-// compendio.js — carga los bloques de contenido y arma la vista navegable + buscador
+// compendio.js — lista de bloques con subtemas como enlaces a tema.html
 
 const DATA_FILES = ['data/bloque1.json', 'data/bloque2.json', 'data/bloque3.json'];
+const ACCENTS = ['#C98A2C', '#A63D2F', '#6B7A5E'];
 
 let BLOQUES = [];
 
@@ -34,43 +35,23 @@ function coincide(subtema, termino) {
   return enTitulo || enContenido;
 }
 
-function renderTOC(termino) {
-  const toc = document.getElementById('toc');
-  toc.innerHTML = '';
-  BLOQUES.forEach(bloque => {
-    const visibles = bloque.subtemas.filter(s => coincide(s, termino));
-    if (termino && visibles.length === 0) return;
-    const titleEl = document.createElement('p');
-    titleEl.className = 'toc-block-title';
-    titleEl.textContent = `Bloque ${bloque.bloque} — ${bloque.nombre}`;
-    toc.appendChild(titleEl);
-    visibles.forEach(s => {
-      const a = document.createElement('a');
-      a.href = `#sub-${s.id}`;
-      a.textContent = `${s.id} ${s.titulo}`;
-      toc.appendChild(a);
-    });
-  });
-}
-
-function renderContenido(termino) {
-  const root = document.getElementById('content-root');
+function render(termino) {
+  const root = document.getElementById('blocks-root');
   const noResults = document.getElementById('no-results');
   root.innerHTML = '';
-
   let totalVisibles = 0;
 
-  BLOQUES.forEach(bloque => {
+  BLOQUES.forEach((bloque, i) => {
     const visibles = bloque.subtemas.filter(s => coincide(s, termino));
     if (visibles.length === 0) return;
     totalVisibles += visibles.length;
 
     const section = document.createElement('section');
-    section.className = 'block-section';
-    section.id = `bloque-${bloque.bloque}`;
+    section.className = 'comp-block';
+    section.style.setProperty('--card-accent', ACCENTS[i % ACCENTS.length]);
 
     const header = document.createElement('div');
-    header.className = 'block-header';
+    header.className = 'comp-block-header';
     header.innerHTML = `
       <p class="section-eyebrow">Bloque ${bloque.bloque}</p>
       <h2>${escaparHTML(bloque.nombre)}</h2>
@@ -78,59 +59,40 @@ function renderContenido(termino) {
     `;
     section.appendChild(header);
 
+    const list = document.createElement('ul');
+    list.className = 'comp-topic-list';
     visibles.forEach(s => {
-      const card = document.createElement('article');
-      card.className = 'subtema-card';
-      card.id = `sub-${s.id}`;
-
-      const parrafos = s.contenido
-        .map(p => `<p>${resaltar(p, termino)}</p>`)
-        .join('');
-
-      card.innerHTML = `
-        <div class="subtema-head">
-          <span class="subtema-id">${s.id}</span>
-          <h3>${resaltar(s.titulo, termino)}</h3>
-        </div>
-        ${parrafos}
-        <div class="activity-grid">
-          <div class="activity-box docente">
-            <h4>Actividad en clase</h4>
-            <p>${escaparHTML(s.actividad_docente)}</p>
-          </div>
-          <div class="activity-box independiente">
-            <h4>Actividad independiente</h4>
-            <p>${escaparHTML(s.actividad_independiente)}</p>
-          </div>
-        </div>
-        <span class="hours-tag">≈ ${s.horas_docente} h con docente · ${s.horas_independiente} h independientes</span>
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <a href="tema.html?id=${encodeURIComponent(s.id)}">
+          <span class="topic-id">${s.id}</span>
+          <span>${resaltar(s.titulo, termino)}</span>
+        </a>
       `;
-      section.appendChild(card);
+      list.appendChild(li);
     });
-
+    section.appendChild(list);
     root.appendChild(section);
   });
 
   noResults.hidden = totalVisibles > 0;
 }
 
-function aplicarBusqueda(termino) {
-  renderTOC(termino);
-  renderContenido(termino);
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
   await cargarBloques();
 
-  // término inicial: query param ?buscar= desde la portada
   const params = new URLSearchParams(window.location.search);
   const inicial = params.get('buscar') || '';
 
-  const sideInput = document.getElementById('side-search-input');
-  sideInput.value = inicial;
-  aplicarBusqueda(inicial);
+  const input = document.getElementById('comp-search-input');
+  input.value = inicial;
+  render(inicial);
 
-  sideInput.addEventListener('input', (e) => {
-    aplicarBusqueda(e.target.value.trim());
+  input.addEventListener('input', (e) => render(e.target.value.trim()));
+
+  const form = document.getElementById('comp-search-form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    render(input.value.trim());
   });
 });
