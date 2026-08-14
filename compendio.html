@@ -30,23 +30,31 @@
   </div>
 </header>
 
-<div class="compendio-layout wrap">
+<section class="comp-hero">
+  <div class="wrap">
+    <p class="eyebrow">Compendio</p>
+    <h1>Elige un subtema</h1>
+    <p class="hero-sub-light">Toca cualquier subtema para abrir su contenido completo en una página aparte.</p>
+  </div>
+</section>
 
-  <aside class="compendio-side" aria-label="Índice del compendio">
-    <div class="side-search">
-      <input id="side-search-input" type="search" placeholder="Buscar tema…" autocomplete="off">
-    </div>
-    <nav id="toc" class="toc"><!-- se rellena por JS --></nav>
-  </aside>
+<section class="search-band">
+  <div class="wrap">
+    <form class="search-form" id="comp-search-form" role="search" aria-label="Buscar en el compendio">
+      <label for="comp-search-input" class="sr-only">Buscar tema o subtema</label>
+      <input id="comp-search-input" type="search" placeholder="Buscar: fondos, mise en place, pastas…" autocomplete="off">
+      <button type="submit">Buscar</button>
+    </form>
+    <p class="search-hint">Busca por subtema exacto del programa o por palabra clave.</p>
+  </div>
+</section>
 
-  <main class="compendio-main">
-    <div id="no-results" class="no-results" hidden>
-      <p>No encontramos coincidencias. Prueba con otra palabra clave.</p>
-    </div>
-    <div id="content-root"><!-- se rellena por JS --></div>
-  </main>
-
-</div>
+<main class="wrap comp-main">
+  <div id="no-results" class="no-results" hidden>
+    <p>No encontramos coincidencias. Prueba con otra palabra clave.</p>
+  </div>
+  <div id="blocks-root"><!-- se rellena por JS --></div>
+</main>
 
 <footer class="site-footer">
   <div class="wrap">
