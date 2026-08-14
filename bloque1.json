@@ -1,0 +1,72 @@
+{
+  "bloque": 1,
+  "nombre": "Conceptos y definiciones de cocina",
+  "introduccion": "Este primer bloque construye el vocabulario y los criterios básicos que un cocinero necesita antes de tocar un solo ingrediente: qué es un género culinario, cómo se estructura una elaboración, qué herramientas se usan para medir con precisión, y bajo qué unidades y temperaturas trabaja una cocina profesional. Es la base sobre la que se apoyan los bloques 2 y 3.",
+  "subtemas": [
+    {
+      "id": "1.1",
+      "titulo": "Géneros y elaboraciones culinarias sencillas",
+      "contenido": [
+        "Un género culinario es una categoría amplia de preparaciones que comparten técnica, estructura o función dentro de un menú: entremeses, sopas, salsas, guarniciones, postres, etc. Clasificar por género permite a un cocinero reconocer patrones comunes entre platillos que a simple vista parecen distintos.",
+        "Una elaboración culinaria sencilla es cualquier preparación de base que no depende de otra preparación previa: un caldo, una vinagreta, un puré simple. Estas elaboraciones sencillas son los 'ladrillos' con los que luego se construyen preparaciones compuestas (una salsa derivada, un plato montado).",
+        "Reconocer el género de un platillo antes de cocinarlo ayuda a anticipar su técnica de cocción, su tiempo aproximado y su función en el menú (entrada, plato fuerte, acompañamiento)."
+      ],
+      "actividad_docente": "Presentar un menú real (puede ser de un restaurante local) y, en grupo, clasificar cada platillo por género; discutir qué técnica probable usa cada uno.",
+      "actividad_independiente": "Elaborar una red conceptual que organice al menos 12 preparaciones (elegidas libremente) según su género culinario.",
+      "horas_docente": 4,
+      "horas_independiente": 3
+    },
+    {
+      "id": "1.2",
+      "titulo": "Elaboración culinaria básica",
+      "contenido": [
+        "La elaboración culinaria básica es el proceso ordenado que transforma materia prima en un alimento comestible: selección, mise en place (preparación previa de ingredientes), técnica de cocción, y montaje o presentación final.",
+        "El concepto de mise en place —'todo en su lugar'— es central: significa tener cada ingrediente pesado, cortado y disponible antes de encender el fuego. Es la diferencia entre una cocina organizada y una improvisada.",
+        "Toda elaboración básica sigue una secuencia lógica: limpieza y preparación de insumos → aplicación de una técnica de cocción → rectificación de sabor → presentación. Esta secuencia se repite, con variantes, en prácticamente cualquier platillo."
+      ],
+      "actividad_docente": "Demostración en vivo de mise en place para una preparación sencilla (por ejemplo, un salteado de vegetales), señalando cada etapa de la secuencia.",
+      "actividad_independiente": "Reporte escrito describiendo la secuencia completa de elaboración de un platillo elegido por el alumno, identificando cada etapa.",
+      "horas_docente": 5,
+      "horas_independiente": 3
+    },
+    {
+      "id": "1.3",
+      "titulo": "Equipos e instrumentos de medida",
+      "contenido": [
+        "La precisión en cocina profesional depende de instrumentos de medida confiables: básculas (de cocina y de precisión), tazas y cucharas medidoras, jarras graduadas, termómetros de sonda, y balanzas digitales.",
+        "Cada instrumento tiene un propósito distinto: una báscula mide masa (gramos, kilogramos); una jarra graduada mide volumen (mililitros, litros); un termómetro de sonda mide temperatura interna, crítica para verificar cocción segura en carnes y para procesos de repostería (como el punto del caramelo).",
+        "Un error común de principiante es medir por volumen ingredientes que deberían medirse por peso (como la harina), lo que genera inconsistencia entre una preparación y otra. La cocina profesional prioriza el peso sobre el volumen siempre que sea posible."
+      ],
+      "actividad_docente": "Taller práctico de manejo de instrumentos: pesar, medir volumen y tomar temperatura del mismo ingrediente con distintos instrumentos, comparando resultados.",
+      "actividad_independiente": "Investigación documental sobre 5 instrumentos de medida usados en cocina profesional que no se hayan visto en clase, con su función específica.",
+      "horas_docente": 5,
+      "horas_independiente": 4
+    },
+    {
+      "id": "1.4",
+      "titulo": "Tablas de temperaturas y manuales de equipos",
+      "contenido": [
+        "Las tablas de temperatura son referencias estandarizadas que indican la temperatura interna segura o ideal para distintos alimentos y procesos: cocción de carnes (res, cerdo, ave, pescado), temperaturas de refrigeración y congelación, y puntos críticos en repostería (caramelo, chocolate, azúcar).",
+        "Conocer estas tablas no es memorización arbitraria: están ligadas a seguridad alimentaria (evitar zona de peligro bacteriano, entre 6°C y 65°C aproximadamente) y a resultados de textura y sabor.",
+        "Los manuales de equipos (hornos, marmitas, freidoras, hornos combinados) documentan las capacidades y límites de cada aparato: rangos de temperatura, tiempos de precalentado, capacidad de carga. Leer el manual antes de usar un equipo nuevo evita accidentes y resultados inconsistentes."
+      ],
+      "actividad_docente": "Análisis conjunto de una tabla de temperaturas de cocción segura y discusión de por qué cada rango existe (seguridad vs. textura).",
+      "actividad_independiente": "Elaborar una tabla propia de temperaturas de cocción para 8 alimentos distintos (carnes, aves, pescados), citando la fuente consultada.",
+      "horas_docente": 4,
+      "horas_independiente": 3
+    },
+    {
+      "id": "1.5",
+      "titulo": "Unidades y pesos establecidos para la elaboración de alimentos y bebidas",
+      "contenido": [
+        "La cocina profesional trabaja principalmente con el sistema métrico decimal (gramos, kilogramos, mililitros, litros), aunque en textos y recetarios de origen anglosajón es común encontrar onzas, libras y tazas — de ahí la importancia de saber convertir entre sistemas.",
+        "Existen además unidades propias del oficio que no son de peso ni volumen estricto, como la 'pizca', el 'punto' o la 'cucharada al gusto', que dependen de la experiencia del cocinero más que de una medida exacta — útiles en ajustes finales, pero no recomendables para procesos que requieren precisión (como panadería o pastelería).",
+        "Estandarizar las unidades usadas en una cocina (recetario interno, fichas técnicas) es lo que permite que un platillo salga igual sin importar quién lo prepare — esto es central en cocina de producción y franquicias."
+      ],
+      "actividad_docente": "Ejercicio de conversión de unidades en equipos (gramos ↔ onzas, mililitros ↔ tazas, °C ↔ °F) aplicado a una receta real.",
+      "actividad_independiente": "Convertir una receta completa (ingredientes y temperaturas) del sistema imperial al métrico decimal, mostrando el procedimiento.",
+      "horas_docente": 5,
+      "horas_independiente": 4
+    }
+  ]
+}
