@@ -1,0 +1,59 @@
+{
+  "bloque": 2,
+  "nombre": "Conocimiento y manipulación de materias primas",
+  "introduccion": "Con el vocabulario y las herramientas del Bloque 1 ya dominadas, este bloque se enfoca en la materia prima misma: de dónde viene, cómo se reconoce su calidad, cómo se conserva y qué la hace apta —o no— para determinada preparación. Sin este conocimiento, ni la mejor técnica salva un ingrediente mal elegido.",
+  "subtemas": [
+    {
+      "id": "2.1",
+      "titulo": "Aprovisionamiento de materias primas",
+      "contenido": [
+        "El aprovisionamiento es el proceso de seleccionar, solicitar y recibir los insumos que una cocina necesita. Incluye decidir proveedores, calcular cantidades según la producción esperada, y verificar que lo recibido cumpla con lo pedido en calidad y cantidad.",
+        "Un buen aprovisionamiento reduce mermas (desperdicio) y evita rupturas de stock a mitad de servicio. Se apoya en herramientas simples pero efectivas: listas de pedido estandarizadas, fichas de especificación por producto (variedad, calibre, origen) y control de fechas de recepción.",
+        "La recepción de mercancía es un punto crítico de control: se debe verificar temperatura de llegada (especialmente en cárnicos, lácteos y pescados), integridad del empaque, fecha de caducidad y, cuando aplica, documentación sanitaria del proveedor."
+      ],
+      "actividad_docente": "Simulación de recepción de mercancía: revisar una 'entrega' simulada con productos de distinta calidad y decidir cuáles se aceptan y cuáles se rechazan, justificando el criterio.",
+      "actividad_independiente": "Diseñar una ficha de recepción de mercancía (formato propio) que incluya los puntos de control mínimos para verificar carnes, lácteos y vegetales.",
+      "horas_docente": 6,
+      "horas_independiente": 4
+    },
+    {
+      "id": "2.2",
+      "titulo": "Materias primas de uso común",
+      "contenido": [
+        "Las materias primas de uso común en una cocina se agrupan en grandes familias: cárnicos (res, cerdo, ave, caza), pescados y mariscos, lácteos y huevo, cereales y leguminosas, hortalizas y frutas, y grasas y aceites. Cada familia tiene su propia lógica de manejo, temporada y conservación.",
+        "Familiarizarse con estas familias no es solo memorizar una lista: es entender qué combinaciones son naturales dentro de una misma tradición culinaria y qué sustituciones son razonables cuando un ingrediente no está disponible.",
+        "El manejo higiénico varía por familia: los cárnicos y pescados requieren cadena de frío estricta y áreas de trabajo separadas para evitar contaminación cruzada; las hortalizas requieren lavado y desinfección; los lácteos requieren control estricto de temperatura de refrigeración."
+      ],
+      "actividad_docente": "Ejercicio de clasificación: dado un listado mixto de 30 ingredientes, agruparlos por familia y explicar un criterio de manejo higiénico específico de cada grupo.",
+      "actividad_independiente": "Investigación documental sobre una familia de materias primas (elegida por el alumno) profundizando en sus subcategorías, temporada y usos culinarios típicos.",
+      "horas_docente": 6,
+      "horas_independiente": 5
+    },
+    {
+      "id": "2.3",
+      "titulo": "Variedades y características físicas",
+      "contenido": [
+        "Dentro de cada materia prima existen variedades con características físicas distintas que determinan su uso ideal: no todas las papas sirven para freír, no todos los tomates sirven para salsa, no todos los cortes de carne sirven para asar a la parrilla.",
+        "Reconocer estas características —textura, contenido de agua, contenido de almidón, firmeza, grasa intramuscular— permite elegir la variedad correcta para el resultado que se busca, en vez de forzar una técnica sobre un ingrediente que no la soporta.",
+        "Esta identificación se apoya en los sentidos entrenados del cocinero: color, aroma, firmeza al tacto, y en criterios objetivos como calibre, peso y grado de maduración."
+      ],
+      "actividad_docente": "Estación de reconocimiento sensorial: comparar 3-4 variedades de un mismo ingrediente (por ejemplo, distintos tipos de papa o de tomate) e identificar diferencias físicas y su uso ideal.",
+      "actividad_independiente": "Elaborar una ficha comparativa de al menos 4 variedades de un ingrediente, detallando características físicas y uso culinario recomendado para cada una.",
+      "horas_docente": 6,
+      "horas_independiente": 4
+    },
+    {
+      "id": "2.4",
+      "titulo": "Cualidades gastronómicas",
+      "contenido": [
+        "Más allá de su clasificación física, cada materia prima aporta cualidades gastronómicas: sabor (dulce, salado, ácido, amargo, umami), aroma, textura en boca, y color — todos factores que un cocinero combina deliberadamente al diseñar un platillo.",
+        "El concepto de equilibrio de sabores es central: un platillo bien logrado balancea estos elementos en vez de dejar que uno domine por accidente. Entender la cualidad gastronómica de cada ingrediente es lo que permite anticipar ese equilibrio antes de cocinar, no solo corregirlo al probar.",
+        "Las cualidades gastronómicas también determinan qué ingredientes combinan naturalmente entre sí (afinidad de sabores) y cuáles requieren un elemento puente (una grasa, un ácido, una especia) para integrarse bien en un mismo platillo."
+      ],
+      "actividad_docente": "Cata dirigida de 4-5 ingredientes crudos, identificando en grupo sus cualidades gastronómicas dominantes y proponiendo combinaciones de afinidad.",
+      "actividad_independiente": "Ensayo corto (1-2 cuartillas) analizando el equilibrio de sabores de un platillo tradicional a elección del alumno, identificando qué ingrediente aporta cada cualidad gastronómica.",
+      "horas_docente": 5,
+      "horas_independiente": 4
+    }
+  ]
+}
