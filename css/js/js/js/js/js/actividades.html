@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividades — Bases Culinarias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/actividades.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">BC</span>
+      <span class="brand-text">Bases Culinarias</span>
+    </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="compendio.html">Compendio</a>
+      <a href="actividades.html" aria-current="page">Actividades</a>
+      <a href="biblioteca.html">Biblioteca</a>
+      <a href="admin.html" class="nav-admin">Panel docente</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="act-hero">
+  <div class="wrap">
+    <p class="eyebrow">Autoevaluación</p>
+    <h1>Pon a prueba lo que sabes</h1>
+    <p class="hero-sub">Un set de preguntas por bloque, tomadas directamente del compendio. Sirven para repasar antes del examen parcial o simplemente para confirmar que un tema quedó claro.</p>
+  </div>
+</section>
+
+<main class="wrap act-main">
+  <div id="quiz-tabs" class="quiz-tabs"></div>
+  <div id="quiz-root"></div>
+  <div id="quiz-result" class="quiz-result" hidden></div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Compendio digital · Bases Culinarias · Material de apoyo docente, uso interno.</p>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/actividades.js"></script>
+</body>
+</html>
