@@ -1,0 +1,25 @@
+.prog-card{
+  background:var(--cream); border-radius:var(--radius); box-shadow:var(--shadow-card);
+  padding:26px 28px; margin-bottom:22px;
+}
+.prog-card h2{font-size:1.1rem; margin-bottom:14px;}
+
+.prog-bloque-row{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:12px 0; border-bottom:1px solid var(--line);
+}
+.prog-bloque-row:last-child{border-bottom:none;}
+.prog-bloque-nombre{font-weight:600; min-width:90px;}
+.prog-bloque-bar-track{
+  flex:1; height:10px; border-radius:999px; background:var(--line); overflow:hidden;
+}
+.prog-bloque-bar-fill{height:100%; background:var(--sage);}
+.prog-bloque-stat{font-size:.82rem; color:var(--ink-soft); min-width:150px; text-align:right;}
+
+.prog-practica-card{
+  background:#fff; border:1px solid var(--line); border-radius:10px;
+  padding:14px 16px; margin-bottom:10px;
+}
+.prog-practica-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;}
+.prog-practica-score{font-weight:700; color:var(--sage);}
+.prog-practica-date{font-size:.8rem; color:var(--ink-soft);}
