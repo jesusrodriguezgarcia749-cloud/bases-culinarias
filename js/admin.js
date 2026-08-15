@@ -104,9 +104,7 @@ document.getElementById('grupo-select').addEventListener('change', (e) => {
 document.getElementById('form-alumno').addEventListener('submit', agregarAlumno);
 document.getElementById('btn-guardar-eval').addEventListener('click', guardarEvaluacion);
 document.getElementById('hist-alumno-select').addEventListener('change', cargarHistorial);
-document.getElementById('eval-alumno-select').addEventListener('change', () => {
-  resetRubricaYChecklist();
-});
+
 
 document.getElementById('eval-fecha').valueAsDate = new Date();
 document.getElementById('asis-fecha').valueAsDate = new Date();
@@ -122,6 +120,7 @@ renderChecklist();
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`));
+  if (tab === 'evaluar') renderListaEvaluar();
   if (tab === 'historial') cargarHistorial();
   if (tab === 'participacion') cargarParticipacion();
   if (tab === 'asistencia') cargarAsistencia();
@@ -178,6 +177,7 @@ async function cargarAlumnos() {
   alumnosCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   renderAlumnos(alumnosCache);
   renderSelectAlumnos();
+  renderListaEvaluar();
 }
 
 function renderAlumnos(lista) {
@@ -201,7 +201,7 @@ function renderAlumnos(lista) {
 }
 
 function renderSelectAlumnos() {
-  ['eval-alumno-select', 'hist-alumno-select'].forEach(id => {
+  ['hist-alumno-select'].forEach(id => {
     const select = document.getElementById(id);
     const placeholder = select.options[0];
     select.innerHTML = '';
@@ -250,6 +250,46 @@ async function eliminarAlumno(alumnoId) {
   if (!ok) return;
   await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId));
   await cargarAlumnos();
+}
+
+// ---------- LISTA DE ALUMNOS PARA EVALUAR ----------
+let alumnoEvaluandoId = null;
+
+function renderListaEvaluar() {
+  const cont = document.getElementById('eval-lista-alumnos');
+  const empty = document.getElementById('eval-alumnos-empty');
+  const form = document.getElementById('eval-form');
+  cont.innerHTML = '';
+
+  if (!grupoActivo) {
+    empty.hidden = false; empty.textContent = 'Elige un grupo primero.';
+    form.hidden = true; return;
+  }
+  if (alumnosCache.length === 0) {
+    empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.';
+    form.hidden = true; return;
+  }
+  empty.hidden = true;
+
+  alumnosCache.forEach(a => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    const activo = a.id === alumnoEvaluandoId;
+    row.className = 'asis-row' + (activo ? ' eval-activo' : '');
+    row.innerHTML = `
+      <span class="student-name">${escaparHTML(a.nombre)}</span>
+      <span class="asis-estado-label">${activo ? 'Calificando' : 'Calificar →'}</span>
+    `;
+    row.addEventListener('click', () => {
+      alumnoEvaluandoId = a.id;
+      resetRubricaYChecklist();
+      document.getElementById('eval-alumno-activo').textContent = `Calificando a: ${a.nombre}`;
+      form.hidden = false;
+      renderListaEvaluar();
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    cont.appendChild(row);
+  });
 }
 
 // ---------- RÚBRICA ----------
@@ -311,10 +351,10 @@ function renderChecklist() {
 
 // ---------- GUARDAR EVALUACIÓN ----------
 async function guardarEvaluacion() {
-  const alumnoId = document.getElementById('eval-alumno-select').value;
+  const alumnoId = alumnoEvaluandoId;
   const msg = document.getElementById('eval-msg');
   if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
-  if (!alumnoId) { alert('Elige un alumno.'); return; }
+  if (!alumnoId) { alert('Elige un alumno de la lista.'); return; }
 
   const criterios = {};
   CRITERIOS.forEach(c => { criterios[c.id] = parseFloat(document.getElementById(`crit-${c.id}`).value); });
@@ -334,7 +374,9 @@ async function guardarEvaluacion() {
   msg.hidden = false;
   setTimeout(() => { msg.hidden = true; }, 3000);
   resetRubricaYChecklist();
-  document.getElementById('eval-alumno-select').value = '';
+  alumnoEvaluandoId = null;
+  document.getElementById('eval-form').hidden = true;
+  renderListaEvaluar();
 }
 
 // ---------- HISTORIAL (prácticas de cocina) ----------
