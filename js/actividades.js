@@ -1,7 +1,11 @@
 // actividades.js — evaluación FORMATIVA por subtema, ligada al alumno real.
-// Principios: retroalimentación con explicación (no solo correcto/incorrecto),
-// reintentos ilimitados, y el punto de Participación se registra en Firestore
-// SOLO la primera vez que el alumno acierta — nunca por solo intentarlo.
+// Principios: retroalimentación con explicación (no solo correcto/incorrecto);
+// el alumno contesta TODAS las preguntas de un subtema antes de revisar (no
+// hay revisión pregunta por pregunta, para evitar adivinar a fuerza de
+// intentos); si falla alguna, debe volver a contestar todas las pendientes
+// del subtema antes de poder revisar otra vez. El punto de Participación se
+// registra en Firestore SOLO la primera vez que el alumno acierta esa
+// actividad — nunca por solo intentarlo.
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
@@ -20,8 +24,8 @@ const NOMBRES_BLOQUE = { 1: 'Bloque 1', 2: 'Bloque 2', 3: 'Bloque 3' };
 
 const SESSION_KEY = 'bc_sesion_alumno';
 
-let sesion = null;           // { grupoId, alumnoId, nombre, pin }
-let actividadesPorBloque = {}; // { 1: [ {...}, ... ] }
+let sesion = null;              // { grupoId, alumnoId, nombre, pin }
+let actividadesPorBloque = {};  // { 1: [ {...}, ... ] }
 let completadasSet = new Set(); // ids de actividades ya correctas ("b1-1.1-a", ...)
 let bloqueActivo = 1;
 
@@ -164,19 +168,101 @@ async function renderBloque() {
   const subtemas = [...new Set(actividades.map(a => a.subtema))];
 
   subtemas.forEach(sub => {
-    const section = document.createElement('section');
-    section.className = 'act-subtema-block';
-    section.innerHTML = `<h2 class="act-subtema-titulo">Subtema ${sub}</h2>`;
-
-    actividades.filter(a => a.subtema === sub).forEach(act => {
-      section.appendChild(renderTarjetaActividad(act));
-    });
-
-    root.appendChild(section);
+    const actsDelSubtema = actividades.filter(a => a.subtema === sub);
+    root.appendChild(renderSubtema(sub, actsDelSubtema));
   });
 }
 
-function renderTarjetaActividad(act) {
+// Renderiza un subtema completo: todas sus preguntas + un solo botón "Revisar
+// subtema" al final. No hay revisión pregunta por pregunta.
+function renderSubtema(sub, actividades) {
+  const section = document.createElement('section');
+  section.className = 'act-subtema-block';
+  section.innerHTML = `<h2 class="act-subtema-titulo">Subtema ${sub}</h2>`;
+
+  const respuestas = {}; // { idFull: idx elegido }
+
+  const pendientes = actividades.filter(a => !completadasSet.has(idCompleto(a)));
+  const todasCompletadas = pendientes.length === 0;
+
+  actividades.forEach(act => {
+    section.appendChild(renderTarjetaActividad(act, respuestas));
+  });
+
+  if (todasCompletadas) {
+    const done = document.createElement('p');
+    done.className = 'subtema-done-msg';
+    done.textContent = '✓ Ya completaste correctamente todas las actividades de este subtema.';
+    section.appendChild(done);
+    return section;
+  }
+
+  const actions = document.createElement('div');
+  actions.className = 'quiz-actions';
+  actions.innerHTML = `<button class="btn btn-primary" data-action="revisar-subtema">Revisar subtema</button>`;
+  section.appendChild(actions);
+
+  actions.querySelector('[data-action="revisar-subtema"]').addEventListener('click', async () => {
+    const faltantes = pendientes.filter(a => respuestas[idCompleto(a)] === undefined);
+    if (faltantes.length > 0) {
+      alert('Contesta todas las preguntas de este subtema antes de revisar.');
+      return;
+    }
+
+    let todoCorrectoEsteIntento = true;
+
+    for (const act of pendientes) {
+      const idFull = idCompleto(act);
+      const card = section.querySelector(`#card-${idFull}`);
+      const opciones = act.tipo === 'verdadero_falso' ? ['Verdadero', 'Falso'] : act.opciones;
+      const correctaIdx = act.tipo === 'verdadero_falso' ? (act.correcta ? 0 : 1) : act.correcta;
+      const elegida = respuestas[idFull];
+      const acerto = elegida === correctaIdx;
+
+      const labels = card.querySelectorAll('.quiz-option');
+      labels.forEach(label => {
+        const idx = parseInt(label.dataset.idx, 10);
+        label.classList.remove('correct', 'incorrect');
+        if (idx === correctaIdx) label.classList.add('correct');
+        else if (idx === elegida) label.classList.add('incorrect');
+        label.querySelector('input').disabled = true;
+      });
+
+      const feedback = card.querySelector('.quiz-feedback');
+      feedback.hidden = false;
+      feedback.innerHTML = acerto
+        ? `<strong>Correcto.</strong> ${escaparHTML(act.explicacion)}`
+        : `<strong>No exactamente.</strong> ${escaparHTML(act.explicacion)}`;
+      feedback.className = 'quiz-feedback visible ' + (acerto ? 'ok' : 'no-ok');
+
+      if (acerto) {
+        await registrarAcierto(idFull, act);
+        completadasSet.add(idFull);
+        card.querySelector('.quiz-sub').innerHTML = '<span class="badge-ok">✓ Completada</span>';
+      } else {
+        todoCorrectoEsteIntento = false;
+      }
+    }
+
+    renderProgreso(actividadesPorBloque[bloqueActivo]);
+
+    if (todoCorrectoEsteIntento) {
+      actions.innerHTML = `<p class="subtema-done-msg">✓ Subtema completo — todas correctas.</p>`;
+    } else {
+      actions.innerHTML = `
+        <p class="subtema-retry-msg">Te faltó alguna. Vuelve a contestar TODAS las preguntas pendientes de este subtema para intentar otra vez.</p>
+        <button class="btn btn-primary" data-action="reintentar-subtema">Volver a contestar</button>
+      `;
+      actions.querySelector('[data-action="reintentar-subtema"]').addEventListener('click', () => {
+        renderBloque();
+      });
+    }
+  });
+
+  return section;
+}
+
+function renderTarjetaActividad(act, respuestas) {
   const idFull = idCompleto(act);
   const yaCompletada = completadasSet.has(idFull);
 
@@ -185,7 +271,6 @@ function renderTarjetaActividad(act) {
   card.id = `card-${idFull}`;
 
   const opciones = act.tipo === 'verdadero_falso' ? ['Verdadero', 'Falso'] : act.opciones;
-  const correctaIdx = act.tipo === 'verdadero_falso' ? (act.correcta ? 0 : 1) : act.correcta;
 
   card.innerHTML = `
     <p class="quiz-sub">${yaCompletada ? '<span class="badge-ok">✓ Completada</span>' : 'Pendiente'}</p>
@@ -193,48 +278,23 @@ function renderTarjetaActividad(act) {
     <div class="quiz-options">
       ${opciones.map((op, i) => `
         <label class="quiz-option" data-idx="${i}">
-          <input type="radio" name="q-${idFull}" value="${i}">
+          <input type="radio" name="q-${idFull}" value="${i}" ${yaCompletada ? 'disabled' : ''}>
           <span>${escaparHTML(op)}</span>
         </label>
       `).join('')}
     </div>
-    <div class="quiz-actions">
-      <button class="btn btn-primary btn-small" data-action="revisar">Revisar</button>
-    </div>
     <p class="quiz-feedback" hidden></p>
   `;
 
-  let elegida = null;
-  card.querySelectorAll('.quiz-option').forEach(label => {
-    label.addEventListener('click', () => {
-      elegida = parseInt(label.dataset.idx, 10);
+  if (!yaCompletada) {
+    card.querySelectorAll('.quiz-option').forEach(label => {
+      label.addEventListener('click', () => {
+        respuestas[idFull] = parseInt(label.dataset.idx, 10);
+        card.querySelectorAll('.quiz-option').forEach(l => l.classList.remove('selected'));
+        label.classList.add('selected');
+      });
     });
-  });
-
-  card.querySelector('[data-action="revisar"]').addEventListener('click', async () => {
-    if (elegida === null) return;
-    const acerto = elegida === correctaIdx;
-    const labels = card.querySelectorAll('.quiz-option');
-    labels.forEach(label => {
-      const idx = parseInt(label.dataset.idx, 10);
-      if (idx === correctaIdx) label.classList.add('correct');
-      else if (idx === elegida) label.classList.add('incorrect');
-    });
-
-    const feedback = card.querySelector('.quiz-feedback');
-    feedback.hidden = false;
-    feedback.innerHTML = acerto
-      ? `<strong>Correcto.</strong> ${escaparHTML(act.explicacion)}`
-      : `<strong>No exactamente.</strong> ${escaparHTML(act.explicacion)} Puedes intentarlo de nuevo.`;
-    feedback.className = 'quiz-feedback visible ' + (acerto ? 'ok' : 'no-ok');
-
-    if (acerto && !completadasSet.has(idFull)) {
-      await registrarAcierto(idFull, act);
-      completadasSet.add(idFull);
-      card.querySelector('.quiz-sub').innerHTML = '<span class="badge-ok">✓ Completada</span>';
-      renderProgreso(actividadesPorBloque[bloqueActivo]);
-    }
-  });
+  }
 
   return card;
 }
