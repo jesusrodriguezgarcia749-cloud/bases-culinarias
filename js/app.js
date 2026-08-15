@@ -8,9 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.querySelector('.nav-toggle');
   const nav = document.querySelector('.main-nav');
   if (toggle && nav) {
-    toggle.addEventListener('click', () => {
-      const isOpen = nav.classList.toggle('open');
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = !nav.classList.contains('open');
+      nav.classList.toggle('open', isOpen);
       toggle.setAttribute('aria-expanded', String(isOpen));
+      nav.style.display = isOpen ? 'flex' : '';
     });
   }
 
