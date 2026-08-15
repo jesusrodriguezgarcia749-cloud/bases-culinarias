@@ -1,7 +1,6 @@
 // Bases Culinarias — app.js
-// Nota: la conexión a Firebase (Auth + Firestore/Storage) se agrega en la
-// siguiente fase, cuando tengamos el contenido del compendio y el proyecto
-// de Firebase creado. Este archivo cubre por ahora la interacción de UI.
+// Cubre la interacción de UI compartida entre páginas: menú móvil, buscador,
+// y el botón de música de fondo (donde exista el markup correspondiente).
 
 document.addEventListener('DOMContentLoaded', () => {
   // Menú móvil
@@ -28,5 +27,36 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = `compendio.html?buscar=${encodeURIComponent(q)}`;
       }
     });
+  }
+
+  // Música de fondo — apagada por defecto (los navegadores bloquean el
+  // autoplay con sonido de todos modos); recuerda la preferencia del usuario
+  // entre páginas mientras dure la sesión del navegador.
+  const musica = document.getElementById('bg-music');
+  const musicaBtn = document.getElementById('bg-music-toggle');
+  if (musica && musicaBtn) {
+    const PREF_KEY = 'bc_musica_activa';
+    musica.volume = 0.35;
+
+    const activar = () => {
+      musica.play().catch(() => { /* el navegador puede bloquear hasta que haya interacción */ });
+      musicaBtn.setAttribute('aria-pressed', 'true');
+      musicaBtn.textContent = '🔊';
+      sessionStorage.setItem(PREF_KEY, '1');
+    };
+    const desactivar = () => {
+      musica.pause();
+      musicaBtn.setAttribute('aria-pressed', 'false');
+      musicaBtn.textContent = '🎵';
+      sessionStorage.setItem(PREF_KEY, '0');
+    };
+
+    musicaBtn.addEventListener('click', () => {
+      if (musica.paused) activar(); else desactivar();
+    });
+
+    // Si el usuario ya la había activado en esta misma sesión de navegación,
+    // la retoma automáticamente al cambiar de página.
+    if (sessionStorage.getItem(PREF_KEY) === '1') activar();
   }
 });
