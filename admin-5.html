@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel docente — Bases Culinarias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">BC</span>
+      <span class="brand-text">Bases Culinarias</span>
+    </a>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <a href="compendio.html">Compendio</a>
+      <a href="actividades.html">Actividades</a>
+      <a href="biblioteca.html">Biblioteca</a>
+      <a href="mi-progreso.html">Mi progreso</a>
+      <a href="admin.html" class="nav-admin" aria-current="page">Panel docente</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== PANTALLA DE LOGIN ===== -->
+<section id="login-screen" class="admin-wrap">
+  <div class="login-card">
+    <h1>Panel docente</h1>
+    <p class="login-sub">Acceso restringido — solo cuenta institucional.</p>
+    <form id="login-form">
+      <label for="login-email" class="sr-only">Correo</label>
+      <input id="login-email" type="email" placeholder="tu-correo@itesrenedescartes.edu.mx" required autocomplete="email">
+      <label for="login-pass" class="sr-only">Contraseña</label>
+      <input id="login-pass" type="password" placeholder="Contraseña" required autocomplete="current-password">
+      <button type="submit" class="btn btn-primary">Entrar</button>
+      <p id="login-error" class="login-error" hidden></p>
+    </form>
+  </div>
+</section>
+
+<!-- ===== APP (visible tras login) ===== -->
+<section id="app-screen" class="admin-wrap" hidden>
+
+  <div class="admin-topbar">
+    <div class="group-select-wrap">
+      <label for="grupo-select" class="sr-only">Grupo activo</label>
+      <select id="grupo-select"><option value="">— Elige un grupo —</option></select>
+      <button id="btn-nuevo-grupo" class="btn-icon" title="Nuevo grupo">+ grupo</button>
+    </div>
+    <button id="btn-logout" class="btn-logout">Salir</button>
+  </div>
+
+  <nav class="admin-tabs" aria-label="Secciones del panel">
+    <button class="tab-btn active" data-tab="alumnos">Alumnos</button>
+    <button class="tab-btn" data-tab="evaluar">Práctica de cocina</button>
+    <button class="tab-btn" data-tab="historial">Historial</button>
+    <button class="tab-btn" data-tab="participacion">Participación</button>
+    <button class="tab-btn" data-tab="asistencia">Asistencia</button>
+    <button class="tab-btn" data-tab="ensayos">Ensayos</button>
+    <button class="tab-btn" data-tab="avisos">Avisos</button>
+  </nav>
+
+  <!-- --- TAB ALUMNOS --- -->
+  <div id="tab-alumnos" class="tab-panel active">
+    <form id="form-alumno" class="inline-form">
+      <input id="input-alumno-nombre" type="text" placeholder="Nombre completo del alumno" required>
+      <button type="submit" class="btn btn-primary">Agregar</button>
+    </form>
+    <ul id="lista-alumnos" class="student-list"></ul>
+    <p id="alumnos-empty" class="empty-state" hidden>Aún no hay alumnos en este grupo.</p>
+  </div>
+
+  <!-- --- TAB EVALUAR --- -->
+  <div id="tab-evaluar" class="tab-panel">
+    <p class="field-hint">Toca un alumno de la lista para calificar su práctica.</p>
+    <div id="eval-lista-alumnos" class="asis-list"></div>
+    <p id="eval-alumnos-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+
+    <div id="eval-form" hidden>
+    <p class="eval-alumno-activo" id="eval-alumno-activo"></p>
+
+    <label for="eval-fecha" class="field-label">Fecha de la práctica</label>
+    <input id="eval-fecha" type="date">
+
+    <h3 class="section-title">Rúbrica de competencias</h3>
+    <div class="rubric-grid" id="rubric-grid"><!-- se rellena por JS --></div>
+
+    <div class="score-display" id="score-display">Calificación: —</div>
+
+    <h3 class="section-title">Checklist "Pase de Revista" <span class="tag-info">informativo</span></h3>
+    <div id="checklist-grid" class="checklist-grid"><!-- se rellena por JS --></div>
+
+    <label for="eval-notas" class="field-label">Notas / observaciones</label>
+    <textarea id="eval-notas" rows="3" placeholder="Opcional"></textarea>
+
+    <button id="btn-guardar-eval" class="btn btn-primary btn-block">Guardar evaluación</button>
+    <p id="eval-msg" class="save-msg" hidden></p>
+    </div>
+  </div>
+
+  <!-- --- TAB HISTORIAL (resumen por alumno) --- -->
+  <div id="tab-historial" class="tab-panel">
+    <p class="field-hint">Toca un alumno para ver su resumen completo del cuatrimestre.</p>
+    <div id="hist-lista-alumnos" class="asis-list"></div>
+    <p id="historial-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+    <div id="hist-resumen" hidden></div>
+  </div>
+
+  <!-- --- TAB PARTICIPACIÓN --- -->
+  <div id="tab-participacion" class="tab-panel">
+    <p class="field-label">Actividades digitales de Aula Virtual — 20% de la Evaluación Parcial. Cada actividad respondida correctamente suma 1 punto de participación; no cuenta si falla, puede repetirla.</p>
+    <div id="participacion-lista" class="part-list"></div>
+    <p id="participacion-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+  </div>
+
+  <!-- --- TAB ASISTENCIA --- -->
+  <div id="tab-asistencia" class="tab-panel">
+    <label for="asis-fecha" class="field-label">Fecha</label>
+    <input id="asis-fecha" type="date">
+    <p class="field-hint">Todos inician como <strong>presente</strong>. Toca a un alumno para cambiar su estado.</p>
+    <div id="asistencia-lista" class="asis-list"></div>
+    <p id="asistencia-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+    <button id="btn-guardar-asistencia" class="btn btn-primary btn-block">Guardar asistencia del día</button>
+    <p id="asis-msg" class="save-msg" hidden></p>
+  </div>
+
+  <!-- --- TAB ENSAYOS --- -->
+  <div id="tab-ensayos" class="tab-panel">
+    <label for="ens-semana-select" class="field-label">Semana</label>
+    <select id="ens-semana-select"></select>
+    <p class="field-hint">20% de la Evaluación Parcial. Bitácora manuscrita de esa semana — marca entregada y captura la calificación (0–10) de cada alumno.</p>
+    <div id="ensayos-lista" class="asis-list"></div>
+    <p id="ensayos-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+    <button id="btn-guardar-ensayos" class="btn btn-primary btn-block">Guardar ensayos de esta semana</button>
+    <p id="ens-msg" class="save-msg" hidden></p>
+  </div>
+
+  <!-- --- TAB AVISOS --- -->
+  <div id="tab-avisos" class="tab-panel">
+    <p class="field-hint">Preguntas detonadoras de la semana, indicaciones y recordatorios. Todos los alumnos del grupo los ven en "Mi progreso".</p>
+
+    <label for="aviso-titulo" class="field-label">Título</label>
+    <input id="aviso-titulo" type="text" placeholder="Ej. Semana 3 — Preguntas para tu bitácora">
+
+    <label for="aviso-texto" class="field-label">Contenido</label>
+    <textarea id="aviso-texto" rows="5" placeholder="Escribe aquí las preguntas o indicaciones…"></textarea>
+
+    <button id="btn-publicar-aviso" class="btn btn-primary btn-block">Publicar aviso</button>
+    <p id="aviso-msg" class="save-msg" hidden></p>
+
+    <h3 class="section-title">Avisos publicados</h3>
+    <div id="avisos-lista"></div>
+    <p id="avisos-empty" class="empty-state" hidden>Aún no has publicado avisos en este grupo.</p>
+  </div>
+
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Panel docente · Bases Culinarias · Acceso restringido.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+<script src="js/app.js"></script>
+<script type="module" src="js/admin.js"></script>
+</body>
+      </html>
