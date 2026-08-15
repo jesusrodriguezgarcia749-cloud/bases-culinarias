@@ -40,17 +40,31 @@ function escaparHTML(str) {
   return div.innerHTML;
 }
 
+function mostrarErrorLogin(msg) {
+  const errorEl = document.getElementById('login-alumno-error');
+  errorEl.textContent = msg;
+  errorEl.hidden = false;
+}
+
 // ---------- LOGIN ----------
 async function cargarGruposEnSelect() {
   const select = document.getElementById('login-grupo');
-  const snap = await getDocs(query(collection(db, 'grupos'), orderBy('nombre')));
-  select.innerHTML = '<option value="">— Elige tu grupo —</option>';
-  snap.forEach(d => {
-    const opt = document.createElement('option');
-    opt.value = d.id;
-    opt.textContent = d.data().nombre;
-    select.appendChild(opt);
-  });
+  try {
+    const snap = await getDocs(query(collection(db, 'grupos'), orderBy('nombre')));
+    select.innerHTML = '<option value="">— Elige tu grupo —</option>';
+    snap.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d.id;
+      opt.textContent = d.data().nombre;
+      select.appendChild(opt);
+    });
+    if (snap.empty) {
+      mostrarErrorLogin('DIAGNÓSTICO: la consulta a Firestore funcionó, pero la colección "grupos" está vacía.');
+    }
+  } catch (err) {
+    console.error('Error cargando grupos:', err);
+    mostrarErrorLogin('DIAGNÓSTICO — error al cargar grupos: ' + (err && err.message ? err.message : String(err)));
+  }
 }
 
 document.getElementById('form-alumno-login').addEventListener('submit', async (e) => {
@@ -64,19 +78,24 @@ document.getElementById('form-alumno-login').addEventListener('submit', async (e
 
   if (!grupoId || !nombre || !pin) return;
 
-  const alumnoId = slugNombre(nombre);
-  const ref = doc(db, 'grupos', grupoId, 'alumnos', alumnoId);
-  const snap = await getDoc(ref);
+  try {
+    const alumnoId = slugNombre(nombre);
+    const ref = doc(db, 'grupos', grupoId, 'alumnos', alumnoId);
+    const snap = await getDoc(ref);
 
-  if (!snap.exists() || String(snap.data().pin) !== pin) {
-    errorEl.textContent = 'No encontramos ese nombre y PIN en el grupo elegido. Verifica con tu docente.';
-    errorEl.hidden = false;
-    return;
+    if (!snap.exists() || String(snap.data().pin) !== pin) {
+      errorEl.textContent = 'No encontramos ese nombre y PIN en el grupo elegido. Verifica con tu docente.';
+      errorEl.hidden = false;
+      return;
+    }
+
+    sesion = { grupoId, alumnoId, nombre: snap.data().nombre, pin };
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(sesion));
+    await iniciarApp();
+  } catch (err) {
+    console.error('Error en login:', err);
+    mostrarErrorLogin('DIAGNÓSTICO — error al entrar: ' + (err && err.message ? err.message : String(err)));
   }
-
-  sesion = { grupoId, alumnoId, nombre: snap.data().nombre, pin };
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify(sesion));
-  await iniciarApp();
 });
 
 document.getElementById('btn-cambiar-alumno').addEventListener('click', () => {
@@ -142,7 +161,6 @@ async function renderBloque() {
   const root = document.getElementById('quiz-root');
   root.innerHTML = '';
 
-  // Agrupar por subtema, en orden de aparición
   const subtemas = [...new Set(actividades.map(a => a.subtema))];
 
   subtemas.forEach(sub => {
@@ -222,8 +240,6 @@ function renderTarjetaActividad(act) {
 }
 
 async function registrarAcierto(idFull, act) {
-  // Crea el documento de la actividad (solo una vez — las reglas de Firestore
-  // bloquean update/delete) y suma exactamente 1 punto de participación.
   const actRef = doc(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'actividades', idFull);
   await setDoc(actRef, {
     bloque: bloqueActivo,
@@ -251,7 +267,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (guardada) {
     try {
       sesion = JSON.parse(guardada);
-      // Verificar que la sesión guardada sigue siendo válida
       const ref = doc(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId);
       const snap = await getDoc(ref);
       if (snap.exists() && String(snap.data().pin) === String(sesion.pin)) {
