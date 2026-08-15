@@ -23,7 +23,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Bloques disponibles: agrega aquí cuando exista data/actividades_bloqueN.json
-const BLOQUES_DISPONIBLES = [1, 2];
+const BLOQUES_DISPONIBLES = [1, 2, 3];
 const NOMBRES_BLOQUE = { 1: 'Bloque 1', 2: 'Bloque 2', 3: 'Bloque 3' };
 
 const SESSION_KEY = 'bc_sesion_alumno';
