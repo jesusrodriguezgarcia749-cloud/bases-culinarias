@@ -94,3 +94,14 @@
   font-size:1.05rem; text-transform:uppercase; letter-spacing:.04em;
   color:var(--saffron-dark); margin-bottom:16px; border-bottom:1px solid var(--line); padding-bottom:8px;
 }
+
+/* ===== Añadido: revisión por subtema (no por pregunta individual) ===== */
+.quiz-option.selected{border-color:var(--saffron); background:rgba(201,138,44,0.08);}
+.subtema-done-msg{
+  background:rgba(107,122,94,0.12); color:var(--ink); padding:14px 16px;
+  border-radius:10px; font-weight:600; font-size:.9rem; text-align:center;
+}
+.subtema-retry-msg{
+  background:rgba(166,61,47,0.08); color:var(--ink); padding:14px 16px;
+  border-radius:10px; font-size:.88rem; margin-bottom:12px;
+}
