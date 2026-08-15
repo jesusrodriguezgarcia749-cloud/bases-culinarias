@@ -1,0 +1,243 @@
+{
+  "bloque": 2,
+  "actividades": [
+    {
+      "id": "2.1-a",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué es el aprovisionamiento de materias primas?",
+      "opciones": [
+        "El proceso de seleccionar, solicitar y recibir los insumos que una cocina necesita",
+        "El emplatado final de un platillo",
+        "El menú de temporada de un restaurante",
+        "La limpieza del área de trabajo al cierre"
+      ],
+      "correcta": 0,
+      "explicacion": "El aprovisionamiento incluye decidir proveedores, calcular cantidades según la producción esperada, y verificar que lo recibido cumpla con lo pedido en calidad y cantidad."
+    },
+    {
+      "id": "2.1-b",
+      "subtema": "2.1",
+      "tipo": "verdadero_falso",
+      "pregunta": "Un buen aprovisionamiento solo importa para reducir costos, no tiene relación con las mermas ni con las rupturas de stock.",
+      "correcta": false,
+      "explicacion": "Un buen aprovisionamiento reduce mermas (desperdicio) y evita rupturas de stock a mitad de servicio — no es solo un tema de costo."
+    },
+    {
+      "id": "2.1-c",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué se debe verificar al recibir mercancía en la cocina?",
+      "opciones": [
+        "Temperatura de llegada, integridad del empaque, fecha de caducidad y documentación sanitaria",
+        "Solo el precio pagado por el producto",
+        "Únicamente el color del empaque",
+        "Nada, la recepción no requiere verificación"
+      ],
+      "correcta": 0,
+      "explicacion": "La recepción de mercancía es un punto crítico de control, especialmente en cárnicos, lácteos y pescados, donde la temperatura de llegada es determinante."
+    },
+    {
+      "id": "2.1-d",
+      "subtema": "2.1",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada herramienta de aprovisionamiento con su función.",
+      "pares": [
+        { "izquierda": "Lista de pedido estandarizada", "derecha": "Evita variaciones en las cantidades pedidas" },
+        { "izquierda": "Ficha de especificación por producto", "derecha": "Define variedad, calibre y origen esperado" },
+        { "izquierda": "Control de fechas de recepción", "derecha": "Evita que lleguen productos caducados" }
+      ],
+      "explicacion": "Estas tres herramientas son simples pero efectivas: cada una controla un riesgo distinto del aprovisionamiento (cantidad, especificación del producto, y vigencia)."
+    },
+    {
+      "id": "2.1-e",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué la recepción de mercancía es un punto crítico de control?",
+      "opciones": [
+        "Porque ahí se detectan a tiempo problemas de temperatura, empaque o caducidad antes de usar el insumo",
+        "Porque ahí se decide el precio de venta del platillo",
+        "Porque no tiene ningún impacto en la seguridad alimentaria",
+        "Porque solo afecta la presentación del insumo"
+      ],
+      "correcta": 0,
+      "explicacion": "Detectar un problema en la recepción evita que un insumo comprometido (por ejemplo, fuera de temperatura o caducado) entre a la producción."
+    },
+    {
+      "id": "2.2-a",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo se agrupan las materias primas de uso común en una cocina?",
+      "opciones": [
+        "En grandes familias: cárnicos, pescados y mariscos, lácteos y huevo, cereales y leguminosas, hortalizas y frutas, grasas y aceites",
+        "Solo por su precio de compra",
+        "Solo por su país de origen",
+        "No existe ninguna agrupación estándar"
+      ],
+      "correcta": 0,
+      "explicacion": "Cada familia tiene su propia lógica de manejo, temporada y conservación — agruparlas así ayuda a anticipar cómo tratarlas."
+    },
+    {
+      "id": "2.2-b",
+      "subtema": "2.2",
+      "tipo": "verdadero_falso",
+      "pregunta": "Familiarizarse con las familias de materias primas es solo memorizar una lista, sin relación con las sustituciones posibles.",
+      "correcta": false,
+      "explicacion": "Al contrario: entender las familias ayuda a reconocer qué combinaciones son naturales dentro de una tradición culinaria y qué sustituciones son razonables cuando falta un ingrediente."
+    },
+    {
+      "id": "2.2-c",
+      "subtema": "2.2",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada familia de materia prima con su cuidado higiénico principal.",
+      "pares": [
+        { "izquierda": "Cárnicos y pescados", "derecha": "Cadena de frío estricta y áreas de trabajo separadas" },
+        { "izquierda": "Hortalizas", "derecha": "Lavado y desinfección" },
+        { "izquierda": "Lácteos", "derecha": "Control estricto de temperatura de refrigeración" }
+      ],
+      "explicacion": "El manejo higiénico varía por familia: cárnicos y pescados necesitan separación para evitar contaminación cruzada; las hortalizas requieren lavado; los lácteos requieren control de frío constante."
+    },
+    {
+      "id": "2.2-d",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué cárnicos y pescados requieren áreas de trabajo separadas de otros alimentos?",
+      "opciones": [
+        "Para evitar contaminación cruzada",
+        "Porque ocupan más espacio físico",
+        "Porque así lo exige el menú del día",
+        "No hay ninguna razón higiénica para separarlos"
+      ],
+      "correcta": 0,
+      "explicacion": "La contaminación cruzada entre cárnicos/pescados crudos y otros alimentos es uno de los riesgos de seguridad alimentaria más comunes en una cocina."
+    },
+    {
+      "id": "2.2-e",
+      "subtema": "2.2",
+      "tipo": "verdadero_falso",
+      "pregunta": "Las hortalizas requieren exactamente el mismo manejo de cadena de frío estricta que los cárnicos y pescados.",
+      "correcta": false,
+      "explicacion": "Cada familia tiene su propio manejo higiénico: las hortalizas requieren lavado y desinfección, mientras que cárnicos y pescados requieren cadena de frío estricta y áreas separadas."
+    },
+    {
+      "id": "2.3-a",
+      "subtema": "2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué determina el uso ideal de una variedad dentro de una misma materia prima?",
+      "opciones": [
+        "Sus características físicas: textura, contenido de agua, almidón, firmeza, grasa intramuscular",
+        "Únicamente su precio en el mercado",
+        "Solo el color del empaque en que se vende",
+        "El nombre comercial que le da el proveedor"
+      ],
+      "correcta": 0,
+      "explicacion": "Reconocer estas características permite elegir la variedad correcta para el resultado buscado, en vez de forzar una técnica sobre un ingrediente que no la soporta."
+    },
+    {
+      "id": "2.3-b",
+      "subtema": "2.3",
+      "tipo": "verdadero_falso",
+      "pregunta": "Todas las papas sirven igual de bien para cualquier técnica de cocción.",
+      "correcta": false,
+      "explicacion": "No todas las papas sirven para freír, igual que no todos los tomates sirven para salsa ni todos los cortes de carne sirven para asar a la parrilla — cada variedad tiene un uso ideal."
+    },
+    {
+      "id": "2.3-c",
+      "subtema": "2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿En qué se apoya un cocinero para identificar las características físicas de una variedad?",
+      "opciones": [
+        "En sus sentidos entrenados (color, aroma, firmeza al tacto) y en criterios objetivos como calibre, peso y maduración",
+        "Únicamente en el nombre que trae la etiqueta",
+        "Solo en la opinión del proveedor",
+        "No hay forma de identificarlas antes de cocinar"
+      ],
+      "correcta": 0,
+      "explicacion": "La identificación combina experiencia sensorial entrenada con criterios objetivos y medibles — ninguno de los dos basta por sí solo."
+    },
+    {
+      "id": "2.3-d",
+      "subtema": "2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál de estas es una característica física relevante para elegir la variedad correcta de un ingrediente?",
+      "opciones": [
+        "Firmeza al tacto",
+        "El nombre del restaurante donde se sirve",
+        "El día de la semana",
+        "El color del plato donde se presenta"
+      ],
+      "correcta": 0,
+      "explicacion": "La firmeza al tacto es uno de los indicadores sensoriales que ayuda a anticipar cómo se va a comportar el ingrediente al cocinarlo."
+    },
+    {
+      "id": "2.3-e",
+      "subtema": "2.3",
+      "tipo": "verdadero_falso",
+      "pregunta": "El calibre y el grado de maduración son criterios objetivos útiles, junto con los sentidos entrenados del cocinero.",
+      "correcta": true,
+      "explicacion": "Correcto: la identificación de variedades combina criterios objetivos (calibre, peso, maduración) con la experiencia sensorial (color, aroma, firmeza)."
+    },
+    {
+      "id": "2.4-a",
+      "subtema": "2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son las cualidades gastronómicas que aporta una materia prima, más allá de su clasificación física?",
+      "opciones": [
+        "Sabor, aroma, textura en boca y color",
+        "Solo su precio de compra",
+        "Únicamente su país de origen",
+        "Solo su nombre comercial"
+      ],
+      "correcta": 0,
+      "explicacion": "Estas cualidades son factores que un cocinero combina deliberadamente al diseñar un platillo, más allá de a qué familia pertenezca el ingrediente."
+    },
+    {
+      "id": "2.4-b",
+      "subtema": "2.4",
+      "tipo": "verdadero_falso",
+      "pregunta": "El equilibrio de sabores solo se puede corregir al probar el platillo ya terminado, nunca se puede anticipar antes de cocinar.",
+      "correcta": false,
+      "explicacion": "Entender la cualidad gastronómica de cada ingrediente es justo lo que permite anticipar el equilibrio de sabores antes de cocinar, no solo corregirlo al final."
+    },
+    {
+      "id": "2.4-c",
+      "subtema": "2.4",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada tipo de elemento puente con su función al integrar sabores.",
+      "pares": [
+        { "izquierda": "Una grasa", "derecha": "Suaviza y liga los sabores entre sí" },
+        { "izquierda": "Un ácido", "derecha": "Equilibra y corta lo pesado de un platillo" },
+        { "izquierda": "Una especia", "derecha": "Aromatiza y realza el conjunto" }
+      ],
+      "explicacion": "Cuando dos ingredientes no combinan naturalmente, un elemento puente (grasa, ácido o especia) ayuda a integrarlos en un mismo platillo."
+    },
+    {
+      "id": "2.4-d",
+      "subtema": "2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué es la afinidad de sabores?",
+      "opciones": [
+        "Qué ingredientes combinan naturalmente entre sí sin necesitar un elemento puente",
+        "El costo de dos ingredientes combinados",
+        "La temporada en que se consiguen dos ingredientes",
+        "El tiempo de cocción combinado de dos ingredientes"
+      ],
+      "correcta": 0,
+      "explicacion": "Las cualidades gastronómicas determinan qué ingredientes combinan naturalmente entre sí (afinidad) y cuáles requieren un elemento puente para integrarse bien."
+    },
+    {
+      "id": "2.4-e",
+      "subtema": "2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Para qué sirve un elemento puente (grasa, ácido o especia) entre dos ingredientes?",
+      "opciones": [
+        "Para integrarlos bien en un mismo platillo cuando no tienen afinidad natural",
+        "Para hacer el platillo más caro",
+        "Para que el platillo tarde más en cocinarse",
+        "No tiene ninguna función real"
+      ],
+      "correcta": 0,
+      "explicacion": "El elemento puente resuelve la falta de afinidad natural entre dos ingredientes, integrándolos en el mismo platillo."
+    }
+  ]
+}
