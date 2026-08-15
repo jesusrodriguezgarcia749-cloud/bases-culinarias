@@ -121,3 +121,12 @@
 }
 .relacionar-select.correct{border-color:var(--sage); background:rgba(107,122,94,0.12);}
 .relacionar-select.incorrect{border-color:var(--paprika); background:rgba(166,61,47,0.08);}
+
+/* ===== Añadido: barras de progreso de los tres bloques a la vez ===== */
+.progreso-fila{
+  display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap;
+}
+.progreso-fila.activo .progreso-nombre{color:var(--saffron-dark); font-weight:700;}
+.progreso-nombre{min-width:78px; font-size:.85rem; font-weight:600; color:var(--ink-soft);}
+.progreso-fila .progreso-bar-track{flex:1; min-width:120px;}
+.progreso-stat{font-size:.8rem; color:var(--ink-soft); min-width:88px; text-align:right;}

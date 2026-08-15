@@ -185,4 +185,15 @@
 .ens-calif{
   width:72px; padding:8px 10px; border-radius:8px; border:1.5px solid var(--line);
   font-size:.9rem; text-align:center;
-    }
+}
+
+/* ===== Añadido: barras por bloque en la pestaña Participación ===== */
+.part-bloque-row{
+  display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap;
+}
+.part-bloque-nombre{min-width:74px; font-size:.84rem; font-weight:600; color:var(--ink-soft);}
+.prog-bar-track{
+  flex:1; min-width:100px; height:9px; border-radius:999px; background:var(--line); overflow:hidden;
+}
+.prog-bar-fill{height:100%; background:var(--sage);}
+.part-bloque-stat{font-size:.78rem; color:var(--ink-soft); min-width:80px; text-align:right;}
