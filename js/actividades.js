@@ -171,11 +171,19 @@ function idCompleto(actividad) {
 }
 
 async function renderBloque() {
-  const actividades = await cargarActividadesBloque(bloqueActivo);
+  const root = document.getElementById('quiz-root');
+  let actividades;
+  try {
+    actividades = await cargarActividadesBloque(bloqueActivo);
+  } catch (err) {
+    console.error('Error cargando actividades del bloque', bloqueActivo, err);
+    root.innerHTML = `<p class="subtema-retry-msg">No se pudo cargar el contenido de este bloque (data/actividades_bloque${bloqueActivo}.json). Verifica que el archivo exista en el repositorio.</p>`;
+    document.getElementById('progreso-bloque').innerHTML = '';
+    return;
+  }
   await cargarCompletadas();
   renderProgreso(actividades);
 
-  const root = document.getElementById('quiz-root');
   root.innerHTML = '';
 
   const subtemas = [...new Set(actividades.map(a => a.subtema))];
