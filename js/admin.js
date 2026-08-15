@@ -112,7 +112,6 @@ on('grupo-select', 'change', (e) => {
 
 on('form-alumno', 'submit', agregarAlumno);
 on('btn-guardar-eval', 'click', guardarEvaluacion);
-on('hist-alumno-select', 'change', cargarHistorial);
 
 
 const _hoy = new Date();
@@ -213,18 +212,7 @@ function renderAlumnos(lista) {
 }
 
 function renderSelectAlumnos() {
-  ['hist-alumno-select'].forEach(id => {
-    const select = document.getElementById(id);
-    const placeholder = select.options[0];
-    select.innerHTML = '';
-    select.appendChild(placeholder);
-    alumnosCache.forEach(a => {
-      const opt = document.createElement('option');
-      opt.value = a.id;
-      opt.textContent = a.nombre;
-      select.appendChild(opt);
-    });
-  });
+  // Los selects de alumno se eliminaron a favor de listas tocables.
 }
 
 async function agregarAlumno(e) {
@@ -391,43 +379,132 @@ async function guardarEvaluacion() {
   renderListaEvaluar();
 }
 
-// ---------- HISTORIAL (prácticas de cocina) ----------
-async function cargarHistorial() {
-  const cont = document.getElementById('historial-lista');
+// ---------- HISTORIAL (resumen completo por alumno) ----------
+function cargarHistorial() {
+  const cont = document.getElementById('hist-lista-alumnos');
   const empty = document.getElementById('historial-empty');
-  const filtroAlumno = document.getElementById('hist-alumno-select').value;
+  const resumen = document.getElementById('hist-resumen');
+  if (!cont) return;
   cont.innerHTML = '';
+  resumen.hidden = true;
 
-  if (!grupoActivo) { empty.hidden = false; return; }
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
 
-  const alumnosAConsultar = filtroAlumno ? [filtroAlumno] : alumnosCache.map(a => a.id);
-  let registros = [];
-
-  for (const alumnoId of alumnosAConsultar) {
-    const alumno = alumnosCache.find(a => a.id === alumnoId);
-    if (!alumno) continue;
-    const snap = await getDocs(query(collection(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'evaluaciones'), orderBy('fecha', 'desc')));
-    snap.forEach(d => {
-      registros.push({ id: d.id, alumnoNombre: alumno.nombre, ...d.data() });
-    });
-  }
-
-  registros.sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''));
-  empty.hidden = registros.length > 0;
-
-  registros.forEach(r => {
-    const div = document.createElement('div');
-    div.className = 'hist-card';
-    div.innerHTML = `
-      <div class="hist-card-top">
-        <span class="hist-card-name">${escaparHTML(r.alumnoNombre)}</span>
-        <span class="hist-card-score">${r.calificacion.toFixed(1)} / 10</span>
-      </div>
-      <div class="hist-card-date">${r.fecha || 'sin fecha'}</div>
-      ${r.notas ? `<div class="hist-card-notas">${escaparHTML(r.notas)}</div>` : ''}
+  alumnosCache.forEach(a => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'asis-row';
+    row.innerHTML = `
+      <span class="student-name">${escaparHTML(a.nombre)}</span>
+      <span class="asis-estado-label">Ver resumen →</span>
     `;
-    cont.appendChild(div);
+    row.addEventListener('click', () => mostrarResumenAlumno(a));
+    cont.appendChild(row);
   });
+}
+
+async function mostrarResumenAlumno(alumno) {
+  const resumen = document.getElementById('hist-resumen');
+  resumen.hidden = false;
+  resumen.innerHTML = `<p class="eval-alumno-activo">Resumen de: ${escaparHTML(alumno.nombre)}</p><p class="empty-inline">Cargando…</p>`;
+  resumen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const base = ['grupos', grupoActivo, 'alumnos', alumno.id];
+
+  const [actSnap, evalSnap, ensSnap, asisSnap] = await Promise.all([
+    getDocs(collection(db, ...base, 'actividades')).catch(() => null),
+    getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
+    getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
+    getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
+  ]);
+
+  // --- Participación (20%) ---
+  const idsAct = actSnap ? actSnap.docs.map(d => d.id) : [];
+  const partPorBloque = [1, 2, 3].map(b => {
+    const total = TOTAL_ACTIVIDADES_POR_BLOQUE[b];
+    const hechas = idsAct.filter(id => id.startsWith(`b${b}-`)).length;
+    return { b, total, hechas, pct: total ? Math.round(hechas / total * 100) : 0 };
+  });
+  const partGlobalPct = Math.round(
+    partPorBloque.reduce((s, x) => s + x.hechas, 0) /
+    Math.max(1, partPorBloque.reduce((s, x) => s + x.total, 0)) * 100
+  );
+
+  // --- Prácticas de cocina (20%) ---
+  const practicas = evalSnap ? evalSnap.docs.map(d => d.data()) : [];
+  const promPractica = practicas.length
+    ? practicas.reduce((s, p) => s + (p.calificacion || 0), 0) / practicas.length : null;
+
+  // --- Ensayos (20%) ---
+  const ensayos = ensSnap ? ensSnap.docs.map(d => d.data()) : [];
+  const entregados = ensayos.filter(e => e.entregado).length;
+  const conCalif = ensayos.filter(e => e.calificacion !== null && e.calificacion !== undefined && e.calificacion !== '');
+  const promEnsayo = conCalif.length
+    ? conCalif.reduce((s, e) => s + Number(e.calificacion), 0) / conCalif.length : null;
+
+  // --- Asistencia (10%) ---
+  const asis = asisSnap ? asisSnap.docs.map(d => d.data()) : [];
+  const presentes = asis.filter(a => a.estado === 'presente').length;
+  const retardos = asis.filter(a => a.estado === 'retardo').length;
+  const faltas = asis.filter(a => a.estado === 'falta').length;
+  const pctAsis = asis.length ? Math.round((presentes + retardos * 0.5) / asis.length * 100) : null;
+
+  // --- Total ponderado (solo con lo que ya hay capturado) ---
+  const partes = [];
+  if (pctAsis !== null) partes.push({ n: 'Asistencia', peso: 10, pct: pctAsis });
+  partes.push({ n: 'Participación', peso: 20, pct: partGlobalPct });
+  if (promPractica !== null) partes.push({ n: 'Prácticas', peso: 20, pct: promPractica * 10 });
+  if (promEnsayo !== null) partes.push({ n: 'Ensayos', peso: 20, pct: promEnsayo * 10 });
+  const pesoCubierto = partes.reduce((s, p) => s + p.peso, 0);
+  const puntosLogrados = partes.reduce((s, p) => s + p.pct / 100 * p.peso, 0);
+
+  resumen.innerHTML = `
+    <p class="eval-alumno-activo">Resumen de: ${escaparHTML(alumno.nombre)}</p>
+
+    <div class="res-card">
+      <h4>Participación (20%)</h4>
+      ${partPorBloque.map(x => `
+        <div class="part-bloque-row">
+          <span class="part-bloque-nombre">Bloque ${x.b}</span>
+          <div class="prog-bar-track"><div class="prog-bar-fill" style="width:${x.pct}%"></div></div>
+          <span class="part-bloque-stat">${x.hechas}/${x.total} · ${x.pct}%</span>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="res-card">
+      <h4>Prácticas de cocina (20%)</h4>
+      ${practicas.length === 0 ? '<p class="empty-inline">Sin prácticas evaluadas.</p>' :
+        practicas.sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||'')).map(p => `
+          <div class="res-row"><span>${p.fecha || 'sin fecha'}</span><strong>${(p.calificacion||0).toFixed(1)} / 10</strong></div>
+        `).join('') + `<div class="res-row res-total"><span>Promedio</span><strong>${promPractica.toFixed(1)} / 10</strong></div>`}
+    </div>
+
+    <div class="res-card">
+      <h4>Ensayos (20%)</h4>
+      ${ensayos.length === 0 ? '<p class="empty-inline">Sin bitácoras registradas.</p>' : `
+        <div class="res-row"><span>Bitácoras entregadas</span><strong>${entregados} / 15</strong></div>
+        ${promEnsayo !== null ? `<div class="res-row res-total"><span>Promedio</span><strong>${promEnsayo.toFixed(1)} / 10</strong></div>` : ''}
+      `}
+    </div>
+
+    <div class="res-card">
+      <h4>Asistencia (10%)</h4>
+      ${asis.length === 0 ? '<p class="empty-inline">Sin registros de asistencia.</p>' : `
+        <div class="res-row"><span>Presentes</span><strong>${presentes}</strong></div>
+        <div class="res-row"><span>Retardos</span><strong>${retardos}</strong></div>
+        <div class="res-row"><span>Faltas</span><strong>${faltas}</strong></div>
+        <div class="res-row res-total"><span>Porcentaje</span><strong>${pctAsis}%</strong></div>
+      `}
+    </div>
+
+    <div class="score-display">
+      ${puntosLogrados.toFixed(1)} / ${pesoCubierto} pts capturados
+    </div>
+    <p class="field-hint">Sobre 100 puntos totales. Falta el Examen (30%), que se captura al cierre de cada bloque.</p>
+  `;
 }
 
 // ---------- PARTICIPACIÓN (actividades digitales, tipo lista con desplegables) ----------
