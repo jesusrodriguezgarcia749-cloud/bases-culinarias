@@ -388,32 +388,42 @@ async function cargarParticipacion() {
     const detalle = document.createElement('details');
     detalle.className = 'part-row';
 
-    const totalBloque1 = TOTAL_ACTIVIDADES_POR_BLOQUE[1];
-    const puntos = alumno.puntosParticipacion || 0;
-    const pct = totalBloque1 ? Math.round((puntos / totalBloque1) * 100) : 0;
+    // Contamos por bloque leyendo los ids reales ("bN-..."), no un total global.
+    let completadas = [];
+    try {
+      const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumno.id, 'actividades'));
+      completadas = snap.docs.map(d => d.id);
+    } catch (err) {
+      console.warn('No se pudieron leer las actividades de', alumno.nombre, err);
+    }
+
+    const porBloque = [1, 2, 3].map(b => {
+      const total = TOTAL_ACTIVIDADES_POR_BLOQUE[b];
+      const hechas = completadas.filter(id => id.startsWith(`b${b}-`)).length;
+      const pct = total ? Math.round((hechas / total) * 100) : 0;
+      return { b, total, hechas, pct };
+    });
+
+    const totalGeneral = porBloque.reduce((s, x) => s + x.hechas, 0);
+    const totalPosible = porBloque.reduce((s, x) => s + x.total, 0);
 
     detalle.innerHTML = `
       <summary>
         <span class="student-name">${escaparHTML(alumno.nombre)}</span>
-        <span class="part-summary-stat">${puntos}/${totalBloque1} actividades · ${pct}% de Participación (Bloque 1)</span>
+        <span class="part-summary-stat">${totalGeneral}/${totalPosible} actividades en total</span>
       </summary>
-      <div class="part-detail" data-loading="1">Cargando actividades…</div>
+      <div class="part-detail">
+        ${porBloque.map(x => `
+          <div class="part-bloque-row">
+            <span class="part-bloque-nombre">Bloque ${x.b}</span>
+            <div class="prog-bar-track"><div class="prog-bar-fill" style="width:${x.pct}%"></div></div>
+            <span class="part-bloque-stat">${x.hechas}/${x.total} · ${x.pct}%</span>
+          </div>
+        `).join('')}
+        ${completadas.length === 0 ? '<p class="empty-inline">Todavía no completa ninguna actividad.</p>' : ''}
+      </div>
     `;
     cont.appendChild(detalle);
-
-    detalle.addEventListener('toggle', async () => {
-      if (!detalle.open) return;
-      const box = detalle.querySelector('.part-detail');
-      if (box.dataset.loaded) return;
-      const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumno.id, 'actividades'));
-      box.dataset.loaded = '1';
-      box.innerHTML = snap.empty
-        ? '<p class="empty-inline">Todavía no completa ninguna actividad.</p>'
-        : `<ul class="part-activity-list">${snap.docs
-            .sort((a, b) => a.id.localeCompare(b.id))
-            .map(d => `<li>✓ ${escaparHTML(d.id)}</li>`)
-            .join('')}</ul>`;
-    });
   }
 }
 
@@ -594,4 +604,4 @@ function escaparHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
-      }
+}

@@ -169,14 +169,34 @@ function renderTabs() {
   });
 }
 
-function renderProgreso(actividades) {
+// Muestra SIEMPRE los tres bloques con su propia barra, no solo el activo.
+// Cada barra cuenta únicamente las actividades de ese bloque (los ids en
+// Firestore llevan el prefijo "bN-", así que se filtran por ahí).
+async function renderProgreso() {
   const cont = document.getElementById('progreso-bloque');
-  const total = actividades.length;
-  const hechas = actividades.filter(a => completadasSet.has(idCompleto(a))).length;
-  const pct = total ? Math.round((hechas / total) * 100) : 0;
+
+  // Nos aseguramos de tener cargadas las actividades de los tres bloques
+  // disponibles, para saber el total de cada uno.
+  await Promise.all(BLOQUES_DISPONIBLES.map(b => cargarActividadesBloque(b).catch(() => [])));
+
+  const filas = BLOQUES_DISPONIBLES.map(b => {
+    const listaB = actividadesPorBloque[b] || [];
+    const total = listaB.length;
+    const hechas = listaB.filter(a => completadasSet.has(`b${b}-${a.id}`)).length;
+    const pct = total ? Math.round((hechas / total) * 100) : 0;
+    const esActivo = b === bloqueActivo;
+    return `
+      <div class="progreso-fila${esActivo ? ' activo' : ''}">
+        <span class="progreso-nombre">${NOMBRES_BLOQUE[b]}</span>
+        <div class="progreso-bar-track"><div class="progreso-bar-fill" style="width:${pct}%"></div></div>
+        <span class="progreso-stat">${hechas}/${total} · ${pct}%</span>
+      </div>
+    `;
+  }).join('');
+
   cont.innerHTML = `
-    <div class="progreso-bar-track"><div class="progreso-bar-fill" style="width:${pct}%"></div></div>
-    <p class="progreso-texto">${hechas} de ${total} actividades correctas · ${pct}% de tu Participación en este bloque</p>
+    ${filas}
+    <p class="progreso-texto">Cada actividad correcta suma a tu Participación (20% de la Evaluación Parcial de ese bloque).</p>
   `;
 }
 
@@ -201,7 +221,7 @@ async function renderBloque() {
     return;
   }
   await cargarCompletadas();
-  renderProgreso(actividades);
+  await renderProgreso();
 
   root.innerHTML = '';
 
@@ -215,6 +235,7 @@ async function renderBloque() {
 
 // ---------- LÓGICA POR TIPO DE ACTIVIDAD ----------
 
+// ¿El alumno ya dio una respuesta (completa) a esta actividad?
 function respuestaCompleta(act, respuesta) {
   if (act.tipo === 'relacionar') {
     return respuesta && act.pares.every((_, i) => respuesta[i] !== undefined);
@@ -222,6 +243,7 @@ function respuestaCompleta(act, respuesta) {
   return respuesta !== undefined;
 }
 
+// ¿La respuesta dada es correcta?
 function esCorrecta(act, respuesta) {
   if (act.tipo === 'relacionar') {
     return act.pares.every((_, i) => respuesta[i] === i);
@@ -292,7 +314,7 @@ function renderSubtema(sub, actividades) {
       }
     }
 
-    renderProgreso(actividadesPorBloque[bloqueActivo]);
+    await renderProgreso();
 
     if (todoCorrectoEsteIntento) {
       actions.innerHTML = `<p class="subtema-done-msg">✓ Subtema completo — todas correctas.</p>`;
@@ -319,6 +341,7 @@ function marcarFeedbackTarjeta(card, act, respuesta, acerto) {
       sel.classList.add(respuesta[i] === i ? 'correct' : 'incorrect');
     });
   } else {
+    const opciones = act.tipo === 'verdadero_falso' ? ['Verdadero', 'Falso'] : act.opciones;
     const correctaIdx = act.tipo === 'verdadero_falso' ? (act.correcta ? 0 : 1) : act.correcta;
     const labels = card.querySelectorAll('.quiz-option');
     labels.forEach(label => {
@@ -411,6 +434,8 @@ function renderTarjetaActividad(act, respuestas) {
 }
 
 async function registrarAcierto(idFull, act) {
+  // Crea el documento de la actividad (solo una vez — las reglas de Firestore
+  // bloquean update/delete) y suma exactamente 1 punto de participación.
   const actRef = doc(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'actividades', idFull);
   await setDoc(actRef, {
     bloque: bloqueActivo,

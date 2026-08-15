@@ -75,22 +75,42 @@ async function cargarGruposEnSelect() {
   });
 }
 
+// Cuenta las actividades completadas POR BLOQUE (no un total global), leyendo
+// los ids reales guardados en Firestore, que llevan el prefijo "bN-".
 async function renderParticipacion() {
   const cont = document.getElementById('prog-participacion');
-  // Por ahora solo el Bloque 1 tiene actividades publicadas.
-  const bloquesConDatos = [1];
-  cont.innerHTML = bloquesConDatos.map(b => {
-    const total = TOTAL_ACTIVIDADES_POR_BLOQUE[b];
-    const puntos = Math.min(sesion.puntosParticipacion || 0, total);
-    const pct = total ? Math.round((puntos / total) * 100) : 0;
+
+  let completadas = new Set();
+  try {
+    const snap = await getDocs(collection(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'actividades'));
+    completadas = new Set(snap.docs.map(d => d.id));
+  } catch (err) {
+    console.warn('No se pudieron cargar las actividades completadas:', err);
+  }
+
+  const filas = await Promise.all([1, 2, 3].map(async (b) => {
+    let total = TOTAL_ACTIVIDADES_POR_BLOQUE[b];
+    try {
+      const res = await fetch(`data/actividades_bloque${b}.json`, { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        total = data.actividades.length;
+      }
+    } catch { /* usamos el total por defecto */ }
+
+    const hechas = [...completadas].filter(id => id.startsWith(`b${b}-`)).length;
+    const pct = total ? Math.round((hechas / total) * 100) : 0;
     return `
       <div class="prog-bloque-row">
         <span class="prog-bloque-nombre">${NOMBRES_BLOQUE[b]}</span>
         <div class="prog-bloque-bar-track"><div class="prog-bloque-bar-fill" style="width:${pct}%"></div></div>
-        <span class="prog-bloque-stat">${puntos}/${total} actividades · ${pct}% de 20%</span>
+        <span class="prog-bloque-stat">${hechas}/${total} actividades · ${pct}%</span>
       </div>
     `;
-  }).join('') + `<p style="margin-top:14px;"><a href="actividades.html" class="btn btn-ghost-dark btn-small">Ir a Actividades</a></p>`;
+  }));
+
+  cont.innerHTML = filas.join('') +
+    `<p style="margin-top:14px;"><a href="actividades.html" class="btn btn-ghost-dark btn-small">Ir a Actividades</a></p>`;
 }
 
 async function renderPracticas() {
