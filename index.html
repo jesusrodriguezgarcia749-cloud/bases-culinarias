@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bases Culinarias — Compendio digital · ITES René Descartes</title>
-<meta name="description" content="Compendio digital de la asignatura Bases Culinarias, Licenciatura en Artes Culinarias y Negocios Gastronómicos.">
+<title>Aula Virtual — Bases Culinarias</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
@@ -22,6 +22,7 @@
       <a href="compendio.html">Compendio</a>
       <a href="actividades.html">Actividades</a>
       <a href="biblioteca.html">Biblioteca</a>
+      <a href="mi-progreso.html">Mi progreso</a>
       <a href="admin.html" class="nav-admin">Panel docente</a>
     </nav>
     <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
@@ -30,122 +31,114 @@
   </div>
 </header>
 
-<main>
+<section class="hero">
+  <div class="hero-texture"></div>
+  <div class="wrap hero-inner">
+    <p class="studio-seal">LudoMente Studio</p>
+    <p class="eyebrow">Plataforma educativa</p>
+    <h1>Aula Virtual</h1>
+    <p class="hero-sub">Bases Culinarias — compendio, actividades de evaluación formativa y seguimiento de tu avance, todo en un mismo lugar. Licenciatura en Artes Culinarias y Negocios Gastronómicos, ITES René Descartes.</p>
+    <div class="hero-actions">
+      <a href="compendio.html" class="btn btn-primary">Ver el Compendio</a>
+      <a href="actividades.html" class="btn btn-ghost">Ir a Actividades</a>
+    </div>
+  </div>
+</section>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="wrap hero-inner">
-      <p class="eyebrow">Primer cuatrimestre · Clave 0101 · 8 créditos</p>
-      <h1>Bases Culinarias</h1>
-      <p class="hero-sub">El compendio de referencia para conocer los conceptos, instrumentos y materias primas del ejercicio gastronómico — organizado, buscable y siempre a la mano.</p>
-      <div class="hero-actions">
-        <a href="compendio.html" class="btn btn-primary">Abrir el compendio</a>
-        <a href="actividades.html" class="btn btn-ghost">Ver actividades</a>
+<section class="search-band">
+  <div class="wrap">
+    <form class="search-form">
+      <label for="search-input" class="sr-only">Buscar en el compendio</label>
+      <input id="search-input" type="text" placeholder="Busca un tema, por ejemplo: mise en place, temperaturas, cortes…">
+      <button type="submit">Buscar</button>
+    </form>
+    <p class="search-hint">La búsqueda te lleva directo al subtema correspondiente en el compendio.</p>
+  </div>
+</section>
+
+<section class="blocks">
+  <div class="wrap">
+    <p class="section-eyebrow">Explora la plataforma</p>
+    <h2>¿A dónde quieres ir?</h2>
+
+    <div class="block-cards">
+      <div class="index-card" style="--card-accent:#C98A2C">
+        <div class="index-card-top">
+          <span class="index-card-num">01</span>
+          <span class="index-card-pin"></span>
+        </div>
+        <h3>Compendio</h3>
+        <ul>
+          <li>Los tres bloques completos de la asignatura</li>
+          <li>Navegación por subtema, con buscador</li>
+        </ul>
+        <a href="compendio.html" class="card-link">Entrar →</a>
+      </div>
+
+      <div class="index-card" style="--card-accent:#A63D2F">
+        <div class="index-card-top">
+          <span class="index-card-num">02</span>
+          <span class="index-card-pin"></span>
+        </div>
+        <h3>Actividades</h3>
+        <ul>
+          <li>Evaluación formativa por subtema</li>
+          <li>Con retroalimentación explicada</li>
+        </ul>
+        <a href="actividades.html" class="card-link">Entrar →</a>
+      </div>
+
+      <div class="index-card" style="--card-accent:#6B7A5E">
+        <div class="index-card-top">
+          <span class="index-card-num">03</span>
+          <span class="index-card-pin"></span>
+        </div>
+        <h3>Biblioteca</h3>
+        <ul>
+          <li>Material de consulta adicional</li>
+        </ul>
+        <a href="biblioteca.html" class="card-link">Entrar →</a>
+      </div>
+
+      <div class="index-card" style="--card-accent:#C98A2C">
+        <div class="index-card-top">
+          <span class="index-card-num">04</span>
+          <span class="index-card-pin"></span>
+        </div>
+        <h3>Mi progreso</h3>
+        <ul>
+          <li>Tu Participación y tus prácticas evaluadas</li>
+          <li>Solo tú puedes ver tu información</li>
+        </ul>
+        <a href="mi-progreso.html" class="card-link">Entrar →</a>
+      </div>
+
+      <div class="index-card" style="--card-accent:#A63D2F">
+        <div class="index-card-top">
+          <span class="index-card-num">05</span>
+          <span class="index-card-pin"></span>
+        </div>
+        <h3>Panel docente</h3>
+        <ul>
+          <li>Acceso restringido</li>
+        </ul>
+        <a href="admin.html" class="card-link">Entrar →</a>
       </div>
     </div>
-    <div class="hero-texture" aria-hidden="true"></div>
-  </section>
-
-  <!-- BUSCADOR -->
-  <section class="search-band">
-    <div class="wrap">
-      <form class="search-form" role="search" aria-label="Buscar en el compendio">
-        <label for="search-input" class="sr-only">Buscar tema o subtema</label>
-        <input id="search-input" type="search" placeholder="Buscar: fondos, mise en place, pastas, temperaturas de cocción…" autocomplete="off">
-        <button type="submit">Buscar</button>
-      </form>
-      <p class="search-hint">Busca por subtema exacto del programa o por palabra clave.</p>
-    </div>
-  </section>
-
-  <!-- LOS TRES BLOQUES -->
-  <section class="blocks">
-    <div class="wrap">
-      <p class="section-eyebrow">Los tres bloques del programa</p>
-      <h2>Un recorrido, tres etapas</h2>
-
-      <div class="block-cards">
-
-        <article class="index-card" style="--card-accent:#C98A2C;">
-          <div class="index-card-top">
-            <span class="index-card-num">Bloque 1</span>
-            <span class="index-card-pin" aria-hidden="true"></span>
-          </div>
-          <h3>Conceptos y definiciones de cocina</h3>
-          <ul>
-            <li>Géneros y elaboraciones culinarias sencillas</li>
-            <li>Elaboración culinaria básica</li>
-            <li>Equipos e instrumentos de medida</li>
-            <li>Tablas de temperaturas y manuales de equipos</li>
-            <li>Unidades y pesos establecidos</li>
-          </ul>
-          <a href="compendio.html#bloque-1" class="card-link">Explorar bloque →</a>
-        </article>
-
-        <article class="index-card" style="--card-accent:#A63D2F;">
-          <div class="index-card-top">
-            <span class="index-card-num">Bloque 2</span>
-            <span class="index-card-pin" aria-hidden="true"></span>
-          </div>
-          <h3>Conocimiento y manipulación de materias primas</h3>
-          <ul>
-            <li>Aprovisionamiento de materias primas</li>
-            <li>Materias primas de uso común</li>
-            <li>Variedades y características físicas</li>
-            <li>Cualidades gastronómicas</li>
-          </ul>
-          <a href="compendio.html#bloque-2" class="card-link">Explorar bloque →</a>
-        </article>
-
-        <article class="index-card" style="--card-accent:#6B7A5E;">
-          <div class="index-card-top">
-            <span class="index-card-num">Bloque 3</span>
-            <span class="index-card-pin" aria-hidden="true"></span>
-          </div>
-          <h3>Desarrollo de habilidades para la cocina</h3>
-          <ul>
-            <li>Conocimientos generales de elaboración</li>
-            <li>Carnes, aves, pescados y mariscos</li>
-            <li>Vegetales y frutos</li>
-            <li>Semillas y cereales</li>
-            <li>Hierbas y especias</li>
-          </ul>
-          <a href="compendio.html#bloque-3" class="card-link">Explorar bloque →</a>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FUENTES -->
-  <section class="sources">
-    <div class="wrap sources-inner">
-      <div class="sources-text">
-        <p class="section-eyebrow">Respaldo académico</p>
-        <h2>Fuentes consultadas</h2>
-        <p>El compendio cruza el programa oficial de la asignatura con nueve referencias técnicas de gastronomía, sistematizadas en un solo recorrido temático.</p>
-      </div>
-      <ul class="sources-list">
-        <li><strong>Manual de cocina profesional</strong> — INCA-CEA, Escuela de Artes Culinarias y Gastronomía</li>
-        <li><strong>Arte culinario: bases y procedimientos</strong> — Martínez de Flores Escobar</li>
-        <li><strong>Iniciación en las técnicas culinarias</strong> — Martínez de Flores / González-Garza</li>
-        <li><strong>Guía de Técnicas Culinarias</strong> — Nestlé Professional / WorldChefs</li>
-        <li><strong>Manual Auxiliar de Cocina y Restauración</strong> — Cámara de Comercio de España</li>
-        <li><strong>Técnicas en cocina</strong> — módulo educativo de formación técnica</li>
-        <li><strong>Manual de Cocina II</strong> — Ministerio de Educación de Nicaragua (MINED)</li>
-        <li><strong>Manual gráfico culinario de fichas técnicas ilustradas</strong> — Universidad de San Carlos de Guatemala</li>
-        <li><strong>Técnicas culinarias</strong> — Universidad de Cuenca, Ecuador</li>
-      </ul>
-    </div>
-  </section>
-
-</main>
+  </div>
+</section>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>Compendio digital · Bases Culinarias · Material de apoyo docente, uso interno.</p>
+    <p>Aula Virtual · Bases Culinarias · LudoMente Studio</p>
   </div>
 </footer>
+
+<!-- Música de fondo (opcional, apagada por defecto) -->
+<audio id="bg-music" loop preload="none">
+  <source src="https://commons.wikimedia.org/wiki/Special:FilePath/Gymnopedie_No._1..ogg" type="audio/ogg">
+</audio>
+<button id="bg-music-toggle" class="music-toggle" aria-label="Activar música de fondo" aria-pressed="false">🎵</button>
 
 <script src="js/app.js"></script>
 </body>
