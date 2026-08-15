@@ -64,6 +64,7 @@
     <button class="tab-btn" data-tab="evaluar">Evaluar</button>
     <button class="tab-btn" data-tab="historial">Historial</button>
     <button class="tab-btn" data-tab="participacion">Participación</button>
+    <button class="tab-btn" data-tab="asistencia">Asistencia</button>
   </nav>
 
   <!-- --- TAB ALUMNOS --- -->
@@ -112,6 +113,17 @@
     <p class="field-label">Actividades digitales de Aula Virtual — 20% de la Evaluación Parcial. Cada actividad respondida correctamente suma 1 punto de participación; no cuenta si falla, puede repetirla.</p>
     <div id="participacion-lista" class="part-list"></div>
     <p id="participacion-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+  </div>
+
+  <!-- --- TAB ASISTENCIA --- -->
+  <div id="tab-asistencia" class="tab-panel">
+    <label for="asis-fecha" class="field-label">Fecha</label>
+    <input id="asis-fecha" type="date">
+    <p class="field-hint">Todos inician como <strong>presente</strong>. Toca a un alumno para cambiar su estado.</p>
+    <div id="asistencia-lista" class="asis-list"></div>
+    <p id="asistencia-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+    <button id="btn-guardar-asistencia" class="btn btn-primary btn-block">Guardar asistencia del día</button>
+    <p id="asis-msg" class="save-msg" hidden></p>
   </div>
 
 </section>
