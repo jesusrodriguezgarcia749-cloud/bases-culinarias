@@ -173,3 +173,16 @@
 .asis-falta{border-left-color:var(--paprika);}
 .asis-falta .asis-dot{background:var(--paprika);}
 .asis-falta .asis-estado-label{color:var(--paprika);}
+
+/* ===== Añadido: Ensayos (checklist semanal de bitácoras) ===== */
+.ens-row{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  background:var(--cream); border-radius:10px; padding:12px 14px; margin-bottom:8px;
+  box-shadow:var(--shadow-card); flex-wrap:wrap;
+}
+.ens-check{display:flex; align-items:center; gap:10px; font-size:.9rem; flex:1; min-width:200px;}
+.ens-check input[type="checkbox"]{width:18px; height:18px; accent-color:var(--sage); flex-shrink:0;}
+.ens-calif{
+  width:72px; padding:8px 10px; border-radius:8px; border:1.5px solid var(--line);
+  font-size:.9rem; text-align:center;
+    }
