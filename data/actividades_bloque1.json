@@ -1,0 +1,243 @@
+{
+  "bloque": 1,
+  "actividades": [
+    {
+      "id": "1.1-a",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué es un género culinario?",
+      "opciones": [
+        "Una categoría amplia de preparaciones que comparten técnica, estructura o función en el menú",
+        "El nombre comercial de un platillo",
+        "Un tipo de utensilio de cocina",
+        "La nacionalidad de una receta"
+      ],
+      "correcta": 0,
+      "explicacion": "El género agrupa preparaciones por su técnica o función (sopas, salsas, guarniciones), no por su nombre comercial ni su origen. Reconocerlo ayuda a anticipar la técnica antes de cocinar."
+    },
+    {
+      "id": "1.1-b",
+      "subtema": "1.1",
+      "tipo": "verdadero_falso",
+      "pregunta": "Una elaboración culinaria sencilla siempre depende de otra preparación previa.",
+      "correcta": false,
+      "explicacion": "Es justo al revés: una elaboración sencilla (un caldo, una vinagreta, un puré simple) es la base que NO depende de nada anterior. Son los 'ladrillos' con los que después se construyen preparaciones compuestas."
+    },
+    {
+      "id": "1.1-c",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál de estas opciones es un ejemplo de elaboración culinaria sencilla?",
+      "opciones": [
+        "Un caldo base",
+        "Un plato montado con salsa derivada y guarnición",
+        "El menú completo de un banquete",
+        "Una carta de vinos"
+      ],
+      "correcta": 0,
+      "explicacion": "El caldo base no depende de ninguna otra preparación: es un 'ladrillo'. Un plato montado, en cambio, ya es una preparación compuesta que combina varias elaboraciones sencillas."
+    },
+    {
+      "id": "1.1-d",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Para qué le sirve a un cocinero reconocer el género de un platillo antes de cocinarlo?",
+      "opciones": [
+        "Para anticipar su técnica de cocción, tiempo aproximado y función en el menú",
+        "Para decidir el precio de venta",
+        "Para elegir el nombre del platillo en el menú",
+        "No tiene ninguna utilidad práctica"
+      ],
+      "correcta": 0,
+      "explicacion": "Clasificar por género es una herramienta operativa: permite prever cómo se va a cocinar algo, cuánto va a tardar y qué lugar ocupa en el servicio, incluso ante platillos que a simple vista parecen distintos."
+    },
+    {
+      "id": "1.2-a",
+      "subtema": "1.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué significa 'mise en place'?",
+      "opciones": [
+        "Emplatado final de la preparación",
+        "Tener cada ingrediente pesado, cortado y disponible antes de cocinar",
+        "El menú del día",
+        "Limpieza de la cocina al terminar el servicio"
+      ],
+      "correcta": 1,
+      "explicacion": "'Mise en place' es la preparación previa completa de todos los insumos, antes de encender el fuego — es la base de una cocina organizada."
+    },
+    {
+      "id": "1.2-b",
+      "subtema": "1.2",
+      "tipo": "verdadero_falso",
+      "pregunta": "El orden correcto de una elaboración básica es: cocción → limpieza de insumos → montaje → rectificación de sabor.",
+      "correcta": false,
+      "explicacion": "El orden real es: limpieza y preparación de insumos → técnica de cocción → rectificación de sabor → presentación/montaje. Rectificar antes de montar es lo que asegura que el sabor llegue correcto al plato final."
+    },
+    {
+      "id": "1.2-c",
+      "subtema": "1.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué distingue a una cocina organizada de una improvisada, según el concepto de mise en place?",
+      "opciones": [
+        "Que en la organizada todo el mise en place está listo antes de empezar a cocinar",
+        "Que la organizada usa más ingredientes",
+        "Que la improvisada es más rápida siempre",
+        "No hay ninguna diferencia real"
+      ],
+      "correcta": 0,
+      "explicacion": "Tener todo pesado, cortado y a la mano antes de encender el fuego es exactamente lo que separa una cocina organizada de una que va improvisando sobre la marcha, con el riesgo de errores y tiempos muertos que eso implica."
+    },
+    {
+      "id": "1.2-d",
+      "subtema": "1.2",
+      "tipo": "verdadero_falso",
+      "pregunta": "La secuencia de una elaboración básica se repite, con variantes, en prácticamente cualquier platillo.",
+      "correcta": true,
+      "explicacion": "Correcto: limpieza/preparación → cocción → rectificación → presentación es un patrón que se repite una y otra vez, aunque cambien la técnica y los ingredientes de cada platillo."
+    },
+    {
+      "id": "1.3-a",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué instrumento se usa para verificar la temperatura interna de una proteína durante la cocción?",
+      "opciones": [
+        "Termómetro de sonda",
+        "Jarra graduada",
+        "Cuchara medidora",
+        "Báscula de precisión"
+      ],
+      "correcta": 0,
+      "explicacion": "El termómetro de sonda mide temperatura interna, algo crítico tanto para verificar cocción segura en carnes como para procesos de repostería como el punto del caramelo."
+    },
+    {
+      "id": "1.3-b",
+      "subtema": "1.3",
+      "tipo": "verdadero_falso",
+      "pregunta": "En cocina profesional es preferible medir la harina por volumen (tazas) que por peso (gramos).",
+      "correcta": false,
+      "explicacion": "Es al revés: medir por volumen ingredientes como la harina es un error común de principiante, porque genera inconsistencia entre una preparación y otra. La cocina profesional prioriza el peso sobre el volumen siempre que sea posible."
+    },
+    {
+      "id": "1.3-c",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué mide una báscula de cocina?",
+      "opciones": [
+        "Masa (gramos, kilogramos)",
+        "Volumen (mililitros, litros)",
+        "Temperatura interna",
+        "Tiempo de cocción"
+      ],
+      "correcta": 0,
+      "explicacion": "La báscula mide masa. Cada instrumento tiene un propósito distinto: la jarra graduada mide volumen y el termómetro de sonda mide temperatura — confundirlos es la raíz de muchos errores de principiante."
+    },
+    {
+      "id": "1.3-d",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué mide específicamente una jarra graduada?",
+      "opciones": [
+        "Volumen (mililitros, litros)",
+        "Masa (gramos, kilogramos)",
+        "Temperatura",
+        "Densidad"
+      ],
+      "correcta": 0,
+      "explicacion": "La jarra graduada es un instrumento de volumen, útil para líquidos. No sustituye a una báscula cuando el ingrediente (como la harina) debería medirse por peso para mayor precisión."
+    },
+    {
+      "id": "1.4-a",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Entre qué rango aproximado de temperatura se ubica la 'zona de peligro' bacteriano?",
+      "opciones": [
+        "Entre 6°C y 65°C",
+        "Entre -18°C y 0°C",
+        "Entre 65°C y 100°C",
+        "Entre 0°C y 6°C"
+      ],
+      "correcta": 0,
+      "explicacion": "La zona de peligro (aprox. 6°C–65°C) es el rango donde las bacterias se multiplican más rápido. Las tablas de temperatura existen precisamente para mantener los alimentos fuera de ese rango el menor tiempo posible."
+    },
+    {
+      "id": "1.4-b",
+      "subtema": "1.4",
+      "tipo": "verdadero_falso",
+      "pregunta": "Leer el manual de un equipo nuevo (horno, marmita, freidora) antes de usarlo ayuda a evitar accidentes y resultados inconsistentes.",
+      "correcta": true,
+      "explicacion": "Correcto. Los manuales documentan rangos de temperatura, tiempos de precalentado y capacidad de carga de cada aparato — ignorarlos es una causa común de accidentes y de resultados que no se repiten igual dos veces."
+    },
+    {
+      "id": "1.4-c",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Para qué sirven las tablas de temperatura críticas en repostería, como los puntos del caramelo?",
+      "opciones": [
+        "Para ligar la temperatura exacta con el resultado de textura y sabor que se busca",
+        "Solo son una tradición decorativa sin efecto real",
+        "Para decidir el precio del postre",
+        "Para calcular el tiempo de entrega al cliente"
+      ],
+      "correcta": 0,
+      "explicacion": "Conocer estas tablas no es memorización arbitraria: cada punto de temperatura en repostería (hilo, bola, quebradizo, etc.) corresponde a una textura y un resultado de sabor específicos."
+    },
+    {
+      "id": "1.4-d",
+      "subtema": "1.4",
+      "tipo": "verdadero_falso",
+      "pregunta": "Las tablas de temperatura son solo una formalidad, sin relación real con la seguridad alimentaria.",
+      "correcta": false,
+      "explicacion": "Falso: están directamente ligadas a la seguridad alimentaria (evitar la zona de peligro bacteriano) y también a los resultados de textura y sabor — no son un trámite decorativo."
+    },
+    {
+      "id": "1.5-a",
+      "subtema": "1.5",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué sistema de unidades usa principalmente la cocina profesional?",
+      "opciones": [
+        "El sistema métrico decimal (gramos, kilogramos, mililitros, litros)",
+        "El sistema anglosajón (onzas, libras, tazas)",
+        "Un sistema propio sin relación con ningún estándar",
+        "El sistema imperial exclusivamente"
+      ],
+      "correcta": 0,
+      "explicacion": "La cocina profesional trabaja principalmente con el sistema métrico decimal, aunque en textos y recetarios de origen anglosajón es común encontrar onzas, libras y tazas — de ahí la importancia de saber convertir entre sistemas."
+    },
+    {
+      "id": "1.5-b",
+      "subtema": "1.5",
+      "tipo": "verdadero_falso",
+      "pregunta": "Unidades como 'una pizca' o 'al gusto' son recomendables para procesos que requieren precisión exacta.",
+      "correcta": false,
+      "explicacion": "Estas unidades propias del oficio dependen de la experiencia del cocinero, no de una medida exacta. Son útiles en ajustes finales, pero no para procesos donde la precisión es indispensable (como una ficha técnica de producción)."
+    },
+    {
+      "id": "1.5-c",
+      "subtema": "1.5",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué es importante estandarizar las unidades en un recetario interno o ficha técnica?",
+      "opciones": [
+        "Porque permite que un platillo salga igual sin importar quién lo prepare",
+        "Porque lo exige la ley de etiquetado",
+        "Porque así se reduce el número de ingredientes",
+        "No tiene relación con la consistencia del platillo"
+      ],
+      "correcta": 0,
+      "explicacion": "Estandarizar unidades es lo que permite que un platillo salga igual sin importar quién lo prepare — esto es central en cocina de producción y en cualquier operación con más de un cocinero."
+    },
+    {
+      "id": "1.5-d",
+      "subtema": "1.5",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué tipo de unidades son comunes en recetarios de origen anglosajón?",
+      "opciones": [
+        "Onzas, libras y tazas",
+        "Gramos y mililitros exclusivamente",
+        "Solo unidades del oficio como 'pizca' o 'al gusto'",
+        "El sistema métrico decimal"
+      ],
+      "correcta": 0,
+      "explicacion": "Los recetarios de origen anglosajón suelen usar onzas, libras y tazas, por eso conviene saber convertir entre ese sistema y el métrico decimal que se usa en la cocina profesional de referencia."
+    }
+  ]
+}
