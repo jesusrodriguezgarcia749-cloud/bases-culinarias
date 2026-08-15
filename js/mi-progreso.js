@@ -138,11 +138,89 @@ async function renderPracticas() {
   }).join('');
 }
 
+// Semanas de bitácora (deben coincidir con las del panel docente).
+const SEMANAS_ENSAYO = [
+  { n: 1, bloque: 1, tema: 'Géneros y Estructura Clásica' },
+  { n: 2, bloque: 1, tema: 'Secuencia Operativa' },
+  { n: 3, bloque: 1, tema: 'Rendimiento y Merma' },
+  { n: 4, bloque: 1, tema: 'Termodinámica y Sanidad' },
+  { n: 5, bloque: 1, tema: 'Escalabilidad — Micro-Ensayo 1' },
+  { n: 6, bloque: 2, tema: 'Aprovisionamiento' },
+  { n: 7, bloque: 2, tema: 'Propiedades Funcionales' },
+  { n: 8, bloque: 2, tema: 'Grasas y Aceites' },
+  { n: 9, bloque: 2, tema: 'Variedades Físicas y Scoville' },
+  { n: 10, bloque: 2, tema: 'Cualidades Gastronómicas — Micro-Ensayo 2' },
+  { n: 11, bloque: 3, tema: 'Técnicas de Cocción' },
+  { n: 12, bloque: 3, tema: 'Destrezas con Proteínas' },
+  { n: 13, bloque: 3, tema: 'Cortes Clásicos' },
+  { n: 14, bloque: 3, tema: 'Semillas y Cereales' },
+  { n: 15, bloque: 3, tema: 'Hierbas y Especias — Micro-Ensayo 3' },
+];
+
+async function renderEnsayos() {
+  const cont = document.getElementById('prog-ensayos');
+  const empty = document.getElementById('prog-ensayos-empty');
+  cont.innerHTML = '';
+
+  let datos = {};
+  try {
+    const snap = await getDocs(collection(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'ensayos'));
+    snap.forEach(d => { datos[d.id] = d.data(); });
+  } catch (err) {
+    console.warn('No se pudieron cargar los ensayos:', err);
+  }
+
+  const conRegistro = Object.keys(datos).length > 0;
+  empty.hidden = conRegistro;
+  if (!conRegistro) return;
+
+  cont.innerHTML = SEMANAS_ENSAYO.map(s => {
+    const d = datos[String(s.n)] || {};
+    const entregado = d.entregado === true;
+    const calif = (d.calificacion !== null && d.calificacion !== undefined && d.calificacion !== '')
+      ? Number(d.calificacion).toFixed(1) : null;
+    return `
+      <div class="prog-ensayo-row">
+        <span class="prog-ensayo-icon ${entregado ? 'ok' : 'pendiente'}">${entregado ? '✓' : '○'}</span>
+        <span class="prog-ensayo-tema">Sem. ${s.n} — ${escaparHTML(s.tema)}</span>
+        <span class="prog-ensayo-calif">${calif !== null ? calif + ' / 10' : (entregado ? 'Entregada' : 'Pendiente')}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+async function renderAvisos() {
+  const cont = document.getElementById('prog-avisos');
+  const empty = document.getElementById('prog-avisos-empty');
+  cont.innerHTML = '';
+
+  let docs = [];
+  try {
+    const snap = await getDocs(query(collection(db, 'grupos', sesion.grupoId, 'avisos'), orderBy('creado', 'desc')));
+    docs = snap.docs;
+  } catch (err) {
+    console.warn('No se pudieron cargar los avisos:', err);
+  }
+
+  empty.hidden = docs.length > 0;
+  if (docs.length === 0) return;
+
+  cont.innerHTML = docs.map(d => {
+    const a = d.data();
+    return `
+      <div class="prog-aviso-card">
+        <div class="prog-aviso-titulo">${escaparHTML(a.titulo || 'Aviso')}</div>
+        <div class="prog-aviso-texto">${escaparHTML(a.texto || '')}</div>
+      </div>
+    `;
+  }).join('');
+}
+
 async function iniciarApp() {
   document.getElementById('alumno-login').hidden = true;
   document.getElementById('progreso-app').hidden = false;
   document.getElementById('act-whoami-nombre').textContent = `Hola, ${sesion.nombre}`;
-  await Promise.all([renderParticipacion(), renderPracticas()]);
+  await Promise.all([renderParticipacion(), renderPracticas(), renderEnsayos(), renderAvisos()]);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

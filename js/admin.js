@@ -114,6 +114,7 @@ document.getElementById('asis-fecha').addEventListener('change', cargarAsistenci
 document.getElementById('btn-guardar-asistencia').addEventListener('click', guardarAsistencia);
 document.getElementById('ens-semana-select').addEventListener('change', cargarEnsayos);
 document.getElementById('btn-guardar-ensayos').addEventListener('click', guardarEnsayos);
+document.getElementById('btn-publicar-aviso').addEventListener('click', publicarAviso);
 
 renderRubrica();
 renderChecklist();
@@ -125,6 +126,7 @@ function switchTab(tab) {
   if (tab === 'participacion') cargarParticipacion();
   if (tab === 'asistencia') cargarAsistencia();
   if (tab === 'ensayos') { poblarSelectSemanas(); cargarEnsayos(); }
+  if (tab === 'avisos') cargarAvisos();
 }
 
 // ---------- GRUPOS ----------
@@ -598,6 +600,57 @@ async function guardarEnsayos() {
   msg.textContent = '✓ Ensayos guardados.';
   msg.hidden = false;
   setTimeout(() => { msg.hidden = true; }, 3000);
+}
+
+// ---------- AVISOS (preguntas semanales e indicaciones para el grupo) ----------
+async function cargarAvisos() {
+  const cont = document.getElementById('avisos-lista');
+  const empty = document.getElementById('avisos-empty');
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+
+  const snap = await getDocs(query(collection(db, 'grupos', grupoActivo, 'avisos'), orderBy('creado', 'desc')));
+  empty.hidden = !snap.empty;
+  if (snap.empty) { empty.textContent = 'Aún no has publicado avisos en este grupo.'; return; }
+
+  snap.forEach(d => {
+    const a = d.data();
+    const div = document.createElement('div');
+    div.className = 'aviso-card';
+    div.innerHTML = `
+      <div class="aviso-card-top">
+        <span class="aviso-card-titulo">${escaparHTML(a.titulo || 'Sin título')}</span>
+        <button type="button" class="btn-delete-student" data-id="${d.id}">Eliminar</button>
+      </div>
+      <div class="aviso-card-texto">${escaparHTML(a.texto || '')}</div>
+    `;
+    div.querySelector('.btn-delete-student').addEventListener('click', async () => {
+      if (!confirm('¿Eliminar este aviso? Los alumnos dejarán de verlo.')) return;
+      await deleteDoc(doc(db, 'grupos', grupoActivo, 'avisos', d.id));
+      cargarAvisos();
+    });
+    cont.appendChild(div);
+  });
+}
+
+async function publicarAviso() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  const titulo = document.getElementById('aviso-titulo').value.trim();
+  const texto = document.getElementById('aviso-texto').value.trim();
+  if (!titulo && !texto) { alert('Escribe al menos un título o contenido.'); return; }
+
+  await addDoc(collection(db, 'grupos', grupoActivo, 'avisos'), {
+    titulo, texto, creado: serverTimestamp(),
+  });
+
+  document.getElementById('aviso-titulo').value = '';
+  document.getElementById('aviso-texto').value = '';
+  const msg = document.getElementById('aviso-msg');
+  msg.textContent = '\u2713 Aviso publicado.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+  cargarAvisos();
 }
 
 function escaparHTML(str) {
