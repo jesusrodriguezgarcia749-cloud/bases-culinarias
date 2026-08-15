@@ -147,3 +147,29 @@
 .part-detail{padding:6px 0 16px;}
 .part-activity-list{list-style:none; margin:0; padding:0; font-size:.85rem; color:var(--sage); display:flex; flex-direction:column; gap:4px;}
 .empty-inline{font-size:.85rem; color:var(--ink-soft); margin:0;}
+
+/* ===== Añadido: Asistencia (semáforo verde/amarillo/rojo) ===== */
+.field-hint{font-size:.82rem; color:var(--ink-soft); margin:6px 0 16px;}
+.asis-list{display:flex; flex-direction:column; gap:8px; margin-bottom:20px;}
+.asis-row{
+  width:100%; text-align:left; border:0; cursor:pointer;
+  display:flex; align-items:center; gap:12px;
+  background:var(--cream); border-radius:10px; padding:13px 16px;
+  box-shadow:var(--shadow-card); font-family:var(--font-body); font-size:.95rem;
+  border-left:5px solid transparent;
+}
+.asis-dot{width:14px; height:14px; border-radius:50%; flex-shrink:0;}
+.asis-row .student-name{flex:1;}
+.asis-estado-label{font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em;}
+
+.asis-presente{border-left-color:var(--sage);}
+.asis-presente .asis-dot{background:var(--sage);}
+.asis-presente .asis-estado-label{color:var(--sage);}
+
+.asis-retardo{border-left-color:#C9A22C;}
+.asis-retardo .asis-dot{background:#C9A22C;}
+.asis-retardo .asis-estado-label{color:#C9A22C;}
+
+.asis-falta{border-left-color:var(--paprika);}
+.asis-falta .asis-dot{background:var(--paprika);}
+.asis-falta .asis-estado-label{color:var(--paprika);}
