@@ -23,3 +23,25 @@
 .prog-practica-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;}
 .prog-practica-score{font-weight:700; color:var(--sage);}
 .prog-practica-date{font-size:.8rem; color:var(--ink-soft);}
+
+/* ===== Añadido: Ensayos y Avisos en el panel del alumno ===== */
+.prog-ensayo-row{
+  display:flex; align-items:center; gap:10px; padding:10px 0;
+  border-bottom:1px solid var(--line); font-size:.9rem; flex-wrap:wrap;
+}
+.prog-ensayo-row:last-child{border-bottom:none;}
+.prog-ensayo-icon{
+  width:20px; height:20px; border-radius:50%; display:flex; align-items:center;
+  justify-content:center; font-size:.7rem; font-weight:700; flex-shrink:0;
+}
+.prog-ensayo-icon.ok{background:var(--sage); color:#fff;}
+.prog-ensayo-icon.pendiente{background:var(--line); color:var(--ink-soft);}
+.prog-ensayo-tema{flex:1; min-width:150px;}
+.prog-ensayo-calif{font-weight:600; color:var(--saffron-dark); font-size:.85rem;}
+
+.prog-aviso-card{
+  background:rgba(201,138,44,0.1); border-left:4px solid var(--saffron);
+  border-radius:8px; padding:14px 16px; margin-bottom:12px;
+}
+.prog-aviso-titulo{font-weight:700; margin-bottom:6px; font-size:.95rem;}
+.prog-aviso-texto{font-size:.9rem; color:var(--ink); white-space:pre-wrap; line-height:1.5;}
