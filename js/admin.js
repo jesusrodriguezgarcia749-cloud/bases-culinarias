@@ -93,6 +93,9 @@ document.getElementById('eval-alumno-select').addEventListener('change', () => {
 });
 
 document.getElementById('eval-fecha').valueAsDate = new Date();
+document.getElementById('asis-fecha').valueAsDate = new Date();
+document.getElementById('asis-fecha').addEventListener('change', cargarAsistencia);
+document.getElementById('btn-guardar-asistencia').addEventListener('click', guardarAsistencia);
 
 renderRubrica();
 renderChecklist();
@@ -102,6 +105,7 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`));
   if (tab === 'historial') cargarHistorial();
   if (tab === 'participacion') cargarParticipacion();
+  if (tab === 'asistencia') cargarAsistencia();
 }
 
 // ---------- GRUPOS ----------
@@ -394,8 +398,77 @@ async function cargarParticipacion() {
   }
 }
 
+// ---------- ASISTENCIA ----------
+let asistenciaEstados = {}; // { alumnoId: 'presente' | 'retardo' | 'falta' }
+
+const CICLO_ESTADO = { presente: 'retardo', retardo: 'falta', falta: 'presente' };
+const ETIQUETA_ESTADO = { presente: 'Presente', retardo: 'Retardo', falta: 'Falta' };
+
+async function cargarAsistencia() {
+  const cont = document.getElementById('asistencia-lista');
+  const empty = document.getElementById('asistencia-empty');
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
+
+  const fecha = document.getElementById('asis-fecha').value;
+  asistenciaEstados = {};
+
+  // Carga lo ya guardado ese día (si existe); si no, todos quedan 'presente'.
+  await Promise.all(alumnosCache.map(async (a) => {
+    try {
+      const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
+      const snap = await getDoc(ref);
+      asistenciaEstados[a.id] = snap.exists() ? snap.data().estado : 'presente';
+    } catch {
+      asistenciaEstados[a.id] = 'presente';
+    }
+  }));
+
+  renderAsistenciaLista();
+}
+
+function renderAsistenciaLista() {
+  const cont = document.getElementById('asistencia-lista');
+  cont.innerHTML = '';
+  alumnosCache.forEach(a => {
+    const estado = asistenciaEstados[a.id] || 'presente';
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = `asis-row asis-${estado}`;
+    row.innerHTML = `
+      <span class="asis-dot"></span>
+      <span class="student-name">${escaparHTML(a.nombre)}</span>
+      <span class="asis-estado-label">${ETIQUETA_ESTADO[estado]}</span>
+    `;
+    row.addEventListener('click', () => {
+      asistenciaEstados[a.id] = CICLO_ESTADO[estado];
+      renderAsistenciaLista();
+    });
+    cont.appendChild(row);
+  });
+}
+
+async function guardarAsistencia() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  const fecha = document.getElementById('asis-fecha').value;
+  if (!fecha) { alert('Elige una fecha.'); return; }
+
+  const msg = document.getElementById('asis-msg');
+  await Promise.all(alumnosCache.map(a => {
+    const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
+    return setDoc(ref, { estado: asistenciaEstados[a.id] || 'presente', fecha, actualizado: serverTimestamp() });
+  }));
+
+  msg.textContent = '✓ Asistencia guardada.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+}
+
 function escaparHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
-      }
+  }
