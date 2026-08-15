@@ -17,7 +17,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const CRITERIOS = [
+var CRITERIOS = [
   { id: 'higiene', nombre: 'Higiene personal y uniforme', peso: 0.15 },
   { id: 'seguridad', nombre: 'Seguridad (NOM-251)', peso: 0.15 },
   { id: 'miseEnPlace', nombre: 'Mise en place y orden', peso: 0.20 },
@@ -25,7 +25,7 @@ const CRITERIOS = [
   { id: 'productoFinal', nombre: 'Producto final', peso: 0.20 },
 ];
 
-const CHECKLIST_ITEMS = [
+var CHECKLIST_ITEMS = [
   { id: 'uniforme', texto: 'Uniforme completo: filipina, mandil limpio, calzado antiderrapante.' },
   { id: 'higienePersonal', texto: 'Higiene personal: pelo recogido, sin anillos/relojes/pulseras, uñas cortas.' },
   { id: 'salud', texto: 'Salud: sin heridas expuestas, sin síntomas de enfermedad.' },
@@ -43,6 +43,15 @@ const TOTAL_ACTIVIDADES_POR_BLOQUE = { 1: 20, 2: 20, 3: 20 };
 
 let grupoActivo = null;
 let alumnosCache = [];
+
+// Ata un listener solo si el elemento existe. Evita que una versión vieja del
+// HTML (sin alguna pestaña nueva) tumbe todo el script al arrancar.
+function on(id, evento, fn) {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener(evento, fn);
+  else console.warn(`[admin] No existe #${id} en este HTML — ¿está actualizado admin.html?`);
+  return el;
+}
 
 onAuthStateChanged(auth, async user => {
   if (user) {
@@ -62,7 +71,7 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
-document.getElementById('login-form').addEventListener('submit', async (e) => {
+on('login-form', 'submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-pass').value;
@@ -85,14 +94,14 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   }
 });
 
-document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+on('btn-logout', 'click', () => signOut(auth));
 
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => switchTab(btn.dataset.tab));
 });
 
-document.getElementById('btn-nuevo-grupo').addEventListener('click', crearGrupo);
-document.getElementById('grupo-select').addEventListener('change', (e) => {
+on('btn-nuevo-grupo', 'click', crearGrupo);
+on('grupo-select', 'change', (e) => {
   grupoActivo = e.target.value || null;
   if (grupoActivo) {
     cargarAlumnos();
@@ -101,18 +110,21 @@ document.getElementById('grupo-select').addEventListener('change', (e) => {
   }
 });
 
-document.getElementById('form-alumno').addEventListener('submit', agregarAlumno);
-document.getElementById('btn-guardar-eval').addEventListener('click', guardarEvaluacion);
-document.getElementById('hist-alumno-select').addEventListener('change', cargarHistorial);
+on('form-alumno', 'submit', agregarAlumno);
+on('btn-guardar-eval', 'click', guardarEvaluacion);
+on('hist-alumno-select', 'change', cargarHistorial);
 
 
-document.getElementById('eval-fecha').valueAsDate = new Date();
-document.getElementById('asis-fecha').valueAsDate = new Date();
-document.getElementById('asis-fecha').addEventListener('change', cargarAsistencia);
-document.getElementById('btn-guardar-asistencia').addEventListener('click', guardarAsistencia);
-document.getElementById('ens-semana-select').addEventListener('change', cargarEnsayos);
-document.getElementById('btn-guardar-ensayos').addEventListener('click', guardarEnsayos);
-document.getElementById('btn-publicar-aviso').addEventListener('click', publicarAviso);
+const _hoy = new Date();
+['eval-fecha','asis-fecha'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.valueAsDate = _hoy;
+});
+on('asis-fecha', 'change', cargarAsistencia);
+on('btn-guardar-asistencia', 'click', guardarAsistencia);
+on('ens-semana-select', 'change', cargarEnsayos);
+on('btn-guardar-ensayos', 'click', guardarEnsayos);
+on('btn-publicar-aviso', 'click', publicarAviso);
 
 renderRubrica();
 renderChecklist();
@@ -253,7 +265,7 @@ async function eliminarAlumno(alumnoId) {
 }
 
 // ---------- LISTA DE ALUMNOS PARA EVALUAR ----------
-let alumnoEvaluandoId = null;
+var alumnoEvaluandoId = null;
 
 function renderListaEvaluar() {
   const cont = document.getElementById('eval-lista-alumnos');
@@ -472,10 +484,10 @@ async function cargarParticipacion() {
 }
 
 // ---------- ASISTENCIA ----------
-let asistenciaEstados = {}; // { alumnoId: 'presente' | 'retardo' | 'falta' }
+var asistenciaEstados = {}; // { alumnoId: 'presente' | 'retardo' | 'falta' }
 
-const CICLO_ESTADO = { presente: 'retardo', retardo: 'falta', falta: 'presente' };
-const ETIQUETA_ESTADO = { presente: 'Presente', retardo: 'Retardo', falta: 'Falta' };
+var CICLO_ESTADO = { presente: 'retardo', retardo: 'falta', falta: 'presente' };
+var ETIQUETA_ESTADO = { presente: 'Presente', retardo: 'Retardo', falta: 'Falta' };
 
 async function cargarAsistencia() {
   const cont = document.getElementById('asistencia-lista');
@@ -544,7 +556,7 @@ async function guardarAsistencia() {
 // Semanas 1-15 agrupadas por bloque (cada bloque cierra con un micro-ensayo
 // en su última semana); la Semana 16 (proyecto final) se maneja aparte, en
 // la Evaluación Final del cuatrimestre.
-const SEMANAS_ENSAYO = [
+var SEMANAS_ENSAYO = [
   { n: 1, bloque: 1, tema: 'Géneros y Estructura Clásica' },
   { n: 2, bloque: 1, tema: 'Secuencia Operativa' },
   { n: 3, bloque: 1, tema: 'Rendimiento y Merma' },
@@ -562,7 +574,7 @@ const SEMANAS_ENSAYO = [
   { n: 15, bloque: 3, tema: 'Hierbas y Especias — Micro-Ensayo 3', cierre: true },
 ];
 
-let semanaSeleccionada = null;
+var semanaSeleccionada = null;
 
 function poblarSelectSemanas() {
   const select = document.getElementById('ens-semana-select');
