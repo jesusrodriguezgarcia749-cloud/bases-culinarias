@@ -96,6 +96,8 @@ document.getElementById('eval-fecha').valueAsDate = new Date();
 document.getElementById('asis-fecha').valueAsDate = new Date();
 document.getElementById('asis-fecha').addEventListener('change', cargarAsistencia);
 document.getElementById('btn-guardar-asistencia').addEventListener('click', guardarAsistencia);
+document.getElementById('ens-alumno-select').addEventListener('change', cargarEnsayos);
+document.getElementById('btn-guardar-ensayos').addEventListener('click', guardarEnsayos);
 
 renderRubrica();
 renderChecklist();
@@ -106,6 +108,7 @@ function switchTab(tab) {
   if (tab === 'historial') cargarHistorial();
   if (tab === 'participacion') cargarParticipacion();
   if (tab === 'asistencia') cargarAsistencia();
+  if (tab === 'ensayos') renderSelectEnsayoAlumno();
 }
 
 // ---------- GRUPOS ----------
@@ -180,7 +183,7 @@ function renderAlumnos(lista) {
 }
 
 function renderSelectAlumnos() {
-  ['eval-alumno-select', 'hist-alumno-select'].forEach(id => {
+  ['eval-alumno-select', 'hist-alumno-select', 'ens-alumno-select'].forEach(id => {
     const select = document.getElementById(id);
     const placeholder = select.options[0];
     select.innerHTML = '';
@@ -467,8 +470,104 @@ async function guardarAsistencia() {
   setTimeout(() => { msg.hidden = true; }, 3000);
 }
 
+// ---------- ENSAYOS (bitácoras semanales manuscritas) ----------
+// Semanas 1-15 agrupadas por bloque (cada bloque cierra con un micro-ensayo
+// en su última semana); la Semana 16 (proyecto final) se maneja aparte, en
+// la Evaluación Final del cuatrimestre.
+const SEMANAS_ENSAYO = [
+  { n: 1, bloque: 1, tema: 'Géneros y Estructura Clásica' },
+  { n: 2, bloque: 1, tema: 'Secuencia Operativa' },
+  { n: 3, bloque: 1, tema: 'Rendimiento y Merma' },
+  { n: 4, bloque: 1, tema: 'Termodinámica y Sanidad' },
+  { n: 5, bloque: 1, tema: 'Escalabilidad y Cierre — Micro-Ensayo 1', cierre: true },
+  { n: 6, bloque: 2, tema: 'Aprovisionamiento' },
+  { n: 7, bloque: 2, tema: 'Propiedades Funcionales' },
+  { n: 8, bloque: 2, tema: 'Grasas y Aceites' },
+  { n: 9, bloque: 2, tema: 'Variedades Físicas y Scoville' },
+  { n: 10, bloque: 2, tema: 'Cualidades Gastronómicas — Micro-Ensayo 2', cierre: true },
+  { n: 11, bloque: 3, tema: 'Técnicas de Cocción' },
+  { n: 12, bloque: 3, tema: 'Destrezas con Proteínas' },
+  { n: 13, bloque: 3, tema: 'Cortes Clásicos' },
+  { n: 14, bloque: 3, tema: 'Semillas y Cereales' },
+  { n: 15, bloque: 3, tema: 'Hierbas y Especias — Micro-Ensayo 3', cierre: true },
+];
+
+function renderSelectEnsayoAlumno() {
+  const empty = document.getElementById('ensayos-empty');
+  const cont = document.getElementById('ensayos-lista');
+  if (!document.getElementById('ens-alumno-select').value) {
+    cont.innerHTML = '';
+    empty.hidden = false;
+    empty.textContent = 'Elige un alumno para ver su seguimiento de ensayos.';
+  }
+}
+
+async function cargarEnsayos() {
+  const alumnoId = document.getElementById('ens-alumno-select').value;
+  const cont = document.getElementById('ensayos-lista');
+  const empty = document.getElementById('ensayos-empty');
+  cont.innerHTML = '';
+
+  if (!grupoActivo || !alumnoId) { empty.hidden = false; empty.textContent = 'Elige un alumno.'; return; }
+  empty.hidden = true;
+
+  const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ensayos'));
+  const guardado = {};
+  snap.forEach(d => { guardado[d.id] = d.data(); });
+
+  let bloqueActualRender = null;
+  SEMANAS_ENSAYO.forEach(s => {
+    if (s.bloque !== bloqueActualRender) {
+      bloqueActualRender = s.bloque;
+      const h = document.createElement('h3');
+      h.className = 'section-title';
+      h.textContent = `Bloque ${s.bloque}`;
+      cont.appendChild(h);
+    }
+    const datos = guardado[String(s.n)] || { entregado: false, calificacion: '' };
+    const row = document.createElement('div');
+    row.className = 'ens-row';
+    row.innerHTML = `
+      <label class="ens-check">
+        <input type="checkbox" data-semana="${s.n}" class="ens-entregado" ${datos.entregado ? 'checked' : ''}>
+        <span>Sem. ${s.n}${s.cierre ? ' 🏁' : ''} — ${escaparHTML(s.tema)}</span>
+      </label>
+      <input type="number" min="0" max="10" step="0.1" class="ens-calif" data-semana="${s.n}"
+        value="${datos.calificacion !== '' && datos.calificacion !== undefined ? datos.calificacion : ''}" placeholder="Calif.">
+    `;
+    cont.appendChild(row);
+  });
+}
+
+async function guardarEnsayos() {
+  const alumnoId = document.getElementById('ens-alumno-select').value;
+  if (!grupoActivo || !alumnoId) { alert('Elige un alumno primero.'); return; }
+
+  const filas = document.querySelectorAll('#ensayos-lista .ens-row');
+  const escrituras = [];
+  filas.forEach(row => {
+    const chk = row.querySelector('.ens-entregado');
+    const num = row.querySelector('.ens-calif');
+    const semana = chk.dataset.semana;
+    const calificacion = num.value === '' ? null : parseFloat(num.value);
+    const ref = doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ensayos', semana);
+    escrituras.push(setDoc(ref, {
+      semana: parseInt(semana, 10),
+      entregado: chk.checked,
+      calificacion,
+      actualizado: serverTimestamp(),
+    }));
+  });
+
+  await Promise.all(escrituras);
+  const msg = document.getElementById('ens-msg');
+  msg.textContent = '✓ Ensayos guardados.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+}
+
 function escaparHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
-  }
+    }
