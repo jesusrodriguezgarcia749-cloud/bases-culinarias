@@ -44,11 +44,18 @@ const TOTAL_ACTIVIDADES_POR_BLOQUE = { 1: 20, 2: 20, 3: 20 };
 let grupoActivo = null;
 let alumnosCache = [];
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
   if (user) {
     document.getElementById('login-screen').hidden = true;
     document.getElementById('app-screen').hidden = false;
-    cargarGrupos();
+    await cargarGrupos();
+    // Si el navegador restauró una opción de grupo ya seleccionada (sin
+    // disparar 'change'), forzamos la carga de alumnos igual.
+    const select = document.getElementById('grupo-select');
+    if (select.value) {
+      grupoActivo = select.value;
+      cargarAlumnos();
+    }
   } else {
     document.getElementById('login-screen').hidden = false;
     document.getElementById('app-screen').hidden = true;
@@ -64,7 +71,16 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   try {
     await signInWithEmailAndPassword(auth, email, pass);
   } catch (err) {
-    errorEl.textContent = 'No se pudo entrar: verifica tu correo y contraseña.';
+    console.error('Error de login:', err.code, err.message);
+    const MENSAJES = {
+      'auth/user-not-found': 'Ese correo no está dado de alta en Firebase Authentication (Console → Authentication → Users → Add user).',
+      'auth/wrong-password': 'La contraseña no coincide con la de ese usuario.',
+      'auth/invalid-credential': 'Correo o contraseña incorrectos, o el usuario no existe en Firebase Authentication.',
+      'auth/invalid-email': 'Ese correo no tiene un formato válido.',
+      'auth/too-many-requests': 'Demasiados intentos fallidos — espera unos minutos e intenta de nuevo.',
+      'auth/network-request-failed': 'Falla de conexión a internet — verifica tu señal.',
+    };
+    errorEl.textContent = MENSAJES[err.code] || `No se pudo entrar (${err.code || err.message}).`;
     errorEl.hidden = false;
   }
 });
@@ -96,7 +112,7 @@ document.getElementById('eval-fecha').valueAsDate = new Date();
 document.getElementById('asis-fecha').valueAsDate = new Date();
 document.getElementById('asis-fecha').addEventListener('change', cargarAsistencia);
 document.getElementById('btn-guardar-asistencia').addEventListener('click', guardarAsistencia);
-document.getElementById('ens-alumno-select').addEventListener('change', cargarEnsayos);
+document.getElementById('ens-semana-select').addEventListener('change', cargarEnsayos);
 document.getElementById('btn-guardar-ensayos').addEventListener('click', guardarEnsayos);
 
 renderRubrica();
@@ -108,7 +124,7 @@ function switchTab(tab) {
   if (tab === 'historial') cargarHistorial();
   if (tab === 'participacion') cargarParticipacion();
   if (tab === 'asistencia') cargarAsistencia();
-  if (tab === 'ensayos') renderSelectEnsayoAlumno();
+  if (tab === 'ensayos') { poblarSelectSemanas(); cargarEnsayos(); }
 }
 
 // ---------- GRUPOS ----------
@@ -183,7 +199,7 @@ function renderAlumnos(lista) {
 }
 
 function renderSelectAlumnos() {
-  ['eval-alumno-select', 'hist-alumno-select', 'ens-alumno-select'].forEach(id => {
+  ['eval-alumno-select', 'hist-alumno-select'].forEach(id => {
     const select = document.getElementById(id);
     const placeholder = select.options[0];
     select.innerHTML = '';
@@ -492,63 +508,71 @@ const SEMANAS_ENSAYO = [
   { n: 15, bloque: 3, tema: 'Hierbas y Especias — Micro-Ensayo 3', cierre: true },
 ];
 
-function renderSelectEnsayoAlumno() {
-  const empty = document.getElementById('ensayos-empty');
-  const cont = document.getElementById('ensayos-lista');
-  if (!document.getElementById('ens-alumno-select').value) {
-    cont.innerHTML = '';
-    empty.hidden = false;
-    empty.textContent = 'Elige un alumno para ver su seguimiento de ensayos.';
-  }
+let semanaSeleccionada = null;
+
+function poblarSelectSemanas() {
+  const select = document.getElementById('ens-semana-select');
+  if (select.options.length > 0) return; // ya poblado
+  SEMANAS_ENSAYO.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.n;
+    opt.textContent = `Semana ${s.n} (Bloque ${s.bloque}) — ${s.tema}`;
+    select.appendChild(opt);
+  });
+  semanaSeleccionada = SEMANAS_ENSAYO[0].n;
 }
 
 async function cargarEnsayos() {
-  const alumnoId = document.getElementById('ens-alumno-select').value;
   const cont = document.getElementById('ensayos-lista');
   const empty = document.getElementById('ensayos-empty');
   cont.innerHTML = '';
 
-  if (!grupoActivo || !alumnoId) { empty.hidden = false; empty.textContent = 'Elige un alumno.'; return; }
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
   empty.hidden = true;
 
-  const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ensayos'));
-  const guardado = {};
-  snap.forEach(d => { guardado[d.id] = d.data(); });
+  semanaSeleccionada = document.getElementById('ens-semana-select').value || SEMANAS_ENSAYO[0].n;
 
-  let bloqueActualRender = null;
-  SEMANAS_ENSAYO.forEach(s => {
-    if (s.bloque !== bloqueActualRender) {
-      bloqueActualRender = s.bloque;
-      const h = document.createElement('h3');
-      h.className = 'section-title';
-      h.textContent = `Bloque ${s.bloque}`;
-      cont.appendChild(h);
+  // Carga lo ya guardado esa semana para cada alumno del grupo.
+  const datos = {};
+  await Promise.all(alumnosCache.map(async (a) => {
+    try {
+      const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'ensayos', String(semanaSeleccionada));
+      const snap = await getDoc(ref);
+      datos[a.id] = snap.exists() ? snap.data() : { entregado: false, calificacion: '' };
+    } catch {
+      datos[a.id] = { entregado: false, calificacion: '' };
     }
-    const datos = guardado[String(s.n)] || { entregado: false, calificacion: '' };
+  }));
+
+  alumnosCache.forEach(a => {
+    const d = datos[a.id] || { entregado: false, calificacion: '' };
     const row = document.createElement('div');
     row.className = 'ens-row';
+    row.dataset.alumnoId = a.id;
     row.innerHTML = `
       <label class="ens-check">
-        <input type="checkbox" data-semana="${s.n}" class="ens-entregado" ${datos.entregado ? 'checked' : ''}>
-        <span>Sem. ${s.n}${s.cierre ? ' 🏁' : ''} — ${escaparHTML(s.tema)}</span>
+        <input type="checkbox" class="ens-entregado" ${d.entregado ? 'checked' : ''}>
+        <span class="student-name">${escaparHTML(a.nombre)}</span>
       </label>
-      <input type="number" min="0" max="10" step="0.1" class="ens-calif" data-semana="${s.n}"
-        value="${datos.calificacion !== '' && datos.calificacion !== undefined ? datos.calificacion : ''}" placeholder="Calif.">
+      <input type="number" min="0" max="10" step="0.1" class="ens-calif"
+        value="${d.calificacion !== '' && d.calificacion !== null && d.calificacion !== undefined ? d.calificacion : ''}" placeholder="Calif.">
     `;
     cont.appendChild(row);
   });
 }
 
 async function guardarEnsayos() {
-  const alumnoId = document.getElementById('ens-alumno-select').value;
-  if (!grupoActivo || !alumnoId) { alert('Elige un alumno primero.'); return; }
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  const semana = document.getElementById('ens-semana-select').value;
+  if (!semana) return;
 
   const filas = document.querySelectorAll('#ensayos-lista .ens-row');
   const escrituras = [];
   filas.forEach(row => {
+    const alumnoId = row.dataset.alumnoId;
     const chk = row.querySelector('.ens-entregado');
     const num = row.querySelector('.ens-calif');
-    const semana = chk.dataset.semana;
     const calificacion = num.value === '' ? null : parseFloat(num.value);
     const ref = doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ensayos', semana);
     escrituras.push(setDoc(ref, {
@@ -570,4 +594,4 @@ function escaparHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
-                                   }
+      }
