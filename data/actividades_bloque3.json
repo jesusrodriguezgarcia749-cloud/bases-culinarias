@@ -1,0 +1,227 @@
+{
+  "bloque": 3,
+  "actividades": [
+    {
+      "id": "3.1-a",
+      "subtema": "3.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿En qué se diferencian las tres familias de técnicas de cocción (concentración, expansión, mixta)?",
+      "opciones": [
+        "En cómo se transmite el calor al alimento: sellando la superficie, intercambiando con el medio, o combinando ambas cosas",
+        "En el tipo de sartén que se utiliza",
+        "Únicamente en el tiempo total de cocción",
+        "No hay ninguna diferencia real entre ellas"
+      ],
+      "correcta": 0,
+      "explicacion": "Cada familia se define por cómo se transmite el calor: concentración sella y retiene, expansión permite el intercambio gradual con el medio, y mixta combina ambas etapas."
+    },
+    {
+      "id": "3.1-b",
+      "subtema": "3.1",
+      "tipo": "verdadero_falso",
+      "pregunta": "La cocción por concentración busca que el calor penetre gradualmente desde el inicio de la cocción.",
+      "correcta": false,
+      "explicacion": "Es al revés: la concentración sella rápidamente la superficie a temperaturas altas. La penetración gradual del calor es característica de la cocción por expansión."
+    },
+    {
+      "id": "3.1-c",
+      "subtema": "3.1",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada familia de técnica de cocción con su principio.",
+      "pares": [
+        { "izquierda": "Por concentración", "derecha": "Sella rápido la superficie y retiene jugos en el interior" },
+        { "izquierda": "Por expansión", "derecha": "Permite el intercambio gradual con el medio de cocción" },
+        { "izquierda": "Mixta", "derecha": "Combina un sellado inicial con cocción lenta en líquido" }
+      ],
+      "explicacion": "Cada familia responde a un principio físico distinto de transmisión de calor, y elegir la correcta depende del resultado que se busca, no de la costumbre."
+    },
+    {
+      "id": "3.1-d",
+      "subtema": "3.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué un corte tierno como el filete se arruina si se cocina por horas con una técnica mixta?",
+      "opciones": [
+        "Porque pierde humedad y su textura se vuelve fibrosa sin necesitar ese tiempo prolongado",
+        "Porque el filete siempre debe cocinarse mixto sin excepción",
+        "Porque las técnicas mixtas nunca deben usarse en carnes",
+        "No hay ninguna razón, cualquier corte se beneficia de horas de cocción"
+      ],
+      "correcta": 0,
+      "explicacion": "Las técnicas mixtas premian la paciencia justamente en cortes duros con tejido conectivo, que necesitan tiempo para volverse gelatina. Un corte ya tierno no necesita ni se beneficia de ese tiempo."
+    },
+    {
+      "id": "3.2.1-a",
+      "subtema": "3.2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué es importante cortar la carne en contra de la fibra al momento de servir?",
+      "opciones": [
+        "Porque hace que la misma pieza, cocinada igual, se perciba más suave al morderla",
+        "Porque cambia el punto de cocción de la carne",
+        "Porque acelera el tiempo de cocción",
+        "No tiene ningún efecto real en la textura"
+      ],
+      "correcta": 0,
+      "explicacion": "Cortar contra la fibra acorta las fibras musculares que el diente tiene que romper al masticar, haciendo que la misma pieza se perciba notablemente más tierna."
+    },
+    {
+      "id": "3.2.1-b",
+      "subtema": "3.2.1",
+      "tipo": "verdadero_falso",
+      "pregunta": "El desvenado del camarón se realiza antes de pelarlo.",
+      "correcta": false,
+      "explicacion": "El desvenado se hace después de pelar el camarón, retirando el conducto digestivo visible a través del caparazón ya expuesto."
+    },
+    {
+      "id": "3.2.1-c",
+      "subtema": "3.2.1",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada punto de cocción de carnes rojas con su rango de temperatura interna aproximado.",
+      "pares": [
+        { "izquierda": "A la inglesa / rojo inglés", "derecha": "Aproximadamente 50-55°C" },
+        { "izquierda": "A punto / término medio", "derecha": "Aproximadamente 60-65°C" },
+        { "izquierda": "Bien cocida", "derecha": "Aproximadamente 70-80°C" }
+      ],
+      "explicacion": "La escala de puntos de cocción describe un rango de temperatura interna y textura, distinto de la temperatura mínima segura estudiada en el Bloque 1."
+    },
+    {
+      "id": "3.2.1-d",
+      "subtema": "3.2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué es importante el porcionado consistente al dividir una pieza de carne?",
+      "opciones": [
+        "Porque piezas de tamaño irregular se cuecen a ritmos distintos dentro de la misma tanda",
+        "Porque solo afecta la presentación visual del plato",
+        "Porque así lo exige el nombre comercial del corte",
+        "No tiene ningún efecto en el resultado de la cocción"
+      ],
+      "correcta": 0,
+      "explicacion": "Un porcionado inconsistente produce resultados de cocción inconsistentes: unas piezas quedan crudas y otras sobrecocidas dentro de la misma tanda."
+    },
+    {
+      "id": "3.2.2-a",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la diferencia entre el agarre de pivote y el de caída libre al cortar?",
+      "opciones": [
+        "El pivote mantiene la punta apoyada en la tabla para mayor control; la caída libre deja caer el cuchillo aprovechando su propio peso",
+        "Son exactamente la misma técnica con distinto nombre",
+        "El pivote solo se usa en frutas, nunca en vegetales",
+        "La caída libre nunca se usa en cocina profesional"
+      ],
+      "correcta": 0,
+      "explicacion": "Ambas técnicas se aplican tanto a vegetales como a carnes y frutas; el pivote da mayor control y precisión, mientras la caída libre aprovecha el peso del cuchillo con un movimiento rítmico."
+    },
+    {
+      "id": "3.2.2-b",
+      "subtema": "3.2.2",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada corte clásico con su descripción.",
+      "pares": [
+        { "izquierda": "Brunoise", "derecha": "Cubos muy pequeños, de 3 a 5 mm por lado" },
+        { "izquierda": "Juliana", "derecha": "Tiras finas de unos 4 cm de largo por 0.5 cm de grosor" },
+        { "izquierda": "Chiffonade", "derecha": "Corte fino usado en hojas, enrolladas antes de cortarse" }
+      ],
+      "explicacion": "El vocabulario de cortes clásicos comunica un tamaño exacto sin necesidad de medir con regla — cualquier cocinero entrenado sabe qué esperar al escuchar cada nombre."
+    },
+    {
+      "id": "3.2.2-c",
+      "subtema": "3.2.2",
+      "tipo": "verdadero_falso",
+      "pregunta": "La oxidación enzimática de frutas y vegetales cortados se puede prevenir con ácido, como limón o vinagre.",
+      "correcta": true,
+      "explicacion": "Correcto: el ácido, el contacto directo con plástico, o cortar cerca del momento de servir son formas de prevenir el pardeamiento enzimático que ocurre al exponer el corte al oxígeno."
+    },
+    {
+      "id": "3.2.2-d",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué es importante que las piezas cortadas tengan un tamaño uniforme?",
+      "opciones": [
+        "Porque garantiza que todo el vegetal se cocine al mismo ritmo, sin trozos crudos ni sobrecocidos",
+        "Porque solo afecta cuánto tiempo tarda el cocinero en cortar",
+        "Porque es una tradición sin ninguna razón práctica",
+        "Porque cambia el sabor del ingrediente"
+      ],
+      "correcta": 0,
+      "explicacion": "La razón detrás de la estandarización de cortes no es solo estética: piezas de tamaño uniforme garantizan una cocción pareja para toda la porción."
+    },
+    {
+      "id": "3.2.3-a",
+      "subtema": "3.2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo se verifica correctamente el punto de cocción de un grano?",
+      "opciones": [
+        "Probando directamente: debe estar suave por completo, sin núcleo duro y crudo en el centro",
+        "Con un termómetro de sonda, igual que una proteína",
+        "Solo por el tiempo transcurrido, sin necesidad de probarlo",
+        "No hay forma de verificarlo antes de servir"
+      ],
+      "correcta": 0,
+      "explicacion": "A diferencia de una proteína, un grano se verifica probándolo directamente — debe estar suave por completo, sin un núcleo duro y crudo en el centro."
+    },
+    {
+      "id": "3.2.3-b",
+      "subtema": "3.2.3",
+      "tipo": "verdadero_falso",
+      "pregunta": "La proporción grano:líquido es solo una sugerencia aproximada que no afecta mucho el resultado final.",
+      "correcta": false,
+      "explicacion": "Al contrario: la proporción grano:líquido determina directamente si el grano queda seco y duro, o suelto y en su punto — no es una sugerencia menor."
+    },
+    {
+      "id": "3.2.3-c",
+      "subtema": "3.2.3",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada grano con su proporción aproximada de grano:líquido.",
+      "pares": [
+        { "izquierda": "Arroz blanco", "derecha": "1 : 2" },
+        { "izquierda": "Arroz integral", "derecha": "1 : 2.5" },
+        { "izquierda": "Cuscús", "derecha": "1 : 1" }
+      ],
+      "explicacion": "Cada grano absorbe una cantidad distinta de líquido según su estructura — el salvado del arroz integral, por ejemplo, hace más lenta la absorción y necesita más líquido."
+    },
+    {
+      "id": "3.2.3-d",
+      "subtema": "3.2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué no se debe destapar la olla mientras se cocina arroz?",
+      "opciones": [
+        "Porque cada vez que se destapa se escapa vapor necesario para la cocción uniforme",
+        "Porque el arroz cambia de color al destaparlo",
+        "Porque destapar acelera la cocción sin ningún problema",
+        "No hay ninguna razón real para mantenerla tapada"
+      ],
+      "correcta": 0,
+      "explicacion": "El vapor atrapado dentro de la olla es lo que termina de cocinar el grano de forma uniforme; destapar libera ese vapor y afecta el resultado."
+    },
+    {
+      "id": "3.2.4-a",
+      "subtema": "3.2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la regla general de equivalencia entre hierba fresca y hierba seca?",
+      "opciones": [
+        "Aproximadamente tres a uno en volumen: tres partes de hierba fresca por una de hierba seca",
+        "Se usan siempre en la misma cantidad exacta",
+        "La hierba seca siempre se usa en mayor cantidad que la fresca",
+        "No existe ninguna relación entre ambas"
+      ],
+      "correcta": 0,
+      "explicacion": "El secado concentra los compuestos aromáticos, por eso una cucharada de hierba fresca picada equivale aproximadamente a una cucharadita de hierba seca — una relación de tres a uno en volumen."
+    },
+    {
+      "id": "3.2.4-b",
+      "subtema": "3.2.4",
+      "tipo": "verdadero_falso",
+      "pregunta": "Las hierbas frescas delicadas, como la albahaca o el cilantro, deben agregarse al inicio de una cocción larga.",
+      "correcta": false,
+      "explicacion": "Justo al revés: agregarlas al inicio de una cocción larga es desperdiciarlas, porque su aroma se evapora mucho antes de que el platillo esté listo. Se agregan casi al final."
+    },
+    {
+      "id": "3.2.4-c",
+      "subtema": "3.2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Para qué sirve tostar especias enteras en seco antes de molerlas?",
+      "opciones": [
+        "Para liberar y realzar sus compuestos aromáticos mediante el calor",
+        "Para que se conserven más tiempo sin refrigeración",
+        "Para cambiar su color permanentemente",
+        "No tiene ningún efecto real en el sabor"
