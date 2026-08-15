@@ -1,12 +1,14 @@
-// admin.js — Panel docente: grupos, alumnos, evaluación con rúbrica y checklist
-// Usa el SDK modular de Firebase, igual que biblioteca.js
+// admin.js — Panel docente: grupos, alumnos, evaluación con rúbrica y checklist,
+// y seguimiento de Participación (actividades digitales de Aula Virtual).
+// Usa el SDK modular de Firebase.
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  getFirestore, collection, doc, addDoc, getDocs, query, orderBy, serverTimestamp
+  getFirestore, collection, doc, setDoc, deleteDoc, addDoc, getDoc, getDocs,
+  query, orderBy, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import { firebaseConfig } from "./firebase-config.js";
@@ -34,6 +36,10 @@ const CHECKLIST_ITEMS = [
   { id: 'residuos', texto: 'Bote de basura con tapa y bolsa, bien ubicado.' },
   { id: 'utensilios', texto: 'Cuchillos afilados y herramientas listas.' },
 ];
+
+// Total de actividades de Participación por bloque (ver data/actividades_bloqueN.json).
+// 20% del bloque se reparte entre estas actividades → cada una vale 20/TOTAL puntos porcentuales.
+const TOTAL_ACTIVIDADES_POR_BLOQUE = { 1: 20, 2: 20, 3: 20 };
 
 let grupoActivo = null;
 let alumnosCache = [];
@@ -95,6 +101,7 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`));
   if (tab === 'historial') cargarHistorial();
+  if (tab === 'participacion') cargarParticipacion();
 }
 
 // ---------- GRUPOS ----------
@@ -121,6 +128,25 @@ async function crearGrupo() {
 }
 
 // ---------- ALUMNOS ----------
+
+// Convierte un nombre en un ID de documento estable y legible, sin acentos ni
+// espacios (ej. "María López" → "maria-lopez"). El alumno usa este mismo
+// nombre para entrar a Actividades / Mi Progreso — por eso el ID se deriva
+// del nombre y no es aleatorio: así el sitio público puede leer su propio
+// documento sin necesidad de "listar" alumnos (ver reglas de Firestore).
+function slugNombre(nombre) {
+  return nombre
+    .trim()
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-');
+}
+
+function generarPIN() {
+  return String(Math.floor(1000 + Math.random() * 9000)); // 4 dígitos
+}
+
 async function cargarAlumnos() {
   if (!grupoActivo) return;
   const snap = await getDocs(query(collection(db, 'grupos', grupoActivo, 'alumnos'), orderBy('nombre')));
@@ -136,8 +162,16 @@ function renderAlumnos(lista) {
   empty.hidden = lista.length > 0;
   lista.forEach(a => {
     const li = document.createElement('li');
-    li.innerHTML = `<span>${escaparHTML(a.nombre)}</span>`;
+    li.className = 'student-row';
+    li.innerHTML = `
+      <span class="student-name">${escaparHTML(a.nombre)}</span>
+      <span class="student-pin" title="PIN de acceso del alumno">PIN: ${escaparHTML(a.pin || '—')}</span>
+      <button type="button" class="btn-delete-student" data-id="${a.id}" title="Eliminar alumno">Eliminar</button>
+    `;
     ul.appendChild(li);
+  });
+  ul.querySelectorAll('.btn-delete-student').forEach(btn => {
+    btn.addEventListener('click', () => eliminarAlumno(btn.dataset.id));
   });
 }
 
@@ -162,9 +196,35 @@ async function agregarAlumno(e) {
   const input = document.getElementById('input-alumno-nombre');
   const nombre = input.value.trim();
   if (!nombre) return;
-  await addDoc(collection(db, 'grupos', grupoActivo, 'alumnos'), { nombre, creado: serverTimestamp() });
+
+  let id = slugNombre(nombre);
+  if (!id) { alert('Ese nombre no es válido.'); return; }
+
+  // Evita chocar con un alumno existente con el mismo nombre (agrega -2, -3…)
+  let idFinal = id;
+  let sufijo = 2;
+  while ((await getDoc(doc(db, 'grupos', grupoActivo, 'alumnos', idFinal))).exists()) {
+    idFinal = `${id}-${sufijo}`;
+    sufijo++;
+  }
+
+  const pin = generarPIN();
+  await setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', idFinal), {
+    nombre, pin, creado: serverTimestamp(), puntosParticipacion: 0,
+  });
+
   input.value = '';
-  cargarAlumnos();
+  await cargarAlumnos();
+  alert(`Alumno agregado.\n\nDale este PIN de acceso (lo necesita para entrar a Actividades y a Mi Progreso):\n\n${nombre} → PIN ${pin}`);
+}
+
+async function eliminarAlumno(alumnoId) {
+  const alumno = alumnosCache.find(a => a.id === alumnoId);
+  if (!alumno) return;
+  const ok = confirm(`¿Eliminar a "${alumno.nombre}"? Esto borra su registro para poder reutilizar el sistema (ej. en otro cuatrimestre o materia). No se puede deshacer.`);
+  if (!ok) return;
+  await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId));
+  await cargarAlumnos();
 }
 
 // ---------- RÚBRICA ----------
@@ -252,7 +312,7 @@ async function guardarEvaluacion() {
   document.getElementById('eval-alumno-select').value = '';
 }
 
-// ---------- HISTORIAL ----------
+// ---------- HISTORIAL (prácticas de cocina) ----------
 async function cargarHistorial() {
   const cont = document.getElementById('historial-lista');
   const empty = document.getElementById('historial-empty');
@@ -291,8 +351,51 @@ async function cargarHistorial() {
   });
 }
 
+// ---------- PARTICIPACIÓN (actividades digitales, tipo lista con desplegables) ----------
+async function cargarParticipacion() {
+  const cont = document.getElementById('participacion-lista');
+  const empty = document.getElementById('participacion-empty');
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
+
+  for (const alumno of alumnosCache) {
+    const detalle = document.createElement('details');
+    detalle.className = 'part-row';
+
+    const totalBloque1 = TOTAL_ACTIVIDADES_POR_BLOQUE[1];
+    const puntos = alumno.puntosParticipacion || 0;
+    const pct = totalBloque1 ? Math.round((puntos / totalBloque1) * 100) : 0;
+
+    detalle.innerHTML = `
+      <summary>
+        <span class="student-name">${escaparHTML(alumno.nombre)}</span>
+        <span class="part-summary-stat">${puntos}/${totalBloque1} actividades · ${pct}% de Participación (Bloque 1)</span>
+      </summary>
+      <div class="part-detail" data-loading="1">Cargando actividades…</div>
+    `;
+    cont.appendChild(detalle);
+
+    detalle.addEventListener('toggle', async () => {
+      if (!detalle.open) return;
+      const box = detalle.querySelector('.part-detail');
+      if (box.dataset.loaded) return;
+      const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumno.id, 'actividades'));
+      box.dataset.loaded = '1';
+      box.innerHTML = snap.empty
+        ? '<p class="empty-inline">Todavía no completa ninguna actividad.</p>'
+        : `<ul class="part-activity-list">${snap.docs
+            .sort((a, b) => a.id.localeCompare(b.id))
+            .map(d => `<li>✓ ${escaparHTML(d.id)}</li>`)
+            .join('')}</ul>`;
+    });
+  }
+}
+
 function escaparHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
-  }
+      }
