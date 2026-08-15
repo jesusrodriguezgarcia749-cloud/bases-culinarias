@@ -188,7 +188,6 @@ async function renderBloque() {
 
 // ---------- LÓGICA POR TIPO DE ACTIVIDAD ----------
 
-// ¿El alumno ya dio una respuesta (completa) a esta actividad?
 function respuestaCompleta(act, respuesta) {
   if (act.tipo === 'relacionar') {
     return respuesta && act.pares.every((_, i) => respuesta[i] !== undefined);
@@ -196,7 +195,6 @@ function respuestaCompleta(act, respuesta) {
   return respuesta !== undefined;
 }
 
-// ¿La respuesta dada es correcta?
 function esCorrecta(act, respuesta) {
   if (act.tipo === 'relacionar') {
     return act.pares.every((_, i) => respuesta[i] === i);
@@ -245,7 +243,7 @@ function renderSubtema(sub, actividades) {
 
     for (const act of pendientes) {
       const idFull = idCompleto(act);
-      const card = section.querySelector(`#card-${idFull}`);
+      const card = document.getElementById(`card-${idFull}`);
       const respuesta = respuestas[idFull];
       const acerto = esCorrecta(act, respuesta);
 
@@ -287,7 +285,6 @@ function marcarFeedbackTarjeta(card, act, respuesta, acerto) {
       sel.classList.add(respuesta[i] === i ? 'correct' : 'incorrect');
     });
   } else {
-    const opciones = act.tipo === 'verdadero_falso' ? ['Verdadero', 'Falso'] : act.opciones;
     const correctaIdx = act.tipo === 'verdadero_falso' ? (act.correcta ? 0 : 1) : act.correcta;
     const labels = card.querySelectorAll('.quiz-option');
     labels.forEach(label => {
