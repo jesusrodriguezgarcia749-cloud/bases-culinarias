@@ -66,6 +66,7 @@
     <button class="tab-btn" data-tab="participacion">Participación</button>
     <button class="tab-btn" data-tab="asistencia">Asistencia</button>
     <button class="tab-btn" data-tab="ensayos">Ensayos</button>
+    <button class="tab-btn" data-tab="avisos">Avisos</button>
   </nav>
 
   <!-- --- TAB ALUMNOS --- -->
@@ -80,8 +81,12 @@
 
   <!-- --- TAB EVALUAR --- -->
   <div id="tab-evaluar" class="tab-panel">
-    <label for="eval-alumno-select" class="field-label">Alumno</label>
-    <select id="eval-alumno-select"><option value="">— Elige un alumno —</option></select>
+    <p class="field-hint">Toca un alumno de la lista para calificar su práctica.</p>
+    <div id="eval-lista-alumnos" class="asis-list"></div>
+    <p id="eval-alumnos-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+
+    <div id="eval-form" hidden>
+    <p class="eval-alumno-activo" id="eval-alumno-activo"></p>
 
     <label for="eval-fecha" class="field-label">Fecha de la práctica</label>
     <input id="eval-fecha" type="date">
@@ -99,6 +104,7 @@
 
     <button id="btn-guardar-eval" class="btn btn-primary btn-block">Guardar evaluación</button>
     <p id="eval-msg" class="save-msg" hidden></p>
+    </div>
   </div>
 
   <!-- --- TAB HISTORIAL --- -->
@@ -138,6 +144,24 @@
     <p id="ens-msg" class="save-msg" hidden></p>
   </div>
 
+  <!-- --- TAB AVISOS --- -->
+  <div id="tab-avisos" class="tab-panel">
+    <p class="field-hint">Preguntas detonadoras de la semana, indicaciones y recordatorios. Todos los alumnos del grupo los ven en "Mi progreso".</p>
+
+    <label for="aviso-titulo" class="field-label">Título</label>
+    <input id="aviso-titulo" type="text" placeholder="Ej. Semana 3 — Preguntas para tu bitácora">
+
+    <label for="aviso-texto" class="field-label">Contenido</label>
+    <textarea id="aviso-texto" rows="5" placeholder="Escribe aquí las preguntas o indicaciones…"></textarea>
+
+    <button id="btn-publicar-aviso" class="btn btn-primary btn-block">Publicar aviso</button>
+    <p id="aviso-msg" class="save-msg" hidden></p>
+
+    <h3 class="section-title">Avisos publicados</h3>
+    <div id="avisos-lista"></div>
+    <p id="avisos-empty" class="empty-state" hidden>Aún no has publicado avisos en este grupo.</p>
+  </div>
+
 </section>
 
 <footer class="site-footer">
@@ -151,4 +175,4 @@
 <script src="js/app.js"></script>
 <script type="module" src="js/admin.js"></script>
 </body>
-      </html>
+</html>
