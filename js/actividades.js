@@ -6,6 +6,10 @@
 // del subtema antes de poder revisar otra vez. El punto de Participación se
 // registra en Firestore SOLO la primera vez que el alumno acierta esa
 // actividad — nunca por solo intentarlo.
+//
+// Tipos de actividad soportados: opcion_multiple, verdadero_falso, relacionar
+// (relacionar columnas — el alumno empareja cada elemento izquierdo con el
+// derecho que le corresponde, usando un <select> por fila).
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
@@ -19,7 +23,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Bloques disponibles: agrega aquí cuando exista data/actividades_bloqueN.json
-const BLOQUES_DISPONIBLES = [1];
+const BLOQUES_DISPONIBLES = [1, 2];
 const NOMBRES_BLOQUE = { 1: 'Bloque 1', 2: 'Bloque 2', 3: 'Bloque 3' };
 
 const SESSION_KEY = 'bc_sesion_alumno';
@@ -42,6 +46,15 @@ function escaparHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+function barajar(arr) {
+  const copia = [...arr];
+  for (let i = copia.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
 }
 
 function mostrarErrorLogin(msg) {
@@ -173,6 +186,25 @@ async function renderBloque() {
   });
 }
 
+// ---------- LÓGICA POR TIPO DE ACTIVIDAD ----------
+
+// ¿El alumno ya dio una respuesta (completa) a esta actividad?
+function respuestaCompleta(act, respuesta) {
+  if (act.tipo === 'relacionar') {
+    return respuesta && act.pares.every((_, i) => respuesta[i] !== undefined);
+  }
+  return respuesta !== undefined;
+}
+
+// ¿La respuesta dada es correcta?
+function esCorrecta(act, respuesta) {
+  if (act.tipo === 'relacionar') {
+    return act.pares.every((_, i) => respuesta[i] === i);
+  }
+  const correctaIdx = act.tipo === 'verdadero_falso' ? (act.correcta ? 0 : 1) : act.correcta;
+  return respuesta === correctaIdx;
+}
+
 // Renderiza un subtema completo: todas sus preguntas + un solo botón "Revisar
 // subtema" al final. No hay revisión pregunta por pregunta.
 function renderSubtema(sub, actividades) {
@@ -180,7 +212,7 @@ function renderSubtema(sub, actividades) {
   section.className = 'act-subtema-block';
   section.innerHTML = `<h2 class="act-subtema-titulo">Subtema ${sub}</h2>`;
 
-  const respuestas = {}; // { idFull: idx elegido }
+  const respuestas = {}; // { idFull: respuesta (formato depende del tipo) }
 
   const pendientes = actividades.filter(a => !completadasSet.has(idCompleto(a)));
   const todasCompletadas = pendientes.length === 0;
@@ -203,7 +235,7 @@ function renderSubtema(sub, actividades) {
   section.appendChild(actions);
 
   actions.querySelector('[data-action="revisar-subtema"]').addEventListener('click', async () => {
-    const faltantes = pendientes.filter(a => respuestas[idCompleto(a)] === undefined);
+    const faltantes = pendientes.filter(a => !respuestaCompleta(a, respuestas[idCompleto(a)]));
     if (faltantes.length > 0) {
       alert('Contesta todas las preguntas de este subtema antes de revisar.');
       return;
@@ -214,26 +246,10 @@ function renderSubtema(sub, actividades) {
     for (const act of pendientes) {
       const idFull = idCompleto(act);
       const card = section.querySelector(`#card-${idFull}`);
-      const opciones = act.tipo === 'verdadero_falso' ? ['Verdadero', 'Falso'] : act.opciones;
-      const correctaIdx = act.tipo === 'verdadero_falso' ? (act.correcta ? 0 : 1) : act.correcta;
-      const elegida = respuestas[idFull];
-      const acerto = elegida === correctaIdx;
+      const respuesta = respuestas[idFull];
+      const acerto = esCorrecta(act, respuesta);
 
-      const labels = card.querySelectorAll('.quiz-option');
-      labels.forEach(label => {
-        const idx = parseInt(label.dataset.idx, 10);
-        label.classList.remove('correct', 'incorrect');
-        if (idx === correctaIdx) label.classList.add('correct');
-        else if (idx === elegida) label.classList.add('incorrect');
-        label.querySelector('input').disabled = true;
-      });
-
-      const feedback = card.querySelector('.quiz-feedback');
-      feedback.hidden = false;
-      feedback.innerHTML = acerto
-        ? `<strong>Correcto.</strong> ${escaparHTML(act.explicacion)}`
-        : `<strong>No exactamente.</strong> ${escaparHTML(act.explicacion)}`;
-      feedback.className = 'quiz-feedback visible ' + (acerto ? 'ok' : 'no-ok');
+      marcarFeedbackTarjeta(card, act, respuesta, acerto);
 
       if (acerto) {
         await registrarAcierto(idFull, act);
@@ -262,6 +278,35 @@ function renderSubtema(sub, actividades) {
   return section;
 }
 
+function marcarFeedbackTarjeta(card, act, respuesta, acerto) {
+  if (act.tipo === 'relacionar') {
+    const selects = card.querySelectorAll('.relacionar-select');
+    selects.forEach((sel, i) => {
+      sel.disabled = true;
+      sel.classList.remove('correct', 'incorrect');
+      sel.classList.add(respuesta[i] === i ? 'correct' : 'incorrect');
+    });
+  } else {
+    const opciones = act.tipo === 'verdadero_falso' ? ['Verdadero', 'Falso'] : act.opciones;
+    const correctaIdx = act.tipo === 'verdadero_falso' ? (act.correcta ? 0 : 1) : act.correcta;
+    const labels = card.querySelectorAll('.quiz-option');
+    labels.forEach(label => {
+      const idx = parseInt(label.dataset.idx, 10);
+      label.classList.remove('correct', 'incorrect');
+      if (idx === correctaIdx) label.classList.add('correct');
+      else if (idx === respuesta) label.classList.add('incorrect');
+      label.querySelector('input').disabled = true;
+    });
+  }
+
+  const feedback = card.querySelector('.quiz-feedback');
+  feedback.hidden = false;
+  feedback.innerHTML = acerto
+    ? `<strong>Correcto.</strong> ${escaparHTML(act.explicacion)}`
+    : `<strong>No exactamente.</strong> ${escaparHTML(act.explicacion)}`;
+  feedback.className = 'quiz-feedback visible ' + (acerto ? 'ok' : 'no-ok');
+}
+
 function renderTarjetaActividad(act, respuestas) {
   const idFull = idCompleto(act);
   const yaCompletada = completadasSet.has(idFull);
@@ -269,6 +314,41 @@ function renderTarjetaActividad(act, respuestas) {
   const card = document.createElement('div');
   card.className = 'quiz-question';
   card.id = `card-${idFull}`;
+
+  if (act.tipo === 'relacionar') {
+    const derechaBarajada = barajar(act.pares.map((p, i) => ({ texto: p.derecha, origen: i })));
+    card.innerHTML = `
+      <p class="quiz-sub">${yaCompletada ? '<span class="badge-ok">✓ Completada</span>' : 'Pendiente'}</p>
+      <h3>${escaparHTML(act.pregunta)}</h3>
+      <div class="relacionar-list">
+        ${act.pares.map((par, i) => `
+          <div class="relacionar-row">
+            <span class="relacionar-izq">${escaparHTML(par.izquierda)}</span>
+            <select class="relacionar-select" data-idx="${i}" ${yaCompletada ? 'disabled' : ''}>
+              <option value="">— Elige —</option>
+              ${derechaBarajada.map(op => `<option value="${op.origen}">${escaparHTML(op.texto)}</option>`).join('')}
+            </select>
+          </div>
+        `).join('')}
+      </div>
+      <p class="quiz-feedback" hidden></p>
+    `;
+
+    if (!yaCompletada) {
+      card.querySelectorAll('.relacionar-select').forEach(sel => {
+        sel.addEventListener('change', () => {
+          const i = parseInt(sel.dataset.idx, 10);
+          respuestas[idFull] = respuestas[idFull] || {};
+          if (sel.value === '') {
+            delete respuestas[idFull][i];
+          } else {
+            respuestas[idFull][i] = parseInt(sel.value, 10);
+          }
+        });
+      });
+    }
+    return card;
+  }
 
   const opciones = act.tipo === 'verdadero_falso' ? ['Verdadero', 'Falso'] : act.opciones;
 
