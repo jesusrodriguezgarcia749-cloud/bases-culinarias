@@ -57,3 +57,30 @@
 }
 .tema-pager .pager-title{font-weight:600; font-size:.92rem;}
 .tema-pager .placeholder{flex:1;}
+
+/* ===== Añadido: secciones cortas, cajas Recuerda, listas de puntos clave ===== */
+.tema-section-title{
+  font-size:1.15rem; margin:28px 0 10px; color:var(--ink);
+  border-bottom:2px solid var(--saffron); display:inline-block; padding-bottom:2px;
+}
+.tema-card h3.tema-section-title:first-of-type{margin-top:22px;}
+
+.tema-callout{
+  background:rgba(201,138,44,0.1); border-left:4px solid var(--saffron);
+  border-radius:8px; padding:14px 18px; margin:18px 0;
+}
+.tema-callout-tag{
+  display:block; font-size:.72rem; font-weight:700; letter-spacing:.08em;
+  color:var(--saffron-dark); margin-bottom:4px;
+}
+.tema-callout p{margin:0; color:var(--ink); font-size:.94rem;}
+
+.tema-bullet-list{
+  margin:14px 0; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:8px;
+}
+.tema-bullet-list li{
+  padding-left:22px; position:relative; font-size:.94rem; color:var(--ink);
+}
+.tema-bullet-list li::before{
+  content:'✓'; position:absolute; left:0; color:var(--sage); font-weight:700;
+                }
