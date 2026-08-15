@@ -65,6 +65,7 @@
     <button class="tab-btn" data-tab="historial">Historial</button>
     <button class="tab-btn" data-tab="participacion">Participación</button>
     <button class="tab-btn" data-tab="asistencia">Asistencia</button>
+    <button class="tab-btn" data-tab="ensayos">Ensayos</button>
   </nav>
 
   <!-- --- TAB ALUMNOS --- -->
@@ -124,6 +125,17 @@
     <p id="asistencia-empty" class="empty-state" hidden>Elige un grupo primero.</p>
     <button id="btn-guardar-asistencia" class="btn btn-primary btn-block">Guardar asistencia del día</button>
     <p id="asis-msg" class="save-msg" hidden></p>
+  </div>
+
+  <!-- --- TAB ENSAYOS --- -->
+  <div id="tab-ensayos" class="tab-panel">
+    <label for="ens-alumno-select" class="field-label">Alumno</label>
+    <select id="ens-alumno-select"><option value="">— Elige un alumno —</option></select>
+    <p class="field-hint">20% de la Evaluación Parcial. Bitácoras manuscritas semanales — marca entregada y captura su calificación (0–10).</p>
+    <div id="ensayos-lista"></div>
+    <p id="ensayos-empty" class="empty-state" hidden>Elige un grupo y un alumno para ver su seguimiento.</p>
+    <button id="btn-guardar-ensayos" class="btn btn-primary btn-block">Guardar ensayos</button>
+    <p id="ens-msg" class="save-msg" hidden></p>
   </div>
 
 </section>
