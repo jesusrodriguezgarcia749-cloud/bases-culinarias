@@ -1,0 +1,21 @@
+.studio-seal{
+  position:absolute; top:24px; right:24px; z-index:2;
+  font-family:var(--font-body); font-size:.75rem; font-weight:600;
+  text-transform:uppercase; letter-spacing:.1em; color:var(--saffron);
+  border:1px solid rgba(201,138,44,0.5); border-radius:999px;
+  padding:6px 14px; margin:0;
+}
+@media (max-width:600px){
+  .studio-seal{position:static; display:inline-block; margin-bottom:16px;}
+}
+
+.music-toggle{
+  position:fixed; bottom:20px; right:20px; z-index:50;
+  width:52px; height:52px; border-radius:50%; border:0;
+  background:var(--charcoal); color:var(--cream); font-size:1.3rem;
+  box-shadow:var(--shadow-card); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  opacity:.55; transition:opacity .15s ease, transform .15s ease;
+}
+.music-toggle:hover{opacity:1; transform:scale(1.05);}
+.music-toggle[aria-pressed="true"]{opacity:1; background:var(--saffron-dark);}
