@@ -45,9 +45,28 @@ let grupoActivo = null;
 let alumnosCache = [];
 
 onAuthStateChanged(auth, async user => {
-  if (user) {
-    document.getElementById('login-screen').hidden = true;
-    document.getElementById('app-screen').hidden = false;
+  if (user) {document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const errorEl = document.getElementById('login-error');
+  errorEl.hidden = true;
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch (err) {
+    console.error('Error de login:', err.code, err.message);
+    const MENSAJES = {
+      'auth/user-not-found': 'Ese correo no está dado de alta en Firebase Authentication (Console → Authentication → Users → Add user).',
+      'auth/wrong-password': 'La contraseña no coincide con la de ese usuario.',
+      'auth/invalid-credential': 'Correo o contraseña incorrectos, o el usuario no existe en Firebase Authentication.',
+      'auth/invalid-email': 'Ese correo no tiene un formato válido.',
+      'auth/too-many-requests': 'Demasiados intentos fallidos — espera unos minutos e intenta de nuevo.',
+      'auth/network-request-failed': 'Falla de conexión a internet — verifica tu señal.',
+    };
+    errorEl.textContent = MENSAJES[err.code] || `No se pudo entrar (${err.code || err.message}).`;
+    errorEl.hidden = false;
+  }
+});
     await cargarGrupos();
     // Si el navegador restauró una opción de grupo ya seleccionada (sin
     // disparar 'change'), forzamos la carga de alumnos igual.
