@@ -22,6 +22,7 @@
       <a href="compendio.html">Compendio</a>
       <a href="actividades.html" aria-current="page">Actividades</a>
       <a href="biblioteca.html">Biblioteca</a>
+      <a href="mi-progreso.html">Mi progreso</a>
       <a href="admin.html" class="nav-admin">Panel docente</a>
     </nav>
     <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
@@ -32,25 +33,47 @@
 
 <section class="act-hero">
   <div class="wrap">
-    <p class="eyebrow">Autoevaluación</p>
-    <h1>Pon a prueba lo que sabes</h1>
-    <p class="hero-sub">Un set de preguntas por bloque, tomadas directamente del compendio. Sirven para repasar antes del examen parcial o simplemente para confirmar que un tema quedó claro.</p>
+    <p class="eyebrow">Evaluación formativa — Participación (20%)</p>
+    <h1>Actividades por subtema</h1>
+    <p class="hero-sub">Cada actividad que respondas correctamente suma un punto de tu Participación. Puedes repetir las veces que quieras — el punto se registra la primera vez que te sale bien, y ya queda contado para siempre.</p>
   </div>
 </section>
 
 <main class="wrap act-main">
-  <div id="quiz-tabs" class="quiz-tabs"></div>
-  <div id="quiz-root"></div>
-  <div id="quiz-result" class="quiz-result" hidden></div>
+
+  <!-- ===== LOGIN DEL ALUMNO ===== -->
+  <section id="alumno-login" class="login-card act-login-card">
+    <h2>Identifícate para empezar</h2>
+    <p class="login-sub">Usa el mismo nombre con el que te dio de alta tu docente, y tu PIN de acceso.</p>
+    <form id="form-alumno-login">
+      <label for="login-grupo" class="field-label">Grupo</label>
+      <select id="login-grupo" required><option value="">— Elige tu grupo —</option></select>
+
+      <label for="login-nombre" class="field-label">Tu nombre completo</label>
+      <input id="login-nombre" type="text" placeholder="Como te registró tu docente" required autocomplete="name">
+
+      <label for="login-pin" class="field-label">PIN</label>
+      <input id="login-pin" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="4 dígitos" required autocomplete="off">
+
+      <button type="submit" class="btn btn-primary">Entrar</button>
+      <p id="login-alumno-error" class="login-error" hidden></p>
+    </form>
+  </section>
+
+  <!-- ===== ACTIVIDADES (visible tras identificarse) ===== -->
+  <section id="act-app" hidden>
+    <div class="act-whoami">
+      <span id="act-whoami-nombre"></span>
+      <button id="btn-cambiar-alumno" class="btn-ghost-dark btn-small">Cambiar de alumno</button>
+    </div>
+
+    <div id="quiz-tabs" class="quiz-tabs"></div>
+    <div id="progreso-bloque" class="progreso-bloque"></div>
+    <div id="quiz-root"></div>
+  </section>
+
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>Compendio digital · Bases Culinarias · Material de apoyo docente, uso interno.</p>
-  </div>
-</footer>
-
-<script src="js/app.js"></script>
-<script src="js/actividades.js"></script>
-</body>
-</html>
+    <p
