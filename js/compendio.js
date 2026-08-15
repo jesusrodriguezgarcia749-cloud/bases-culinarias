@@ -27,6 +27,20 @@ function resaltar(texto, termino) {
   return escapado.replace(re, '<mark>$1</mark>');
 }
 
+// La introducción completa de cada bloque puede ser muy larga (varios
+// párrafos); aquí solo mostramos un resumen breve. El texto completo vive
+// en la página de cada subtema (tema.html), no en este índice.
+function resumenIntro(texto, maxChars = 240) {
+  if (!texto) return '';
+  const primerPunto = texto.indexOf('. ');
+  if (primerPunto > 30 && primerPunto < maxChars) {
+    return texto.slice(0, primerPunto + 1);
+  }
+  if (texto.length <= maxChars) return texto;
+  const corte = texto.lastIndexOf(' ', maxChars);
+  return texto.slice(0, corte > 0 ? corte : maxChars) + '…';
+}
+
 function coincide(subtema, termino) {
   if (!termino) return true;
   const t = termino.toLowerCase();
@@ -55,7 +69,7 @@ function render(termino) {
     header.innerHTML = `
       <p class="section-eyebrow">Bloque ${bloque.bloque}</p>
       <h2>${escaparHTML(bloque.nombre)}</h2>
-      <p>${escaparHTML(bloque.introduccion || '')}</p>
+      <p>${escaparHTML(resumenIntro(bloque.introduccion || ''))}</p>
     `;
     section.appendChild(header);
 
