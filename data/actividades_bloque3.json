@@ -225,3 +225,21 @@
         "Para que se conserven más tiempo sin refrigeración",
         "Para cambiar su color permanentemente",
         "No tiene ningún efecto real en el sabor"
+      ],
+      "correcta": 0,
+      "explicacion": "Muchas especias enteras tienen sus compuestos aromáticos encapsulados dentro de la semilla o corteza; el tostado en seco los libera y realza antes de molerlas."
+    },
+    {
+      "id": "3.2.4-d",
+      "subtema": "3.2.4",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada tipo de hierba o especia con el momento en que se debe agregar durante la cocción.",
+      "pares": [
+        { "izquierda": "Especias secas robustas (romero, tomillo, laurel)", "derecha": "Al inicio de la cocción" },
+        { "izquierda": "Hierbas frescas delicadas (albahaca, cilantro)", "derecha": "Casi al final o después de retirar del fuego" },
+        { "izquierda": "Especias enteras que se van a moler", "derecha": "Se tuestan en seco antes de molerse" }
+      ],
+      "explicacion": "El momento de incorporación importa tanto como la cantidad: cada tipo de hierba o especia libera su aroma a un ritmo distinto durante la cocción."
+    }
+  ]
+}
