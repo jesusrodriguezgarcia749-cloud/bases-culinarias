@@ -125,15 +125,29 @@ document.getElementById('btn-cambiar-alumno').addEventListener('click', () => {
 // ---------- CARGA DE DATOS ----------
 async function cargarActividadesBloque(bloque) {
   if (actividadesPorBloque[bloque]) return actividadesPorBloque[bloque];
-  const res = await fetch(`data/actividades_bloque${bloque}.json`);
-  const data = await res.json();
+  const res = await fetch(`data/actividades_bloque${bloque}.json`, { cache: 'no-store' });
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status} al pedir data/actividades_bloque${bloque}.json`);
+  }
+  let data;
+  try {
+    data = await res.json();
+  } catch (e) {
+    throw new Error(`El archivo data/actividades_bloque${bloque}.json no es JSON válido (${e.message})`);
+  }
   actividadesPorBloque[bloque] = data.actividades;
   return data.actividades;
 }
 
 async function cargarCompletadas() {
-  const snap = await getDocs(collection(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'actividades'));
-  completadasSet = new Set(snap.docs.map(d => d.id));
+  try {
+    const snap = await getDocs(collection(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'actividades'));
+    completadasSet = new Set(snap.docs.map(d => d.id));
+  } catch (err) {
+    // Un bache de conexión aquí no debe tumbar toda la pantalla: seguimos
+    // con lo que ya sabíamos (o vacío) y dejamos que el alumno intente.
+    console.warn('No se pudo verificar actividades completadas (se continúa igual):', err);
+  }
 }
 
 // ---------- RENDER ----------
@@ -177,8 +191,13 @@ async function renderBloque() {
     actividades = await cargarActividadesBloque(bloqueActivo);
   } catch (err) {
     console.error('Error cargando actividades del bloque', bloqueActivo, err);
-    root.innerHTML = `<p class="subtema-retry-msg">No se pudo cargar el contenido de este bloque (data/actividades_bloque${bloqueActivo}.json). Verifica que el archivo exista en el repositorio.</p>`;
+    const motivo = (err && err.message) ? err.message : String(err);
+    root.innerHTML = `
+      <p class="subtema-retry-msg">No se pudo cargar el contenido de este bloque (data/actividades_bloque${bloqueActivo}.json).<br>Motivo: ${escaparHTML(motivo)}</p>
+      <button class="btn btn-primary" data-action="reintentar-carga">Reintentar</button>
+    `;
     document.getElementById('progreso-bloque').innerHTML = '';
+    root.querySelector('[data-action="reintentar-carga"]').addEventListener('click', () => renderBloque());
     return;
   }
   await cargarCompletadas();
@@ -258,9 +277,16 @@ function renderSubtema(sub, actividades) {
       marcarFeedbackTarjeta(card, act, respuesta, acerto);
 
       if (acerto) {
-        await registrarAcierto(idFull, act);
-        completadasSet.add(idFull);
-        card.querySelector('.quiz-sub').innerHTML = '<span class="badge-ok">✓ Completada</span>';
+        try {
+          await registrarAcierto(idFull, act);
+          completadasSet.add(idFull);
+          card.querySelector('.quiz-sub').innerHTML = '<span class="badge-ok">✓ Completada</span>';
+        } catch (err) {
+          console.error('No se pudo guardar el punto de esta actividad:', err);
+          const feedback = card.querySelector('.quiz-feedback');
+          feedback.innerHTML += `<br><strong>Aviso:</strong> tu respuesta fue correcta, pero no se pudo guardar el punto por un problema de conexión. Vuelve a intentar este subtema en cuanto tengas mejor señal.`;
+          todoCorrectoEsteIntento = false;
+        }
       } else {
         todoCorrectoEsteIntento = false;
       }
