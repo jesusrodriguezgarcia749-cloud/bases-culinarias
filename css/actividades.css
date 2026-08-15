@@ -105,3 +105,19 @@
   background:rgba(166,61,47,0.08); color:var(--ink); padding:14px 16px;
   border-radius:10px; font-size:.88rem; margin-bottom:12px;
 }
+
+/* ===== Añadido: actividad tipo "relacionar columnas" ===== */
+.relacionar-list{display:flex; flex-direction:column; gap:10px;}
+.relacionar-row{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.relacionar-izq{
+  flex:1; min-width:140px; font-size:.92rem; font-weight:600;
+  background:var(--parchment); padding:10px 12px; border-radius:8px;
+}
+.relacionar-select{
+  flex:1; min-width:180px; padding:10px 12px; border-radius:8px;
+  border:1.5px solid var(--line); font-size:.9rem; background:#fff; color:var(--ink);
+}
+.relacionar-select.correct{border-color:var(--sage); background:rgba(107,122,94,0.12);}
+.relacionar-select.incorrect{border-color:var(--paprika); background:rgba(166,61,47,0.08);}
