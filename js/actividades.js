@@ -1,164 +1,264 @@
-// actividades.js — evaluación FORMATIVA por bloque
+// actividades.js — evaluación FORMATIVA por subtema, ligada al alumno real.
 // Principios: retroalimentación con explicación (no solo correcto/incorrecto),
-// reintentos ilimitados, y seguimiento de progreso guardado en el navegador
-// para que el alumno sepa cuándo está listo para la evaluación sumativa.
+// reintentos ilimitados, y el punto de Participación se registra en Firestore
+// SOLO la primera vez que el alumno acierta — nunca por solo intentarlo.
 
-let PREGUNTAS = [];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, updateDoc, increment,
+  collection, getDocs, query, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import { firebaseConfig } from "./firebase-config.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Bloques disponibles: agrega aquí cuando exista data/actividades_bloqueN.json
+const BLOQUES_DISPONIBLES = [1];
+const NOMBRES_BLOQUE = { 1: 'Bloque 1', 2: 'Bloque 2', 3: 'Bloque 3' };
+
+const SESSION_KEY = 'bc_sesion_alumno';
+
+let sesion = null;           // { grupoId, alumnoId, nombre, pin }
+let actividadesPorBloque = {}; // { 1: [ {...}, ... ] }
+let completadasSet = new Set(); // ids de actividades ya correctas ("b1-1.1-a", ...)
 let bloqueActivo = 1;
-const respuestasUsuario = {};   // { indiceGlobal: opcionElegida }
-let calificado = false;
 
-const META_DOMINIO = 0.8; // 80% de aciertos = bloque "dominado"
-const STORAGE_KEY = 'bc_progreso_actividades';
-
-function leerProgreso() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  } catch { return {}; }
-}
-function guardarProgreso(bloque, aciertos, total) {
-  const progreso = leerProgreso();
-  const anterior = progreso[bloque] || { mejorAciertos: 0, intentos: 0 };
-  progreso[bloque] = {
-    mejorAciertos: Math.max(anterior.mejorAciertos, aciertos),
-    total,
-    intentos: anterior.intentos + 1
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(progreso));
-  return progreso[bloque];
+function slugNombre(nombre) {
+  return nombre
+    .trim()
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-');
 }
 
-async function cargarPreguntas() {
-  const res = await fetch('data/preguntas.json');
+function escaparHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ---------- LOGIN ----------
+async function cargarGruposEnSelect() {
+  const select = document.getElementById('login-grupo');
+  const snap = await getDocs(query(collection(db, 'grupos'), orderBy('nombre')));
+  select.innerHTML = '<option value="">— Elige tu grupo —</option>';
+  snap.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d.id;
+    opt.textContent = d.data().nombre;
+    select.appendChild(opt);
+  });
+}
+
+document.getElementById('form-alumno-login').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const errorEl = document.getElementById('login-alumno-error');
+  errorEl.hidden = true;
+
+  const grupoId = document.getElementById('login-grupo').value;
+  const nombre = document.getElementById('login-nombre').value.trim();
+  const pin = document.getElementById('login-pin').value.trim();
+
+  if (!grupoId || !nombre || !pin) return;
+
+  const alumnoId = slugNombre(nombre);
+  const ref = doc(db, 'grupos', grupoId, 'alumnos', alumnoId);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists() || String(snap.data().pin) !== pin) {
+    errorEl.textContent = 'No encontramos ese nombre y PIN en el grupo elegido. Verifica con tu docente.';
+    errorEl.hidden = false;
+    return;
+  }
+
+  sesion = { grupoId, alumnoId, nombre: snap.data().nombre, pin };
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(sesion));
+  await iniciarApp();
+});
+
+document.getElementById('btn-cambiar-alumno').addEventListener('click', () => {
+  sessionStorage.removeItem(SESSION_KEY);
+  sesion = null;
+  document.getElementById('act-app').hidden = true;
+  document.getElementById('alumno-login').hidden = false;
+});
+
+// ---------- CARGA DE DATOS ----------
+async function cargarActividadesBloque(bloque) {
+  if (actividadesPorBloque[bloque]) return actividadesPorBloque[bloque];
+  const res = await fetch(`data/actividades_bloque${bloque}.json`);
   const data = await res.json();
-  PREGUNTAS = data.preguntas;
+  actividadesPorBloque[bloque] = data.actividades;
+  return data.actividades;
 }
 
+async function cargarCompletadas() {
+  const snap = await getDocs(collection(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'actividades'));
+  completadasSet = new Set(snap.docs.map(d => d.id));
+}
+
+// ---------- RENDER ----------
 function renderTabs() {
   const tabsRoot = document.getElementById('quiz-tabs');
-  const bloques = [...new Set(PREGUNTAS.map(p => p.bloque))];
-  const progreso = leerProgreso();
   tabsRoot.innerHTML = '';
-  bloques.forEach(b => {
-    const info = progreso[b];
-    const dominado = info && (info.mejorAciertos / info.total) >= META_DOMINIO;
+  [1, 2, 3].forEach(b => {
+    const disponible = BLOQUES_DISPONIBLES.includes(b);
     const btn = document.createElement('button');
-    btn.className = 'quiz-tab' + (b === bloqueActivo ? ' active' : '');
-    btn.innerHTML = `Bloque ${b} ${dominado ? '<span class="badge-ok">✓</span>' : ''}`;
-    btn.addEventListener('click', () => {
+    btn.className = 'quiz-tab' + (b === bloqueActivo ? ' active' : '') + (disponible ? '' : ' quiz-tab-disabled');
+    btn.innerHTML = disponible ? NOMBRES_BLOQUE[b] : `${NOMBRES_BLOQUE[b]} <span class="tag-info">próximamente</span>`;
+    btn.disabled = !disponible;
+    btn.addEventListener('click', async () => {
       bloqueActivo = b;
-      calificado = false;
-      document.getElementById('quiz-result').hidden = true;
       renderTabs();
-      renderQuiz();
+      await renderBloque();
     });
     tabsRoot.appendChild(btn);
   });
 }
 
-function renderQuiz() {
+function renderProgreso(actividades) {
+  const cont = document.getElementById('progreso-bloque');
+  const total = actividades.length;
+  const hechas = actividades.filter(a => completadasSet.has(idCompleto(a))).length;
+  const pct = total ? Math.round((hechas / total) * 100) : 0;
+  cont.innerHTML = `
+    <div class="progreso-bar-track"><div class="progreso-bar-fill" style="width:${pct}%"></div></div>
+    <p class="progreso-texto">${hechas} de ${total} actividades correctas · ${pct}% de tu Participación en este bloque</p>
+  `;
+}
+
+function idCompleto(actividad) {
+  return `b${bloqueActivo}-${actividad.id}`;
+}
+
+async function renderBloque() {
+  const actividades = await cargarActividadesBloque(bloqueActivo);
+  await cargarCompletadas();
+  renderProgreso(actividades);
+
   const root = document.getElementById('quiz-root');
   root.innerHTML = '';
-  const preguntasBloque = PREGUNTAS
-    .map((p, i) => ({ ...p, _idx: i }))
-    .filter(p => p.bloque === bloqueActivo);
 
-  preguntasBloque.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'quiz-question';
-    card.id = `q-card-${p._idx}`;
-    card.innerHTML = `
-      <p class="quiz-sub">Subtema ${p.subtema}</p>
-      <h3>${p.pregunta}</h3>
-      <div class="quiz-options">
-        ${p.opciones.map((op, i) => `
-          <label class="quiz-option" data-idx="${i}">
-            <input type="radio" name="q-${p._idx}" value="${i}">
-            <span>${op}</span>
-          </label>
-        `).join('')}
-      </div>
-      <p class="quiz-feedback" hidden></p>
-    `;
-    card.querySelectorAll('.quiz-option').forEach(label => {
-      label.addEventListener('click', () => {
-        if (calificado) return; // no cambiar respuesta a media calificación
-        const opcionIdx = parseInt(label.dataset.idx, 10);
-        respuestasUsuario[p._idx] = opcionIdx;
-      });
+  // Agrupar por subtema, en orden de aparición
+  const subtemas = [...new Set(actividades.map(a => a.subtema))];
+
+  subtemas.forEach(sub => {
+    const section = document.createElement('section');
+    section.className = 'act-subtema-block';
+    section.innerHTML = `<h2 class="act-subtema-titulo">Subtema ${sub}</h2>`;
+
+    actividades.filter(a => a.subtema === sub).forEach(act => {
+      section.appendChild(renderTarjetaActividad(act));
     });
-    root.appendChild(card);
-  });
 
-  const actions = document.createElement('div');
-  actions.className = 'quiz-actions';
-  actions.innerHTML = `
-    <button class="btn btn-primary" id="btn-calificar">Revisar mis respuestas</button>
-    <button class="btn btn-ghost-dark" id="btn-reintentar" hidden>Intentar de nuevo</button>
-  `;
-  root.appendChild(actions);
-
-  document.getElementById('btn-calificar').addEventListener('click', () => calificar(preguntasBloque));
-  document.getElementById('btn-reintentar').addEventListener('click', () => {
-    calificado = false;
-    Object.keys(respuestasUsuario).forEach(k => delete respuestasUsuario[k]);
-    document.getElementById('quiz-result').hidden = true;
-    renderQuiz();
+    root.appendChild(section);
   });
 }
 
-function calificar(preguntasBloque) {
-  calificado = true;
-  let aciertos = 0;
+function renderTarjetaActividad(act) {
+  const idFull = idCompleto(act);
+  const yaCompletada = completadasSet.has(idFull);
 
-  preguntasBloque.forEach(p => {
-    const elegida = respuestasUsuario[p._idx];
-    const card = document.getElementById(`q-card-${p._idx}`);
-    const feedback = card.querySelector('.quiz-feedback');
+  const card = document.createElement('div');
+  card.className = 'quiz-question';
+  card.id = `card-${idFull}`;
+
+  const opciones = act.tipo === 'verdadero_falso' ? ['Verdadero', 'Falso'] : act.opciones;
+  const correctaIdx = act.tipo === 'verdadero_falso' ? (act.correcta ? 0 : 1) : act.correcta;
+
+  card.innerHTML = `
+    <p class="quiz-sub">${yaCompletada ? '<span class="badge-ok">✓ Completada</span>' : 'Pendiente'}</p>
+    <h3>${escaparHTML(act.pregunta)}</h3>
+    <div class="quiz-options">
+      ${opciones.map((op, i) => `
+        <label class="quiz-option" data-idx="${i}">
+          <input type="radio" name="q-${idFull}" value="${i}">
+          <span>${escaparHTML(op)}</span>
+        </label>
+      `).join('')}
+    </div>
+    <div class="quiz-actions">
+      <button class="btn btn-primary btn-small" data-action="revisar">Revisar</button>
+    </div>
+    <p class="quiz-feedback" hidden></p>
+  `;
+
+  let elegida = null;
+  card.querySelectorAll('.quiz-option').forEach(label => {
+    label.addEventListener('click', () => {
+      elegida = parseInt(label.dataset.idx, 10);
+    });
+  });
+
+  card.querySelector('[data-action="revisar"]').addEventListener('click', async () => {
+    if (elegida === null) return;
+    const acerto = elegida === correctaIdx;
     const labels = card.querySelectorAll('.quiz-option');
-
     labels.forEach(label => {
       const idx = parseInt(label.dataset.idx, 10);
-      label.querySelector('input').disabled = true;
-      if (idx === p.correcta) label.classList.add('correct');
+      if (idx === correctaIdx) label.classList.add('correct');
       else if (idx === elegida) label.classList.add('incorrect');
     });
 
-    const acerto = elegida === p.correcta;
-    if (acerto) aciertos++;
-
+    const feedback = card.querySelector('.quiz-feedback');
     feedback.hidden = false;
     feedback.innerHTML = acerto
-      ? `<strong>Correcto.</strong> ${p.explicacion}`
-      : (elegida === undefined
-          ? `<strong>Sin responder.</strong> La respuesta correcta era: "${p.opciones[p.correcta]}". ${p.explicacion}`
-          : `<strong>No exactamente.</strong> ${p.explicacion}`);
+      ? `<strong>Correcto.</strong> ${escaparHTML(act.explicacion)}`
+      : `<strong>No exactamente.</strong> ${escaparHTML(act.explicacion)} Puedes intentarlo de nuevo.`;
     feedback.className = 'quiz-feedback visible ' + (acerto ? 'ok' : 'no-ok');
+
+    if (acerto && !completadasSet.has(idFull)) {
+      await registrarAcierto(idFull, act);
+      completadasSet.add(idFull);
+      card.querySelector('.quiz-sub').innerHTML = '<span class="badge-ok">✓ Completada</span>';
+      renderProgreso(actividadesPorBloque[bloqueActivo]);
+    }
   });
 
-  document.getElementById('btn-calificar').hidden = true;
-  document.getElementById('btn-reintentar').hidden = false;
+  return card;
+}
 
-  const total = preguntasBloque.length;
-  const stats = guardarProgreso(bloqueActivo, aciertos, total);
-  const porcentaje = Math.round((aciertos / total) * 100);
-  const dominado = (aciertos / total) >= META_DOMINIO;
+async function registrarAcierto(idFull, act) {
+  // Crea el documento de la actividad (solo una vez — las reglas de Firestore
+  // bloquean update/delete) y suma exactamente 1 punto de participación.
+  const actRef = doc(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'actividades', idFull);
+  await setDoc(actRef, {
+    bloque: bloqueActivo,
+    subtema: act.subtema,
+    correcto: true,
+    pinVerificado: sesion.pin,
+  });
+  const alumnoRef = doc(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId);
+  await updateDoc(alumnoRef, { puntosParticipacion: increment(1) });
+}
 
-  const resultEl = document.getElementById('quiz-result');
-  resultEl.hidden = false;
-  resultEl.innerHTML = `
-    <h2>${aciertos} de ${total} correctas (${porcentaje}%)</h2>
-    <p>${dominado
-        ? 'Bloque dominado — vas con buen pie para la evaluación sumativa. Puedes seguir practicando si quieres subir tu marca.'
-        : `Meta de dominio: ${Math.round(META_DOMINIO*100)}%. Repasa en el compendio los subtemas donde fallaste y vuelve a intentarlo — no hay límite de intentos.`}</p>
-    <p class="quiz-stats">Mejor resultado en este bloque: ${stats.mejorAciertos}/${stats.total} · Intentos: ${stats.intentos}</p>
-  `;
-  resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+// ---------- ARRANQUE ----------
+async function iniciarApp() {
+  document.getElementById('alumno-login').hidden = true;
+  document.getElementById('act-app').hidden = false;
+  document.getElementById('act-whoami-nombre').textContent = `Hola, ${sesion.nombre}`;
   renderTabs();
+  await renderBloque();
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  await cargarPreguntas();
-  renderTabs();
-  renderQuiz();
+  await cargarGruposEnSelect();
+
+  const guardada = sessionStorage.getItem(SESSION_KEY);
+  if (guardada) {
+    try {
+      sesion = JSON.parse(guardada);
+      // Verificar que la sesión guardada sigue siendo válida
+      const ref = doc(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId);
+      const snap = await getDoc(ref);
+      if (snap.exists() && String(snap.data().pin) === String(sesion.pin)) {
+        await iniciarApp();
+        return;
+      }
+    } catch { /* sesión inválida, se ignora */ }
+    sessionStorage.removeItem(SESSION_KEY);
+  }
 });
