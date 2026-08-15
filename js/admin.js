@@ -44,11 +44,18 @@ const TOTAL_ACTIVIDADES_POR_BLOQUE = { 1: 20, 2: 20, 3: 20 };
 let grupoActivo = null;
 let alumnosCache = [];
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
   if (user) {
     document.getElementById('login-screen').hidden = true;
     document.getElementById('app-screen').hidden = false;
-    cargarGrupos();
+    await cargarGrupos();
+    // Si el navegador restauró una opción de grupo ya seleccionada (sin
+    // disparar 'change'), forzamos la carga de alumnos igual.
+    const select = document.getElementById('grupo-select');
+    if (select.value) {
+      grupoActivo = select.value;
+      cargarAlumnos();
+    }
   } else {
     document.getElementById('login-screen').hidden = false;
     document.getElementById('app-screen').hidden = true;
@@ -96,7 +103,7 @@ document.getElementById('eval-fecha').valueAsDate = new Date();
 document.getElementById('asis-fecha').valueAsDate = new Date();
 document.getElementById('asis-fecha').addEventListener('change', cargarAsistencia);
 document.getElementById('btn-guardar-asistencia').addEventListener('click', guardarAsistencia);
-document.getElementById('ens-alumno-select').addEventListener('change', cargarEnsayos);
+document.getElementById('ens-semana-select').addEventListener('change', cargarEnsayos);
 document.getElementById('btn-guardar-ensayos').addEventListener('click', guardarEnsayos);
 
 renderRubrica();
@@ -108,7 +115,7 @@ function switchTab(tab) {
   if (tab === 'historial') cargarHistorial();
   if (tab === 'participacion') cargarParticipacion();
   if (tab === 'asistencia') cargarAsistencia();
-  if (tab === 'ensayos') renderSelectEnsayoAlumno();
+  if (tab === 'ensayos') { poblarSelectSemanas(); cargarEnsayos(); }
 }
 
 // ---------- GRUPOS ----------
@@ -183,7 +190,7 @@ function renderAlumnos(lista) {
 }
 
 function renderSelectAlumnos() {
-  ['eval-alumno-select', 'hist-alumno-select', 'ens-alumno-select'].forEach(id => {
+  ['eval-alumno-select', 'hist-alumno-select'].forEach(id => {
     const select = document.getElementById(id);
     const placeholder = select.options[0];
     select.innerHTML = '';
@@ -347,227 +354,4 @@ async function cargarHistorial() {
     const div = document.createElement('div');
     div.className = 'hist-card';
     div.innerHTML = `
-      <div class="hist-card-top">
-        <span class="hist-card-name">${escaparHTML(r.alumnoNombre)}</span>
-        <span class="hist-card-score">${r.calificacion.toFixed(1)} / 10</span>
-      </div>
-      <div class="hist-card-date">${r.fecha || 'sin fecha'}</div>
-      ${r.notas ? `<div class="hist-card-notas">${escaparHTML(r.notas)}</div>` : ''}
-    `;
-    cont.appendChild(div);
-  });
-}
-
-// ---------- PARTICIPACIÓN (actividades digitales, tipo lista con desplegables) ----------
-async function cargarParticipacion() {
-  const cont = document.getElementById('participacion-lista');
-  const empty = document.getElementById('participacion-empty');
-  cont.innerHTML = '';
-
-  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
-  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
-  empty.hidden = true;
-
-  for (const alumno of alumnosCache) {
-    const detalle = document.createElement('details');
-    detalle.className = 'part-row';
-
-    const totalBloque1 = TOTAL_ACTIVIDADES_POR_BLOQUE[1];
-    const puntos = alumno.puntosParticipacion || 0;
-    const pct = totalBloque1 ? Math.round((puntos / totalBloque1) * 100) : 0;
-
-    detalle.innerHTML = `
-      <summary>
-        <span class="student-name">${escaparHTML(alumno.nombre)}</span>
-        <span class="part-summary-stat">${puntos}/${totalBloque1} actividades · ${pct}% de Participación (Bloque 1)</span>
-      </summary>
-      <div class="part-detail" data-loading="1">Cargando actividades…</div>
-    `;
-    cont.appendChild(detalle);
-
-    detalle.addEventListener('toggle', async () => {
-      if (!detalle.open) return;
-      const box = detalle.querySelector('.part-detail');
-      if (box.dataset.loaded) return;
-      const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumno.id, 'actividades'));
-      box.dataset.loaded = '1';
-      box.innerHTML = snap.empty
-        ? '<p class="empty-inline">Todavía no completa ninguna actividad.</p>'
-        : `<ul class="part-activity-list">${snap.docs
-            .sort((a, b) => a.id.localeCompare(b.id))
-            .map(d => `<li>✓ ${escaparHTML(d.id)}</li>`)
-            .join('')}</ul>`;
-    });
-  }
-}
-
-// ---------- ASISTENCIA ----------
-let asistenciaEstados = {}; // { alumnoId: 'presente' | 'retardo' | 'falta' }
-
-const CICLO_ESTADO = { presente: 'retardo', retardo: 'falta', falta: 'presente' };
-const ETIQUETA_ESTADO = { presente: 'Presente', retardo: 'Retardo', falta: 'Falta' };
-
-async function cargarAsistencia() {
-  const cont = document.getElementById('asistencia-lista');
-  const empty = document.getElementById('asistencia-empty');
-  cont.innerHTML = '';
-
-  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
-  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
-  empty.hidden = true;
-
-  const fecha = document.getElementById('asis-fecha').value;
-  asistenciaEstados = {};
-
-  // Carga lo ya guardado ese día (si existe); si no, todos quedan 'presente'.
-  await Promise.all(alumnosCache.map(async (a) => {
-    try {
-      const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
-      const snap = await getDoc(ref);
-      asistenciaEstados[a.id] = snap.exists() ? snap.data().estado : 'presente';
-    } catch {
-      asistenciaEstados[a.id] = 'presente';
-    }
-  }));
-
-  renderAsistenciaLista();
-}
-
-function renderAsistenciaLista() {
-  const cont = document.getElementById('asistencia-lista');
-  cont.innerHTML = '';
-  alumnosCache.forEach(a => {
-    const estado = asistenciaEstados[a.id] || 'presente';
-    const row = document.createElement('button');
-    row.type = 'button';
-    row.className = `asis-row asis-${estado}`;
-    row.innerHTML = `
-      <span class="asis-dot"></span>
-      <span class="student-name">${escaparHTML(a.nombre)}</span>
-      <span class="asis-estado-label">${ETIQUETA_ESTADO[estado]}</span>
-    `;
-    row.addEventListener('click', () => {
-      asistenciaEstados[a.id] = CICLO_ESTADO[estado];
-      renderAsistenciaLista();
-    });
-    cont.appendChild(row);
-  });
-}
-
-async function guardarAsistencia() {
-  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
-  const fecha = document.getElementById('asis-fecha').value;
-  if (!fecha) { alert('Elige una fecha.'); return; }
-
-  const msg = document.getElementById('asis-msg');
-  await Promise.all(alumnosCache.map(a => {
-    const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
-    return setDoc(ref, { estado: asistenciaEstados[a.id] || 'presente', fecha, actualizado: serverTimestamp() });
-  }));
-
-  msg.textContent = '✓ Asistencia guardada.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 3000);
-}
-
-// ---------- ENSAYOS (bitácoras semanales manuscritas) ----------
-// Semanas 1-15 agrupadas por bloque (cada bloque cierra con un micro-ensayo
-// en su última semana); la Semana 16 (proyecto final) se maneja aparte, en
-// la Evaluación Final del cuatrimestre.
-const SEMANAS_ENSAYO = [
-  { n: 1, bloque: 1, tema: 'Géneros y Estructura Clásica' },
-  { n: 2, bloque: 1, tema: 'Secuencia Operativa' },
-  { n: 3, bloque: 1, tema: 'Rendimiento y Merma' },
-  { n: 4, bloque: 1, tema: 'Termodinámica y Sanidad' },
-  { n: 5, bloque: 1, tema: 'Escalabilidad y Cierre — Micro-Ensayo 1', cierre: true },
-  { n: 6, bloque: 2, tema: 'Aprovisionamiento' },
-  { n: 7, bloque: 2, tema: 'Propiedades Funcionales' },
-  { n: 8, bloque: 2, tema: 'Grasas y Aceites' },
-  { n: 9, bloque: 2, tema: 'Variedades Físicas y Scoville' },
-  { n: 10, bloque: 2, tema: 'Cualidades Gastronómicas — Micro-Ensayo 2', cierre: true },
-  { n: 11, bloque: 3, tema: 'Técnicas de Cocción' },
-  { n: 12, bloque: 3, tema: 'Destrezas con Proteínas' },
-  { n: 13, bloque: 3, tema: 'Cortes Clásicos' },
-  { n: 14, bloque: 3, tema: 'Semillas y Cereales' },
-  { n: 15, bloque: 3, tema: 'Hierbas y Especias — Micro-Ensayo 3', cierre: true },
-];
-
-function renderSelectEnsayoAlumno() {
-  const empty = document.getElementById('ensayos-empty');
-  const cont = document.getElementById('ensayos-lista');
-  if (!document.getElementById('ens-alumno-select').value) {
-    cont.innerHTML = '';
-    empty.hidden = false;
-    empty.textContent = 'Elige un alumno para ver su seguimiento de ensayos.';
-  }
-}
-
-async function cargarEnsayos() {
-  const alumnoId = document.getElementById('ens-alumno-select').value;
-  const cont = document.getElementById('ensayos-lista');
-  const empty = document.getElementById('ensayos-empty');
-  cont.innerHTML = '';
-
-  if (!grupoActivo || !alumnoId) { empty.hidden = false; empty.textContent = 'Elige un alumno.'; return; }
-  empty.hidden = true;
-
-  const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ensayos'));
-  const guardado = {};
-  snap.forEach(d => { guardado[d.id] = d.data(); });
-
-  let bloqueActualRender = null;
-  SEMANAS_ENSAYO.forEach(s => {
-    if (s.bloque !== bloqueActualRender) {
-      bloqueActualRender = s.bloque;
-      const h = document.createElement('h3');
-      h.className = 'section-title';
-      h.textContent = `Bloque ${s.bloque}`;
-      cont.appendChild(h);
-    }
-    const datos = guardado[String(s.n)] || { entregado: false, calificacion: '' };
-    const row = document.createElement('div');
-    row.className = 'ens-row';
-    row.innerHTML = `
-      <label class="ens-check">
-        <input type="checkbox" data-semana="${s.n}" class="ens-entregado" ${datos.entregado ? 'checked' : ''}>
-        <span>Sem. ${s.n}${s.cierre ? ' 🏁' : ''} — ${escaparHTML(s.tema)}</span>
-      </label>
-      <input type="number" min="0" max="10" step="0.1" class="ens-calif" data-semana="${s.n}"
-        value="${datos.calificacion !== '' && datos.calificacion !== undefined ? datos.calificacion : ''}" placeholder="Calif.">
-    `;
-    cont.appendChild(row);
-  });
-}
-
-async function guardarEnsayos() {
-  const alumnoId = document.getElementById('ens-alumno-select').value;
-  if (!grupoActivo || !alumnoId) { alert('Elige un alumno primero.'); return; }
-
-  const filas = document.querySelectorAll('#ensayos-lista .ens-row');
-  const escrituras = [];
-  filas.forEach(row => {
-    const chk = row.querySelector('.ens-entregado');
-    const num = row.querySelector('.ens-calif');
-    const semana = chk.dataset.semana;
-    const calificacion = num.value === '' ? null : parseFloat(num.value);
-    const ref = doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ensayos', semana);
-    escrituras.push(setDoc(ref, {
-      semana: parseInt(semana, 10),
-      entregado: chk.checked,
-      calificacion,
-      actualizado: serverTimestamp(),
-    }));
-  });
-
-  await Promise.all(escrituras);
-  const msg = document.getElementById('ens-msg');
-  msg.textContent = '✓ Ensayos guardados.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 3000);
-}
-
-function escaparHTML(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-    }
+      <
