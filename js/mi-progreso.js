@@ -174,19 +174,62 @@ async function renderEnsayos() {
   empty.hidden = conRegistro;
   if (!conRegistro) return;
 
-  cont.innerHTML = SEMANAS_ENSAYO.map(s => {
-    const d = datos[String(s.n)] || {};
-    const entregado = d.entregado === true;
-    const calif = (d.calificacion !== null && d.calificacion !== undefined && d.calificacion !== '')
-      ? Number(d.calificacion).toFixed(1) : null;
-    return `
-      <div class="prog-ensayo-row">
-        <span class="prog-ensayo-icon ${entregado ? 'ok' : 'pendiente'}">${entregado ? '✓' : '○'}</span>
-        <span class="prog-ensayo-tema">Sem. ${s.n} — ${escaparHTML(s.tema)}</span>
-        <span class="prog-ensayo-calif">${calif !== null ? calif + ' / 10' : (entregado ? 'Entregada' : 'Pendiente')}</span>
+  // Cada bloque vale 20% de su Evaluación Parcial, repartido entre sus 5
+  // semanas → 4% por bitácora. Si el alumno saca 8/10, gana 3.2% esa semana.
+  const PCT_POR_SEMANA = 4;
+  let html = '';
+
+  [1, 2, 3].forEach(b => {
+    const semanas = SEMANAS_ENSAYO.filter(s => s.bloque === b);
+    html += `<h3 class="prog-ens-bloque">Bloque ${b}</h3>`;
+
+    let acumulado = 0;
+    semanas.forEach(s => {
+      const d = datos[String(s.n)] || {};
+      const entregado = d.entregado === true;
+      const tieneCalif = d.calificacion !== null && d.calificacion !== undefined && d.calificacion !== '';
+      const calif = tieneCalif ? Number(d.calificacion) : null;
+      const puntos = calif !== null ? (calif / 10) * PCT_POR_SEMANA : 0;
+      acumulado += puntos;
+
+      const derecha = calif !== null
+        ? `${calif.toFixed(1)}/10 · ${puntos.toFixed(1)}%`
+        : (entregado ? 'Entregada' : 'Pendiente');
+
+      html += `
+        <div class="prog-ensayo-row">
+          <span class="prog-ensayo-icon ${entregado ? 'ok' : 'pendiente'}">${entregado ? '✓' : '○'}</span>
+          <span class="prog-ensayo-tema">Sem. ${s.n} — ${escaparHTML(s.tema)}</span>
+          <span class="prog-ensayo-calif">${derecha}</span>
+        </div>
+      `;
+    });
+
+    html += `
+      <div class="prog-ens-subtotal">
+        <span>Subtotal Bloque ${b}</span>
+        <strong>${acumulado.toFixed(1)} / 20%</strong>
       </div>
     `;
-  }).join('');
+  });
+
+  // Total del cuatrimestre (los tres bloques juntos)
+  let totalGeneral = 0;
+  SEMANAS_ENSAYO.forEach(s => {
+    const d = datos[String(s.n)] || {};
+    if (d.calificacion !== null && d.calificacion !== undefined && d.calificacion !== '') {
+      totalGeneral += (Number(d.calificacion) / 10) * PCT_POR_SEMANA;
+    }
+  });
+  html += `
+    <div class="prog-ens-total">
+      <span>Total acumulado del cuatrimestre</span>
+      <strong>${totalGeneral.toFixed(1)} / 60%</strong>
+    </div>
+    <p class="field-hint">Cada bitácora vale 4% de su bloque. Este acumulado alimenta el 35% de "entrega de ensayos" en tu Evaluación Final.</p>
+  `;
+
+  cont.innerHTML = html;
 }
 
 async function renderAvisos() {
