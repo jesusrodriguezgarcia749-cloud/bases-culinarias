@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/admin.css">
 <link rel="stylesheet" href="css/actividades.css">
 <link rel="stylesheet" href="css/progreso.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
@@ -62,20 +63,26 @@
     </div>
 
     <section class="prog-card">
-      <h2>Participación (20% de la Evaluación Parcial)</h2>
+      <h2>Participación (20 pts por bloque)</h2>
       <div id="prog-participacion"></div>
     </section>
 
     <section class="prog-card">
-      <h2>Prácticas de cocina (20%)</h2>
+      <h2>Prácticas de cocina (20 pts por bloque)</h2>
       <div id="prog-practicas"></div>
       <p id="prog-practicas-empty" class="empty-state" hidden>Tu docente aún no ha registrado evaluaciones de práctica.</p>
     </section>
 
     <section class="prog-card">
-      <h2>Ensayos (20%)</h2>
+      <h2>Ensayos (20 pts por bloque)</h2>
       <div id="prog-ensayos"></div>
       <p id="prog-ensayos-empty" class="empty-state" hidden>Tu docente aún no ha registrado entregas de bitácora.</p>
+    </section>
+
+    <section class="prog-card">
+      <h2>Calificación por bloque</h2>
+      <div id="prog-bloques"></div>
+      <p class="field-hint">Cada bloque vale 100 puntos: Participación 20 · Ensayos 20 · Prácticas 20 · Asistencia 10 · Examen 30</p>
     </section>
 
     <section class="prog-card">
@@ -92,6 +99,11 @@
     <p>Aula Virtual · Bases Culinarias · Panel personal del alumno.</p>
   </div>
 </footer>
+
+<audio id="bg-music" loop preload="none">
+  <source src="https://commons.wikimedia.org/wiki/Special:FilePath/Gymnopedie_No._1..ogg" type="audio/ogg">
+</audio>
+<button id="bg-music-toggle" class="music-toggle" aria-label="Activar música de fondo" aria-pressed="false">🎵</button>
 
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
