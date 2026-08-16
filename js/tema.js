@@ -113,4 +113,20 @@ async function init() {
   `;
 }
 
-document.addEventListener('DOMContentLoaded', init);
+// El buscador de esta página manda al compendio con el término aplicado,
+// para no tener que volver atrás manualmente.
+function conectarBuscador() {
+  const form = document.getElementById('tema-search-form');
+  const input = document.getElementById('tema-search-input');
+  if (!form || !input) return;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const q = input.value.trim();
+    if (q) window.location.href = `compendio.html?buscar=${encodeURIComponent(q)}`;
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  conectarBuscador();
+  init();
+});
