@@ -4,7 +4,8 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
-  getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+  getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
+  EmailAuthProvider, reauthenticateWithCredential
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   getFirestore, collection, doc, setDoc, deleteDoc, addDoc, getDoc, getDocs,
@@ -38,6 +39,8 @@ var CHECKLIST_ITEMS = [
   { id: 'utensilios', texto: 'Cuchillos afilados y herramientas listas.' },
 ];
 
+// Total de actividades de Participación por bloque (ver data/actividades_bloqueN.json).
+// 20% del bloque se reparte entre estas actividades → cada una vale 20/TOTAL puntos porcentuales.
 const TOTAL_ACTIVIDADES_POR_BLOQUE = { 1: 20, 2: 20, 3: 20 };
 
 let grupoActivo = null;
@@ -57,6 +60,8 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('login-screen').hidden = true;
     document.getElementById('app-screen').hidden = false;
     await cargarGrupos();
+    // Si el navegador restauró una opción de grupo ya seleccionada (sin
+    // disparar 'change'), forzamos la carga de alumnos igual.
     const select = document.getElementById('grupo-select');
     if (select.value) {
       grupoActivo = select.value;
@@ -110,6 +115,7 @@ on('grupo-select', 'change', (e) => {
 on('form-alumno', 'submit', agregarAlumno);
 on('btn-guardar-eval', 'click', guardarEvaluacion);
 
+
 const _hoy = new Date();
 ['eval-fecha','asis-fecha'].forEach(id => {
   const el = document.getElementById(id);
@@ -123,6 +129,9 @@ on('btn-guardar-ensayos', 'click', guardarEnsayos);
 on('btn-publicar-aviso', 'click', publicarAviso);
 on('exa-select', 'change', cargarExamenes);
 on('btn-guardar-examenes', 'click', guardarExamenes);
+on('btn-guardar-bloques', 'click', guardarBloquesActivos);
+on('btn-eliminar-grupo', 'click', eliminarGrupo);
+on('btn-exportar', 'click', exportarCalificaciones);
 
 renderRubrica();
 renderChecklist();
@@ -132,7 +141,7 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`));
   if (tab === 'evaluar') renderListaEvaluar();
   if (tab === 'historial') cargarHistorial();
-  if (tab === 'participacion') cargarParticipacion();
+  if (tab === 'participacion') { cargarBloquesActivos(); cargarParticipacion(); }
   if (tab === 'asistencia') cargarAsistencia();
   if (tab === 'ensayos') { poblarSelectSemanas(); cargarEnsayos(); }
   if (tab === 'examenes') cargarExamenes();
@@ -162,7 +171,177 @@ async function crearGrupo() {
   cargarAlumnos();
 }
 
+// Elimina un grupo completo. Doble verificación: confirmación + contraseña.
+async function eliminarGrupo() {
+  if (!grupoActivo) { alert('Elige el grupo que quieres eliminar.'); return; }
+  const select = document.getElementById('grupo-select');
+  const nombreGrupo = select.options[select.selectedIndex].textContent;
+
+  const ok = confirm(
+    `¿ELIMINAR el grupo "${nombreGrupo}"?\n\n` +
+    `Se borrarán TODOS sus alumnos y sus calificaciones (asistencias, prácticas, ` +
+    `ensayos, exámenes y actividades). Esto NO se puede deshacer.`
+  );
+  if (!ok) return;
+
+  const pass = prompt('Para confirmar, escribe tu contraseña del panel docente:');
+  if (!pass) return;
+
+  try {
+    const cred = EmailAuthProvider.credential(auth.currentUser.email, pass);
+    await reauthenticateWithCredential(auth.currentUser, cred);
+  } catch {
+    alert('Contraseña incorrecta. No se eliminó nada.');
+    return;
+  }
+
+  // Borrar subcolecciones de cada alumno, luego el alumno, luego el grupo.
+  const alumnosSnap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos'));
+  for (const alumnoDoc of alumnosSnap.docs) {
+    const base = ['grupos', grupoActivo, 'alumnos', alumnoDoc.id];
+    for (const sub of ['actividades', 'evaluaciones', 'ensayos', 'asistencias', 'examenes']) {
+      const subSnap = await getDocs(collection(db, ...base, sub)).catch(() => null);
+      if (subSnap) {
+        await Promise.all(subSnap.docs.map(d => deleteDoc(doc(db, ...base, sub, d.id))));
+      }
+    }
+    await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoDoc.id));
+  }
+
+  for (const sub of ['avisos', 'config']) {
+    const subSnap = await getDocs(collection(db, 'grupos', grupoActivo, sub)).catch(() => null);
+    if (subSnap) {
+      await Promise.all(subSnap.docs.map(d => deleteDoc(doc(db, 'grupos', grupoActivo, sub, d.id))));
+    }
+  }
+
+  await deleteDoc(doc(db, 'grupos', grupoActivo));
+
+  alert(`Grupo "${nombreGrupo}" eliminado.`);
+  grupoActivo = null;
+  alumnosCache = [];
+  await cargarGrupos();
+  renderAlumnos([]);
+}
+
+// ---------- EXPORTAR CALIFICACIONES ----------
+async function exportarCalificaciones() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  if (alumnosCache.length === 0) { alert('Este grupo no tiene alumnos.'); return; }
+
+  const modo = document.getElementById('hist-modo').value;
+  const select = document.getElementById('grupo-select');
+  const nombreGrupo = select.options[select.selectedIndex].textContent;
+
+  let aExportar = alumnosCache;
+  if (modo === 'alumno') {
+    const nombres = alumnosCache.map((a, i) => `${i + 1}. ${a.nombre}`).join('\n');
+    const elegido = prompt(`¿De qué alumno?\n\n${nombres}\n\nEscribe el número:`);
+    const idx = parseInt(elegido, 10) - 1;
+    if (isNaN(idx) || idx < 0 || idx >= alumnosCache.length) return;
+    aExportar = [alumnosCache[idx]];
+  }
+
+  const msg = document.getElementById('export-msg');
+  msg.textContent = 'Preparando archivo…';
+  msg.hidden = false;
+
+  const filas = [];
+  // Encabezados
+  filas.push([
+    'Alumno', 'Bloque',
+    'Participación (20)', 'Ensayos (20)', 'Prácticas (20)',
+    'Asistencia (10)', 'Presentes', 'Retardos', 'Justificados', 'Faltas',
+    'Examen (30)', 'TOTAL (100)',
+  ]);
+
+  const detalleAsistencia = [['Alumno', 'Fecha', 'Bloque', 'Estado', 'Puntos']];
+
+  for (const alumno of aExportar) {
+    const base = ['grupos', grupoActivo, 'alumnos', alumno.id];
+    const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap] = await Promise.all([
+      getDocs(collection(db, ...base, 'actividades')).catch(() => null),
+      getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
+      getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
+      getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
+      getDocs(collection(db, ...base, 'examenes')).catch(() => null),
+    ]);
+
+    const ensayos = {};
+    if (ensSnap) ensSnap.docs.forEach(d => { ensayos[d.id] = d.data(); });
+    const examenes = {};
+    if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
+    const asistencias = asisSnap ? asisSnap.docs.map(d => d.data()) : [];
+
+    const datos = {
+      idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
+      ensayos,
+      practicas: evalSnap ? evalSnap.docs.map(d => d.data()) : [],
+      asistencias,
+      examenes,
+    };
+
+    [1, 2, 3].forEach(b => {
+      const r = calcularBloque(b, datos);
+      filas.push([
+        alumno.nombre, `Bloque ${b}`,
+        r.participacion.pts, r.ensayos.pts.toFixed(1), r.practicas.pts.toFixed(1),
+        r.asistencia.pts.toFixed(2),
+        r.asistencia.conteo.presente, r.asistencia.conteo.retardo,
+        r.asistencia.conteo.justificado, r.asistencia.conteo.falta,
+        r.examen.pts.toFixed(1), r.total.toFixed(1),
+      ]);
+    });
+
+    // Detalle de asistencia por fecha
+    asistencias
+      .sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''))
+      .forEach(a => {
+        detalleAsistencia.push([
+          alumno.nombre, a.fecha || '', a.bloque || '',
+          ETIQUETA_ESTADO[a.estado] || a.estado || '',
+          PUNTOS_ESTADO[a.estado] ?? 0,
+        ]);
+      });
+  }
+
+  // Construir CSV (Excel lo abre directo). BOM para que respete los acentos.
+  const csv = (arr) => arr.map(f =>
+    f.map(v => {
+      const s = String(v ?? '');
+      return /[",;\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    }).join(',')
+  ).join('\n');
+
+  const contenido = '\uFEFF' +
+    `CALIFICACIONES — ${nombreGrupo}\n` +
+    `Generado: ${new Date().toLocaleString('es-MX')}\n\n` +
+    csv(filas) +
+    `\n\nDETALLE DE ASISTENCIA POR FECHA\n` +
+    csv(detalleAsistencia);
+
+  const blob = new Blob([contenido], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const sufijo = modo === 'alumno' ? aExportar[0].nombre.replace(/\s+/g, '-') : 'grupo-completo';
+  a.href = url;
+  a.download = `calificaciones-${sufijo}-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  msg.textContent = '\u2713 Archivo descargado. Ábrelo con Excel.';
+  setTimeout(() => { msg.hidden = true; }, 4000);
+}
+
 // ---------- ALUMNOS ----------
+
+// Convierte un nombre en un ID de documento estable y legible, sin acentos ni
+// espacios (ej. "María López" → "maria-lopez"). El alumno usa este mismo
+// nombre para entrar a Actividades / Mi Progreso — por eso el ID se deriva
+// del nombre y no es aleatorio: así el sitio público puede leer su propio
+// documento sin necesidad de "listar" alumnos (ver reglas de Firestore).
 function slugNombre(nombre) {
   return nombre
     .trim()
@@ -173,7 +352,7 @@ function slugNombre(nombre) {
 }
 
 function generarPIN() {
-  return String(Math.floor(1000 + Math.random() * 9000));
+  return String(Math.floor(1000 + Math.random() * 9000)); // 4 dígitos
 }
 
 async function cargarAlumnos() {
@@ -219,6 +398,7 @@ async function agregarAlumno(e) {
   let id = slugNombre(nombre);
   if (!id) { alert('Ese nombre no es válido.'); return; }
 
+  // Evita chocar con un alumno existente con el mismo nombre (agrega -2, -3…)
   let idFinal = id;
   let sufijo = 2;
   while ((await getDoc(doc(db, 'grupos', grupoActivo, 'alumnos', idFinal))).exists()) {
@@ -239,7 +419,7 @@ async function agregarAlumno(e) {
 async function eliminarAlumno(alumnoId) {
   const alumno = alumnosCache.find(a => a.id === alumnoId);
   if (!alumno) return;
-  const ok = confirm(`¿Eliminar a "${alumno.nombre}"? Esto borra su registro para poder reutilizar el sistema. No se puede deshacer.`);
+  const ok = confirm(`¿Eliminar a "${alumno.nombre}"? Esto borra su registro para poder reutilizar el sistema (ej. en otro cuatrimestre o materia). No se puede deshacer.`);
   if (!ok) return;
   await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId));
   await cargarAlumnos();
@@ -252,7 +432,6 @@ function renderListaEvaluar() {
   const cont = document.getElementById('eval-lista-alumnos');
   const empty = document.getElementById('eval-alumnos-empty');
   const form = document.getElementById('eval-form');
-  if (!cont) return;
   cont.innerHTML = '';
 
   if (!grupoActivo) {
@@ -316,12 +495,13 @@ function actualizarScore() {
     document.getElementById(`crit-${c.id}-val`).textContent = val;
     total += val * c.peso;
   });
-  const pts = (total / 10 * 4).toFixed(2);
-  document.getElementById('score-display').textContent = `${total.toFixed(1)} / 10 → ${pts} pts`;
+  document.getElementById('score-display').textContent = `Calificación: ${total.toFixed(1)} / 10`;
   return total;
 }
 
 function resetRubricaYChecklist() {
+  // Todo arranca en el máximo y con el checklist completo: con 40 alumnos es
+  // mucho más rápido bajar solo lo que falló que subir todo lo que cumplió.
   CRITERIOS.forEach(c => {
     document.getElementById(`crit-${c.id}`).value = 10;
   });
@@ -339,7 +519,7 @@ function renderChecklist() {
   grid.innerHTML = '';
   CHECKLIST_ITEMS.forEach(item => {
     const label = document.createElement('label');
-    label.innerHTML = `<input type="checkbox" id="chk-${item.id}" checked><span>${item.texto}</span>`;
+    label.innerHTML = `<input type="checkbox" id="chk-${item.id}"><span>${item.texto}</span>`;
     grid.appendChild(label);
   });
 }
@@ -360,11 +540,34 @@ async function guardarEvaluacion() {
   const calificacion = actualizarScore();
   const fecha = document.getElementById('eval-fecha').value;
   const notas = document.getElementById('eval-notas').value.trim();
+
   const bloque = parseInt(document.getElementById('eval-bloque').value, 10);
 
-  await addDoc(collection(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'evaluaciones'), {
-    fecha, bloque, criterios, checklist, calificacion, notas, creado: serverTimestamp(),
+  // Evita calificar dos veces la misma práctica: si ya existe una del mismo
+  // alumno, misma fecha y mismo bloque, pregunta si quiere reemplazarla.
+  const yaSnap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'evaluaciones'));
+  const duplicada = yaSnap.docs.find(d => {
+    const x = d.data();
+    return x.fecha === fecha && Number(x.bloque) === bloque;
   });
+
+  if (duplicada) {
+    const anterior = (duplicada.data().calificacion || 0).toFixed(1);
+    const alumnoNombre = (alumnosCache.find(a => a.id === alumnoId) || {}).nombre || 'este alumno';
+    const reemplazar = confirm(
+      `Ya calificaste a ${alumnoNombre} el ${fecha} (Bloque ${bloque}) con ${anterior}/10.\n\n` +
+      `¿Quieres REEMPLAZAR esa calificación por ${calificacion.toFixed(1)}/10?\n\n` +
+      `Si eliges Cancelar, no se guarda nada y se conserva la anterior.`
+    );
+    if (!reemplazar) return;
+    await setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'evaluaciones', duplicada.id), {
+      fecha, bloque, criterios, checklist, calificacion, notas, creado: serverTimestamp(),
+    });
+  } else {
+    await addDoc(collection(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'evaluaciones'), {
+      fecha, bloque, criterios, checklist, calificacion, notas, creado: serverTimestamp(),
+    });
+  }
 
   msg.textContent = '✓ Evaluación guardada.';
   msg.hidden = false;
@@ -462,7 +665,7 @@ async function mostrarResumenAlumno(alumno) {
   `;
 }
 
-// ---------- PARTICIPACIÓN ----------
+// ---------- PARTICIPACIÓN (actividades digitales, tipo lista con desplegables) ----------
 async function cargarParticipacion() {
   const cont = document.getElementById('participacion-lista');
   const empty = document.getElementById('participacion-empty');
@@ -476,6 +679,7 @@ async function cargarParticipacion() {
     const detalle = document.createElement('details');
     detalle.className = 'part-row';
 
+    // Contamos por bloque leyendo los ids reales ("bN-..."), no un total global.
     let completadas = [];
     try {
       const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumno.id, 'actividades'));
@@ -497,14 +701,14 @@ async function cargarParticipacion() {
     detalle.innerHTML = `
       <summary>
         <span class="student-name">${escaparHTML(alumno.nombre)}</span>
-        <span class="part-summary-stat">${totalGeneral}/${totalPosible} pts en total</span>
+        <span class="part-summary-stat">${totalGeneral}/${totalPosible} actividades en total</span>
       </summary>
       <div class="part-detail">
         ${porBloque.map(x => `
           <div class="part-bloque-row">
             <span class="part-bloque-nombre">Bloque ${x.b}</span>
             <div class="prog-bar-track"><div class="prog-bar-fill" style="width:${x.pct}%"></div></div>
-            <span class="part-bloque-stat">${x.hechas}/${x.total} pts</span>
+            <span class="part-bloque-stat">${x.hechas}/${x.total} · ${x.pct}%</span>
           </div>
         `).join('')}
         ${completadas.length === 0 ? '<p class="empty-inline">Todavía no completa ninguna actividad.</p>' : ''}
@@ -514,8 +718,71 @@ async function cargarParticipacion() {
   }
 }
 
+// ---------- BLOQUES ABIERTOS PARA RESPONDER ----------
+// Se guarda en grupos/{id}/config/bloques como { activos: [1] }.
+// actividades.html lo lee para permitir o no responder.
+var bloquesActivos = [1];
+
+async function cargarBloquesActivos() {
+  const cont = document.getElementById('bloques-activos-lista');
+  if (!cont) return;
+
+  if (!grupoActivo) {
+    cont.innerHTML = '<p class="empty-inline">Elige un grupo primero.</p>';
+    return;
+  }
+
+  try {
+    const snap = await getDoc(doc(db, 'grupos', grupoActivo, 'config', 'bloques'));
+    bloquesActivos = snap.exists() && Array.isArray(snap.data().activos)
+      ? snap.data().activos.map(Number)
+      : [1];
+  } catch {
+    bloquesActivos = [1];
+  }
+
+  renderBloquesActivos();
+}
+
+function renderBloquesActivos() {
+  const cont = document.getElementById('bloques-activos-lista');
+  cont.innerHTML = '';
+  [1, 2, 3].forEach(b => {
+    const abierto = bloquesActivos.includes(b);
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'asis-row ' + (abierto ? 'asis-presente' : 'asis-falta');
+    row.innerHTML = `
+      <span class="asis-dot"></span>
+      <span class="student-name">Bloque ${b}</span>
+      <span class="asis-estado-label">${abierto ? 'Abierto' : 'Solo lectura'}</span>
+    `;
+    row.addEventListener('click', () => {
+      if (abierto) {
+        bloquesActivos = bloquesActivos.filter(x => x !== b);
+      } else {
+        bloquesActivos = [...bloquesActivos, b].sort();
+      }
+      renderBloquesActivos();
+    });
+    cont.appendChild(row);
+  });
+}
+
+async function guardarBloquesActivos() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  await setDoc(doc(db, 'grupos', grupoActivo, 'config', 'bloques'), {
+    activos: bloquesActivos,
+    actualizado: serverTimestamp(),
+  });
+  const msg = document.getElementById('bloques-msg');
+  msg.textContent = '\u2713 Guardado. Los alumnos solo pueden responder los bloques abiertos.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 4000);
+}
+
 // ---------- ASISTENCIA ----------
-var asistenciaEstados = {};
+var asistenciaEstados = {}; // { alumnoId: 'presente' | 'retardo' | 'falta' }
 
 // Cada clase vale 0.5 pts (20 clases por bloque = 10 pts).
 var CICLO_ESTADO = { presente: 'retardo', retardo: 'justificado', justificado: 'falta', falta: 'presente' };
@@ -525,7 +792,6 @@ var PUNTOS_ESTADO = { presente: 0.5, retardo: 0.25, justificado: 0.5, falta: 0 }
 async function cargarAsistencia() {
   const cont = document.getElementById('asistencia-lista');
   const empty = document.getElementById('asistencia-empty');
-  if (!cont) return;
   cont.innerHTML = '';
 
   if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
@@ -535,6 +801,7 @@ async function cargarAsistencia() {
   const fecha = document.getElementById('asis-fecha').value;
   asistenciaEstados = {};
 
+  // Carga lo ya guardado ese día (si existe); si no, todos quedan 'presente'.
   await Promise.all(alumnosCache.map(async (a) => {
     try {
       const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
@@ -559,7 +826,7 @@ function renderAsistenciaLista() {
     row.innerHTML = `
       <span class="asis-dot"></span>
       <span class="student-name">${escaparHTML(a.nombre)}</span>
-      <span class="asis-estado-label">${ETIQUETA_ESTADO[estado]} · ${PUNTOS_ESTADO[estado]}</span>
+      <span class="asis-estado-label">${ETIQUETA_ESTADO[estado]}</span>
     `;
     row.addEventListener('click', () => {
       asistenciaEstados[a.id] = CICLO_ESTADO[estado];
@@ -573,11 +840,11 @@ async function guardarAsistencia() {
   if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
   const fecha = document.getElementById('asis-fecha').value;
   if (!fecha) { alert('Elige una fecha.'); return; }
-  const bloque = parseInt(document.getElementById('asis-bloque').value, 10);
 
   const msg = document.getElementById('asis-msg');
   await Promise.all(alumnosCache.map(a => {
     const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
+    const bloque = parseInt(document.getElementById('asis-bloque').value, 10);
     return setDoc(ref, { estado: asistenciaEstados[a.id] || 'presente', fecha, bloque, actualizado: serverTimestamp() });
   }));
 
@@ -586,7 +853,10 @@ async function guardarAsistencia() {
   setTimeout(() => { msg.hidden = true; }, 3000);
 }
 
-// ---------- ENSAYOS ----------
+// ---------- ENSAYOS (bitácoras semanales manuscritas) ----------
+// Semanas 1-15 agrupadas por bloque (cada bloque cierra con un micro-ensayo
+// en su última semana); la Semana 16 (proyecto final) se maneja aparte, en
+// la Evaluación Final del cuatrimestre.
 var SEMANAS_ENSAYO = [
   { n: 1, bloque: 1, tema: 'Géneros y Estructura Clásica' },
   { n: 2, bloque: 1, tema: 'Secuencia Operativa' },
@@ -609,7 +879,7 @@ var semanaSeleccionada = null;
 
 function poblarSelectSemanas() {
   const select = document.getElementById('ens-semana-select');
-  if (!select || select.options.length > 0) return;
+  if (select.options.length > 0) return; // ya poblado
   SEMANAS_ENSAYO.forEach(s => {
     const opt = document.createElement('option');
     opt.value = s.n;
@@ -622,7 +892,6 @@ function poblarSelectSemanas() {
 async function cargarEnsayos() {
   const cont = document.getElementById('ensayos-lista');
   const empty = document.getElementById('ensayos-empty');
-  if (!cont) return;
   cont.innerHTML = '';
 
   if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
@@ -631,6 +900,7 @@ async function cargarEnsayos() {
 
   semanaSeleccionada = document.getElementById('ens-semana-select').value || SEMANAS_ENSAYO[0].n;
 
+  // Carga lo ya guardado esa semana para cada alumno del grupo.
   const datos = {};
   await Promise.all(alumnosCache.map(async (a) => {
     try {
@@ -687,7 +957,7 @@ async function guardarEnsayos() {
   setTimeout(() => { msg.hidden = true; }, 3000);
 }
 
-// ---------- EXÁMENES ----------
+// ---------- EXÁMENES (3 parciales + final) ----------
 async function cargarExamenes() {
   const cont = document.getElementById('examenes-lista');
   const empty = document.getElementById('examenes-empty');
@@ -716,7 +986,7 @@ async function cargarExamenes() {
     row.dataset.alumnoId = a.id;
     row.innerHTML = `
       <span class="ens-check"><span class="student-name">${escaparHTML(a.nombre)}</span></span>
-      <input type="number" min="0" max="10" step="0.1" class="exa-calif" value="${val}" placeholder="0-10">
+      <input type="number" min="0" max="10" step="0.1" class="exa-calif" value="${val}" placeholder="Calif.">
     `;
     cont.appendChild(row);
   });
@@ -737,16 +1007,15 @@ async function guardarExamenes() {
   }));
 
   const msg = document.getElementById('exa-msg');
-  msg.textContent = '✓ Calificaciones guardadas.';
+  msg.textContent = '\u2713 Calificaciones guardadas.';
   msg.hidden = false;
   setTimeout(() => { msg.hidden = true; }, 3000);
 }
 
-// ---------- AVISOS ----------
+// ---------- AVISOS (preguntas semanales e indicaciones para el grupo) ----------
 async function cargarAvisos() {
   const cont = document.getElementById('avisos-lista');
   const empty = document.getElementById('avisos-empty');
-  if (!cont) return;
   cont.innerHTML = '';
 
   if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
@@ -788,7 +1057,7 @@ async function publicarAviso() {
   document.getElementById('aviso-titulo').value = '';
   document.getElementById('aviso-texto').value = '';
   const msg = document.getElementById('aviso-msg');
-  msg.textContent = '✓ Aviso publicado.';
+  msg.textContent = '\u2713 Aviso publicado.';
   msg.hidden = false;
   setTimeout(() => { msg.hidden = true; }, 3000);
   cargarAvisos();
@@ -798,4 +1067,4 @@ function escaparHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
-   }
+}
