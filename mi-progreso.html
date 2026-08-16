@@ -36,7 +36,6 @@
 
 <main class="wrap act-main">
 
-  <!-- ===== LOGIN DEL ALUMNO ===== -->
   <section id="alumno-login" class="login-card act-login-card">
     <h2>Mi progreso</h2>
     <p class="login-sub">Solo tú puedes ver esta información — nadie más puede entrar a tu panel.</p>
@@ -55,7 +54,6 @@
     </form>
   </section>
 
-  <!-- ===== PANEL (visible tras identificarse) ===== -->
   <section id="progreso-app" hidden>
     <div class="act-whoami">
       <span id="act-whoami-nombre"></span>
@@ -77,6 +75,12 @@
       <h2>Ensayos (20 pts por bloque)</h2>
       <div id="prog-ensayos"></div>
       <p id="prog-ensayos-empty" class="empty-state" hidden>Tu docente aún no ha registrado entregas de bitácora.</p>
+    </section>
+
+    <section class="prog-card">
+      <h2>Asistencia (10 pts por bloque)</h2>
+      <div id="prog-asistencia"></div>
+      <p id="prog-asistencia-empty" class="empty-state" hidden>Tu docente aún no ha registrado asistencia.</p>
     </section>
 
     <section class="prog-card">
