@@ -14,6 +14,7 @@ import {
 
 import { firebaseConfig } from "./firebase-config.js";
 import { calcularBloque } from "./calculo.js";
+import { reporteGrupo, reporteAlumno } from "./reporte.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -132,6 +133,8 @@ on('btn-guardar-examenes', 'click', guardarExamenes);
 on('btn-guardar-bloques', 'click', guardarBloquesActivos);
 on('btn-eliminar-grupo', 'click', eliminarGrupo);
 on('btn-exportar', 'click', exportarCalificaciones);
+on('btn-pdf', 'click', generarPDF);
+on('hist-modo', 'change', renderBloquesReporte);
 
 renderRubrica();
 renderChecklist();
@@ -140,7 +143,7 @@ function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`));
   if (tab === 'evaluar') renderListaEvaluar();
-  if (tab === 'historial') cargarHistorial();
+  if (tab === 'historial') { renderBloquesReporte(); cargarHistorial(); }
   if (tab === 'participacion') { cargarBloquesActivos(); cargarParticipacion(); }
   if (tab === 'asistencia') cargarAsistencia();
   if (tab === 'ensayos') { poblarSelectSemanas(); cargarEnsayos(); }
@@ -222,6 +225,105 @@ async function eliminarGrupo() {
   alumnosCache = [];
   await cargarGrupos();
   renderAlumnos([]);
+}
+
+// ---------- SELECTOR DE BLOQUES PARA EL REPORTE ----------
+var bloquesReporte = [1, 2, 3];
+
+function renderBloquesReporte() {
+  const cont = document.getElementById('hist-bloques');
+  if (!cont) return;
+  cont.innerHTML = '';
+  [1, 2, 3].forEach(b => {
+    const incluido = bloquesReporte.includes(b);
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'asis-row ' + (incluido ? 'asis-presente' : 'asis-falta');
+    row.innerHTML = `
+      <span class="asis-dot"></span>
+      <span class="student-name">Bloque ${b}</span>
+      <span class="asis-estado-label">${incluido ? 'Incluido' : 'Omitido'}</span>
+    `;
+    row.addEventListener('click', () => {
+      if (incluido) {
+        if (bloquesReporte.length === 1) { alert('Deja al menos un bloque incluido.'); return; }
+        bloquesReporte = bloquesReporte.filter(x => x !== b);
+      } else {
+        bloquesReporte = [...bloquesReporte, b].sort();
+      }
+      renderBloquesReporte();
+    });
+    cont.appendChild(row);
+  });
+}
+
+// Lee de Firestore todo lo necesario para calcular las calificaciones de un alumno.
+async function datosDeAlumno(alumnoId) {
+  const base = ['grupos', grupoActivo, 'alumnos', alumnoId];
+  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap] = await Promise.all([
+    getDocs(collection(db, ...base, 'actividades')).catch(() => null),
+    getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
+    getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
+    getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
+    getDocs(collection(db, ...base, 'examenes')).catch(() => null),
+  ]);
+
+  const ensayos = {};
+  if (ensSnap) ensSnap.docs.forEach(d => { ensayos[d.id] = d.data(); });
+  const examenes = {};
+  if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
+
+  return {
+    idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
+    ensayos,
+    practicas: evalSnap ? evalSnap.docs.map(d => d.data()) : [],
+    asistencias: asisSnap ? asisSnap.docs.map(d => d.data()) : [],
+    examenes,
+  };
+}
+
+function nombreDelGrupo() {
+  const select = document.getElementById('grupo-select');
+  return select.options[select.selectedIndex]?.textContent || 'Sin grupo';
+}
+
+// ---------- REPORTE PDF ----------
+async function generarPDF() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  if (alumnosCache.length === 0) { alert('Este grupo no tiene alumnos.'); return; }
+
+  const modo = document.getElementById('hist-modo').value;
+  const msg = document.getElementById('export-msg');
+  msg.textContent = 'Generando reporte…';
+  msg.hidden = false;
+
+  try {
+    if (modo === 'alumno') {
+      const nombres = alumnosCache.map((a, i) => `${i + 1}. ${a.nombre}`).join('\n');
+      const elegido = prompt(`¿De qué alumno?\n\n${nombres}\n\nEscribe el número:`);
+      const idx = parseInt(elegido, 10) - 1;
+      if (isNaN(idx) || idx < 0 || idx >= alumnosCache.length) { msg.hidden = true; return; }
+
+      const alumno = alumnosCache[idx];
+      const datos = await datosDeAlumno(alumno.id);
+      await reporteAlumno({ nombreGrupo: nombreDelGrupo(), alumno, datos });
+    } else {
+      const alumnos = [];
+      for (const alumno of alumnosCache) {
+        alumnos.push({ alumno, datos: await datosDeAlumno(alumno.id) });
+      }
+      await reporteGrupo({
+        nombreGrupo: nombreDelGrupo(),
+        alumnos,
+        bloques: bloquesReporte,
+      });
+    }
+    msg.textContent = '\u2713 Reporte abierto en una ventana nueva.';
+    setTimeout(() => { msg.hidden = true; }, 4000);
+  } catch (err) {
+    console.error('Error generando el reporte:', err);
+    msg.textContent = 'No se pudo generar el reporte: ' + (err.message || err);
+  }
 }
 
 // ---------- EXPORTAR CALIFICACIONES ----------
