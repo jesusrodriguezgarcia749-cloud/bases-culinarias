@@ -45,3 +45,22 @@
 }
 .prog-aviso-titulo{font-weight:700; margin-bottom:6px; font-size:.95rem;}
 .prog-aviso-texto{font-size:.9rem; color:var(--ink); white-space:pre-wrap; line-height:1.5;}
+
+/* ===== Añadido: ensayos agrupados por bloque con subtotales ===== */
+.prog-ens-bloque{
+  font-family:var(--font-display); font-size:.95rem; color:var(--saffron-dark);
+  margin:20px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--line);
+}
+.prog-ens-bloque:first-child{margin-top:4px;}
+.prog-ens-subtotal{
+  display:flex; justify-content:space-between; align-items:center;
+  background:rgba(107,122,94,0.12); border-radius:8px;
+  padding:10px 14px; margin:10px 0 4px; font-size:.88rem; font-weight:600;
+}
+.prog-ens-subtotal strong{color:var(--sage);}
+.prog-ens-total{
+  display:flex; justify-content:space-between; align-items:center;
+  background:var(--charcoal); color:var(--cream); border-radius:10px;
+  padding:14px 16px; margin-top:18px; font-size:.95rem; font-weight:700;
+}
+.prog-ens-total strong{color:var(--saffron);}
