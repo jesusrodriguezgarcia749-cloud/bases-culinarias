@@ -96,7 +96,6 @@ async function cargarGruposEnSelect() {
   });
 }
 
-// Carga UNA sola vez todos los datos del alumno y los deja en datosCache.
 async function cargarDatos() {
   const base = ['grupos', sesion.grupoId, 'alumnos', sesion.alumnoId];
   const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap] = await Promise.all([
@@ -195,7 +194,26 @@ function renderEnsayos(bloques) {
         <strong>${x.ensayos.pts.toFixed(1)} / ${x.ensayos.tope} pts</strong>
       </div>
     `;
-  }).join('');
+  }).join('') + renderAcumuladoEnsayos(bloques);
+}
+
+// Los 60 pts de bitácoras del cuatrimestre alimentan el 35% de la Evaluación
+// Final (60 pts = 35%). El docente puede ajustar puntos al cierre por la
+// presentación del compendio digitalizado.
+function renderAcumuladoEnsayos(bloques) {
+  const acumulado = bloques.reduce((s, x) => s + x.ensayos.pts, 0);
+  const pctFinal = acumulado / 60 * 35;
+  return `
+    <div class="prog-ens-total">
+      <span>Acumulado del cuatrimestre</span>
+      <strong>${acumulado.toFixed(1)} / 60 pts</strong>
+    </div>
+    <div class="prog-ens-subtotal" style="margin-top:8px;">
+      <span>Equivale hoy en tu Evaluación Final</span>
+      <strong>${pctFinal.toFixed(1)}% de 35%</strong>
+    </div>
+    <p class="field-hint">Tus 15 bitácoras suman 60 puntos, que se convierten en el 35% de "entrega de ensayos" de tu Evaluación Final. Tu docente puede ajustar puntos al cierre según la presentación del compendio final.</p>
+  `;
 }
 
 function renderBloques(bloques) {
@@ -209,10 +227,6 @@ function renderBloques(bloques) {
       <span class="prog-bloque-stat">${x.total.toFixed(1)} / 100 pts</span>
     </div>
   `).join('') + `
-    <div class="prog-ens-total">
-      <span>Promedio de los tres bloques</span>
-      <strong>${(bloques.reduce((s, x) => s + x.total, 0) / 3 / 10).toFixed(1)} / 10</strong>
-    </div>
     <div class="prog-desglose">
       ${bloques.map(x => `
         <details class="prog-detalle-bloque">
