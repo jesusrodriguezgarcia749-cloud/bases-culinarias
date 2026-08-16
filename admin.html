@@ -114,13 +114,24 @@
   </div>
 
   <div id="tab-historial" class="tab-panel">
-    <label for="hist-modo" class="field-label">Exportar calificaciones</label>
-    <select id="hist-modo">
-      <option value="grupo">Todo el grupo</option>
-      <option value="alumno">Por alumno</option>
-    </select>
-    <button id="btn-exportar" class="btn btn-primary btn-block">Descargar Excel</button>
-    <p id="export-msg" class="save-msg" hidden></p>
+    <div class="bloques-activos-card">
+      <h3 class="section-title" style="margin-top:0;">Generar reporte</h3>
+
+      <label for="hist-modo" class="field-label">¿De quién?</label>
+      <select id="hist-modo">
+        <option value="grupo">Todo el grupo</option>
+        <option value="alumno">Por alumno</option>
+      </select>
+
+      <label class="field-label">Bloques a incluir</label>
+      <div id="hist-bloques" class="asis-list"></div>
+
+      <div class="reporte-botones">
+        <button id="btn-pdf" class="btn btn-primary">Reporte PDF</button>
+        <button id="btn-exportar" class="btn btn-ghost-dark">Excel (CSV)</button>
+      </div>
+      <p id="export-msg" class="save-msg" hidden></p>
+    </div>
 
     <h3 class="section-title">Resumen por alumno</h3>
     <p class="field-hint">Toca un alumno para ver su resumen completo del cuatrimestre.</p>
@@ -220,4 +231,4 @@
 <script src="js/app.js"></script>
 <script type="module" src="js/admin.js"></script>
 </body>
-</html>
+        </html>
