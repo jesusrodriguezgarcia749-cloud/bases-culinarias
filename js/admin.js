@@ -297,3 +297,505 @@ function renderRubrica() {
       <div class="rubric-row-top">
         <span class="crit-name">${c.nombre}</span>
         <span class="crit-weight">${Math.round(c.peso * 100)}%</span>
+      </div>
+      <input type="range" min="0" max="10" step="1" value="10" id="crit-${c.id}">
+      <div class="rubric-row-val" id="crit-${c.id}-val">10</div>
+    `;
+    grid.appendChild(row);
+  });
+  CRITERIOS.forEach(c => {
+    document.getElementById(`crit-${c.id}`).addEventListener('input', actualizarScore);
+  });
+  actualizarScore();
+}
+
+function actualizarScore() {
+  let total = 0;
+  CRITERIOS.forEach(c => {
+    const val = parseFloat(document.getElementById(`crit-${c.id}`).value);
+    document.getElementById(`crit-${c.id}-val`).textContent = val;
+    total += val * c.peso;
+  });
+  const pts = (total / 10 * 4).toFixed(2);
+  document.getElementById('score-display').textContent = `${total.toFixed(1)} / 10 → ${pts} pts`;
+  return total;
+}
+
+function resetRubricaYChecklist() {
+  CRITERIOS.forEach(c => {
+    document.getElementById(`crit-${c.id}`).value = 10;
+  });
+  actualizarScore();
+  CHECKLIST_ITEMS.forEach(item => {
+    document.getElementById(`chk-${item.id}`).checked = true;
+  });
+  document.getElementById('eval-notas').value = '';
+  document.getElementById('eval-fecha').valueAsDate = new Date();
+}
+
+// ---------- CHECKLIST ----------
+function renderChecklist() {
+  const grid = document.getElementById('checklist-grid');
+  grid.innerHTML = '';
+  CHECKLIST_ITEMS.forEach(item => {
+    const label = document.createElement('label');
+    label.innerHTML = `<input type="checkbox" id="chk-${item.id}" checked><span>${item.texto}</span>`;
+    grid.appendChild(label);
+  });
+}
+
+// ---------- GUARDAR EVALUACIÓN ----------
+async function guardarEvaluacion() {
+  const alumnoId = alumnoEvaluandoId;
+  const msg = document.getElementById('eval-msg');
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  if (!alumnoId) { alert('Elige un alumno de la lista.'); return; }
+
+  const criterios = {};
+  CRITERIOS.forEach(c => { criterios[c.id] = parseFloat(document.getElementById(`crit-${c.id}`).value); });
+
+  const checklist = {};
+  CHECKLIST_ITEMS.forEach(item => { checklist[item.id] = document.getElementById(`chk-${item.id}`).checked; });
+
+  const calificacion = actualizarScore();
+  const fecha = document.getElementById('eval-fecha').value;
+  const notas = document.getElementById('eval-notas').value.trim();
+  const bloque = parseInt(document.getElementById('eval-bloque').value, 10);
+
+  await addDoc(collection(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'evaluaciones'), {
+    fecha, bloque, criterios, checklist, calificacion, notas, creado: serverTimestamp(),
+  });
+
+  msg.textContent = '✓ Evaluación guardada.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+  resetRubricaYChecklist();
+  alumnoEvaluandoId = null;
+  document.getElementById('eval-form').hidden = true;
+  renderListaEvaluar();
+}
+
+// ---------- HISTORIAL (resumen completo por alumno) ----------
+function cargarHistorial() {
+  const cont = document.getElementById('hist-lista-alumnos');
+  const empty = document.getElementById('historial-empty');
+  const resumen = document.getElementById('hist-resumen');
+  if (!cont) return;
+  cont.innerHTML = '';
+  resumen.hidden = true;
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
+
+  alumnosCache.forEach(a => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'asis-row';
+    row.innerHTML = `
+      <span class="student-name">${escaparHTML(a.nombre)}</span>
+      <span class="asis-estado-label">Ver resumen →</span>
+    `;
+    row.addEventListener('click', () => mostrarResumenAlumno(a));
+    cont.appendChild(row);
+  });
+}
+
+async function mostrarResumenAlumno(alumno) {
+  const resumen = document.getElementById('hist-resumen');
+  resumen.hidden = false;
+  resumen.innerHTML = `<p class="eval-alumno-activo">Resumen de: ${escaparHTML(alumno.nombre)}</p><p class="empty-inline">Cargando…</p>`;
+  resumen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const base = ['grupos', grupoActivo, 'alumnos', alumno.id];
+
+  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap] = await Promise.all([
+    getDocs(collection(db, ...base, 'actividades')).catch(() => null),
+    getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
+    getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
+    getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
+    getDocs(collection(db, ...base, 'examenes')).catch(() => null),
+  ]);
+
+  const ensayos = {};
+  if (ensSnap) ensSnap.docs.forEach(d => { ensayos[d.id] = d.data(); });
+  const examenes = {};
+  if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
+
+  const datos = {
+    idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
+    ensayos,
+    practicas: evalSnap ? evalSnap.docs.map(d => d.data()) : [],
+    asistencias: asisSnap ? asisSnap.docs.map(d => d.data()) : [],
+    examenes,
+  };
+
+  const bloques = [1, 2, 3].map(b => calcularBloque(b, datos));
+
+  const fila = (etiqueta, r, extra) => `
+    <div class="res-row">
+      <span>${etiqueta}${extra ? ` <small class="res-extra">${extra}</small>` : ''}</span>
+      <strong>${r.pts.toFixed(1)} / ${r.tope}</strong>
+    </div>`;
+
+  resumen.innerHTML = `
+    <p class="eval-alumno-activo">Resumen de: ${escaparHTML(alumno.nombre)}</p>
+    ${bloques.map(x => `
+      <div class="res-card">
+        <h4>Bloque ${x.bloque}</h4>
+        ${fila('Participación', x.participacion, `${x.participacion.hechas}/${x.participacion.deTotal} actividades`)}
+        ${fila('Ensayos', x.ensayos, `${x.ensayos.entregados}/${x.ensayos.deTotal} bitácoras`)}
+        ${fila('Prácticas de cocina', x.practicas, `${x.practicas.cuantas}/${x.practicas.deTotal} prácticas`)}
+        ${fila('Asistencia', x.asistencia, `${x.asistencia.clases}/${x.asistencia.deTotal} clases · ${x.asistencia.conteo.falta} faltas`)}
+        ${fila('Examen', x.examen, x.examen.calificacion !== null ? `${x.examen.calificacion}/10` : 'sin capturar')}
+        <div class="res-row res-total">
+          <span>Total Bloque ${x.bloque}</span>
+          <strong>${x.total.toFixed(1)} / 100 pts</strong>
+        </div>
+      </div>
+    `).join('')}
+
+    <div class="score-display">
+      Promedio: ${(bloques.reduce((s, x) => s + x.total, 0) / 3 / 10).toFixed(1)} / 10
+    </div>
+    <p class="field-hint">Promedio de los tres bloques (cada uno vale 100 puntos).</p>
+  `;
+}
+
+// ---------- PARTICIPACIÓN ----------
+async function cargarParticipacion() {
+  const cont = document.getElementById('participacion-lista');
+  const empty = document.getElementById('participacion-empty');
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
+
+  for (const alumno of alumnosCache) {
+    const detalle = document.createElement('details');
+    detalle.className = 'part-row';
+
+    let completadas = [];
+    try {
+      const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumno.id, 'actividades'));
+      completadas = snap.docs.map(d => d.id);
+    } catch (err) {
+      console.warn('No se pudieron leer las actividades de', alumno.nombre, err);
+    }
+
+    const porBloque = [1, 2, 3].map(b => {
+      const total = TOTAL_ACTIVIDADES_POR_BLOQUE[b];
+      const hechas = completadas.filter(id => id.startsWith(`b${b}-`)).length;
+      const pct = total ? Math.round((hechas / total) * 100) : 0;
+      return { b, total, hechas, pct };
+    });
+
+    const totalGeneral = porBloque.reduce((s, x) => s + x.hechas, 0);
+    const totalPosible = porBloque.reduce((s, x) => s + x.total, 0);
+
+    detalle.innerHTML = `
+      <summary>
+        <span class="student-name">${escaparHTML(alumno.nombre)}</span>
+        <span class="part-summary-stat">${totalGeneral}/${totalPosible} pts en total</span>
+      </summary>
+      <div class="part-detail">
+        ${porBloque.map(x => `
+          <div class="part-bloque-row">
+            <span class="part-bloque-nombre">Bloque ${x.b}</span>
+            <div class="prog-bar-track"><div class="prog-bar-fill" style="width:${x.pct}%"></div></div>
+            <span class="part-bloque-stat">${x.hechas}/${x.total} pts</span>
+          </div>
+        `).join('')}
+        ${completadas.length === 0 ? '<p class="empty-inline">Todavía no completa ninguna actividad.</p>' : ''}
+      </div>
+    `;
+    cont.appendChild(detalle);
+  }
+}
+
+// ---------- ASISTENCIA ----------
+var asistenciaEstados = {};
+
+// Cada clase vale 0.5 pts (20 clases por bloque = 10 pts).
+var CICLO_ESTADO = { presente: 'retardo', retardo: 'justificado', justificado: 'falta', falta: 'presente' };
+var ETIQUETA_ESTADO = { presente: 'Presente', retardo: 'Retardo', justificado: 'Justificado', falta: 'Falta' };
+var PUNTOS_ESTADO = { presente: 0.5, retardo: 0.25, justificado: 0.5, falta: 0 };
+
+async function cargarAsistencia() {
+  const cont = document.getElementById('asistencia-lista');
+  const empty = document.getElementById('asistencia-empty');
+  if (!cont) return;
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
+
+  const fecha = document.getElementById('asis-fecha').value;
+  asistenciaEstados = {};
+
+  await Promise.all(alumnosCache.map(async (a) => {
+    try {
+      const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
+      const snap = await getDoc(ref);
+      asistenciaEstados[a.id] = snap.exists() ? snap.data().estado : 'presente';
+    } catch {
+      asistenciaEstados[a.id] = 'presente';
+    }
+  }));
+
+  renderAsistenciaLista();
+}
+
+function renderAsistenciaLista() {
+  const cont = document.getElementById('asistencia-lista');
+  cont.innerHTML = '';
+  alumnosCache.forEach(a => {
+    const estado = asistenciaEstados[a.id] || 'presente';
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = `asis-row asis-${estado}`;
+    row.innerHTML = `
+      <span class="asis-dot"></span>
+      <span class="student-name">${escaparHTML(a.nombre)}</span>
+      <span class="asis-estado-label">${ETIQUETA_ESTADO[estado]} · ${PUNTOS_ESTADO[estado]}</span>
+    `;
+    row.addEventListener('click', () => {
+      asistenciaEstados[a.id] = CICLO_ESTADO[estado];
+      renderAsistenciaLista();
+    });
+    cont.appendChild(row);
+  });
+}
+
+async function guardarAsistencia() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  const fecha = document.getElementById('asis-fecha').value;
+  if (!fecha) { alert('Elige una fecha.'); return; }
+  const bloque = parseInt(document.getElementById('asis-bloque').value, 10);
+
+  const msg = document.getElementById('asis-msg');
+  await Promise.all(alumnosCache.map(a => {
+    const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
+    return setDoc(ref, { estado: asistenciaEstados[a.id] || 'presente', fecha, bloque, actualizado: serverTimestamp() });
+  }));
+
+  msg.textContent = '✓ Asistencia guardada.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+}
+
+// ---------- ENSAYOS ----------
+var SEMANAS_ENSAYO = [
+  { n: 1, bloque: 1, tema: 'Géneros y Estructura Clásica' },
+  { n: 2, bloque: 1, tema: 'Secuencia Operativa' },
+  { n: 3, bloque: 1, tema: 'Rendimiento y Merma' },
+  { n: 4, bloque: 1, tema: 'Termodinámica y Sanidad' },
+  { n: 5, bloque: 1, tema: 'Escalabilidad y Cierre — Micro-Ensayo 1', cierre: true },
+  { n: 6, bloque: 2, tema: 'Aprovisionamiento' },
+  { n: 7, bloque: 2, tema: 'Propiedades Funcionales' },
+  { n: 8, bloque: 2, tema: 'Grasas y Aceites' },
+  { n: 9, bloque: 2, tema: 'Variedades Físicas y Scoville' },
+  { n: 10, bloque: 2, tema: 'Cualidades Gastronómicas — Micro-Ensayo 2', cierre: true },
+  { n: 11, bloque: 3, tema: 'Técnicas de Cocción' },
+  { n: 12, bloque: 3, tema: 'Destrezas con Proteínas' },
+  { n: 13, bloque: 3, tema: 'Cortes Clásicos' },
+  { n: 14, bloque: 3, tema: 'Semillas y Cereales' },
+  { n: 15, bloque: 3, tema: 'Hierbas y Especias — Micro-Ensayo 3', cierre: true },
+];
+
+var semanaSeleccionada = null;
+
+function poblarSelectSemanas() {
+  const select = document.getElementById('ens-semana-select');
+  if (!select || select.options.length > 0) return;
+  SEMANAS_ENSAYO.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.n;
+    opt.textContent = `Semana ${s.n} (Bloque ${s.bloque}) — ${s.tema}`;
+    select.appendChild(opt);
+  });
+  semanaSeleccionada = SEMANAS_ENSAYO[0].n;
+}
+
+async function cargarEnsayos() {
+  const cont = document.getElementById('ensayos-lista');
+  const empty = document.getElementById('ensayos-empty');
+  if (!cont) return;
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
+
+  semanaSeleccionada = document.getElementById('ens-semana-select').value || SEMANAS_ENSAYO[0].n;
+
+  const datos = {};
+  await Promise.all(alumnosCache.map(async (a) => {
+    try {
+      const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'ensayos', String(semanaSeleccionada));
+      const snap = await getDoc(ref);
+      datos[a.id] = snap.exists() ? snap.data() : { entregado: false, calificacion: '' };
+    } catch {
+      datos[a.id] = { entregado: false, calificacion: '' };
+    }
+  }));
+
+  alumnosCache.forEach(a => {
+    const d = datos[a.id] || { entregado: false, calificacion: '' };
+    const row = document.createElement('div');
+    row.className = 'ens-row';
+    row.dataset.alumnoId = a.id;
+    row.innerHTML = `
+      <label class="ens-check">
+        <input type="checkbox" class="ens-entregado" ${d.entregado ? 'checked' : ''}>
+        <span class="student-name">${escaparHTML(a.nombre)}</span>
+      </label>
+      <input type="number" min="0" max="4" step="0.1" class="ens-calif"
+        value="${d.calificacion !== '' && d.calificacion !== null && d.calificacion !== undefined ? d.calificacion : ''}" placeholder="0-4">
+    `;
+    cont.appendChild(row);
+  });
+}
+
+async function guardarEnsayos() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  const semana = document.getElementById('ens-semana-select').value;
+  if (!semana) return;
+
+  const filas = document.querySelectorAll('#ensayos-lista .ens-row');
+  const escrituras = [];
+  filas.forEach(row => {
+    const alumnoId = row.dataset.alumnoId;
+    const chk = row.querySelector('.ens-entregado');
+    const num = row.querySelector('.ens-calif');
+    const calificacion = num.value === '' ? null : parseFloat(num.value);
+    const ref = doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ensayos', semana);
+    escrituras.push(setDoc(ref, {
+      semana: parseInt(semana, 10),
+      entregado: chk.checked,
+      calificacion,
+      actualizado: serverTimestamp(),
+    }));
+  });
+
+  await Promise.all(escrituras);
+  const msg = document.getElementById('ens-msg');
+  msg.textContent = '✓ Ensayos guardados.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+}
+
+// ---------- EXÁMENES ----------
+async function cargarExamenes() {
+  const cont = document.getElementById('examenes-lista');
+  const empty = document.getElementById('examenes-empty');
+  if (!cont) return;
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
+
+  const cual = document.getElementById('exa-select').value;
+
+  const datos = {};
+  await Promise.all(alumnosCache.map(async (a) => {
+    try {
+      const snap = await getDoc(doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'examenes', String(cual)));
+      datos[a.id] = snap.exists() ? snap.data() : { calificacion: '' };
+    } catch { datos[a.id] = { calificacion: '' }; }
+  }));
+
+  alumnosCache.forEach(a => {
+    const d = datos[a.id] || {};
+    const val = (d.calificacion !== null && d.calificacion !== undefined && d.calificacion !== '') ? d.calificacion : '';
+    const row = document.createElement('div');
+    row.className = 'ens-row';
+    row.dataset.alumnoId = a.id;
+    row.innerHTML = `
+      <span class="ens-check"><span class="student-name">${escaparHTML(a.nombre)}</span></span>
+      <input type="number" min="0" max="10" step="0.1" class="exa-calif" value="${val}" placeholder="0-10">
+    `;
+    cont.appendChild(row);
+  });
+}
+
+async function guardarExamenes() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  const cual = document.getElementById('exa-select').value;
+
+  const filas = document.querySelectorAll('#examenes-lista .ens-row');
+  await Promise.all([...filas].map(row => {
+    const alumnoId = row.dataset.alumnoId;
+    const num = row.querySelector('.exa-calif');
+    const calificacion = num.value === '' ? null : parseFloat(num.value);
+    return setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', String(cual)), {
+      examen: cual, calificacion, actualizado: serverTimestamp(),
+    });
+  }));
+
+  const msg = document.getElementById('exa-msg');
+  msg.textContent = '✓ Calificaciones guardadas.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+}
+
+// ---------- AVISOS ----------
+async function cargarAvisos() {
+  const cont = document.getElementById('avisos-lista');
+  const empty = document.getElementById('avisos-empty');
+  if (!cont) return;
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+
+  const snap = await getDocs(query(collection(db, 'grupos', grupoActivo, 'avisos'), orderBy('creado', 'desc')));
+  empty.hidden = !snap.empty;
+  if (snap.empty) { empty.textContent = 'Aún no has publicado avisos en este grupo.'; return; }
+
+  snap.forEach(d => {
+    const a = d.data();
+    const div = document.createElement('div');
+    div.className = 'aviso-card';
+    div.innerHTML = `
+      <div class="aviso-card-top">
+        <span class="aviso-card-titulo">${escaparHTML(a.titulo || 'Sin título')}</span>
+        <button type="button" class="btn-delete-student" data-id="${d.id}">Eliminar</button>
+      </div>
+      <div class="aviso-card-texto">${escaparHTML(a.texto || '')}</div>
+    `;
+    div.querySelector('.btn-delete-student').addEventListener('click', async () => {
+      if (!confirm('¿Eliminar este aviso? Los alumnos dejarán de verlo.')) return;
+      await deleteDoc(doc(db, 'grupos', grupoActivo, 'avisos', d.id));
+      cargarAvisos();
+    });
+    cont.appendChild(div);
+  });
+}
+
+async function publicarAviso() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  const titulo = document.getElementById('aviso-titulo').value.trim();
+  const texto = document.getElementById('aviso-texto').value.trim();
+  if (!titulo && !texto) { alert('Escribe al menos un título o contenido.'); return; }
+
+  await addDoc(collection(db, 'grupos', grupoActivo, 'avisos'), {
+    titulo, texto, creado: serverTimestamp(),
+  });
+
+  document.getElementById('aviso-titulo').value = '';
+  document.getElementById('aviso-texto').value = '';
+  const msg = document.getElementById('aviso-msg');
+  msg.textContent = '✓ Aviso publicado.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+  cargarAvisos();
+}
+
+function escaparHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+   }
