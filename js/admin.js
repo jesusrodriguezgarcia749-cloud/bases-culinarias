@@ -124,6 +124,8 @@ on('btn-guardar-asistencia', 'click', guardarAsistencia);
 on('ens-semana-select', 'change', cargarEnsayos);
 on('btn-guardar-ensayos', 'click', guardarEnsayos);
 on('btn-publicar-aviso', 'click', publicarAviso);
+on('exa-select', 'change', cargarExamenes);
+on('btn-guardar-examenes', 'click', guardarExamenes);
 
 renderRubrica();
 renderChecklist();
@@ -136,6 +138,7 @@ function switchTab(tab) {
   if (tab === 'participacion') cargarParticipacion();
   if (tab === 'asistencia') cargarAsistencia();
   if (tab === 'ensayos') { poblarSelectSemanas(); cargarEnsayos(); }
+  if (tab === 'examenes') cargarExamenes();
   if (tab === 'avisos') cargarAvisos();
 }
 
@@ -729,6 +732,61 @@ async function guardarEnsayos() {
   await Promise.all(escrituras);
   const msg = document.getElementById('ens-msg');
   msg.textContent = '✓ Ensayos guardados.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+}
+
+// ---------- EXÁMENES (3 parciales + final) ----------
+async function cargarExamenes() {
+  const cont = document.getElementById('examenes-lista');
+  const empty = document.getElementById('examenes-empty');
+  if (!cont) return;
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
+
+  const cual = document.getElementById('exa-select').value;
+
+  const datos = {};
+  await Promise.all(alumnosCache.map(async (a) => {
+    try {
+      const snap = await getDoc(doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'examenes', String(cual)));
+      datos[a.id] = snap.exists() ? snap.data() : { calificacion: '' };
+    } catch { datos[a.id] = { calificacion: '' }; }
+  }));
+
+  alumnosCache.forEach(a => {
+    const d = datos[a.id] || {};
+    const val = (d.calificacion !== null && d.calificacion !== undefined && d.calificacion !== '') ? d.calificacion : '';
+    const row = document.createElement('div');
+    row.className = 'ens-row';
+    row.dataset.alumnoId = a.id;
+    row.innerHTML = `
+      <span class="ens-check"><span class="student-name">${escaparHTML(a.nombre)}</span></span>
+      <input type="number" min="0" max="10" step="0.1" class="exa-calif" value="${val}" placeholder="Calif.">
+    `;
+    cont.appendChild(row);
+  });
+}
+
+async function guardarExamenes() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  const cual = document.getElementById('exa-select').value;
+
+  const filas = document.querySelectorAll('#examenes-lista .ens-row');
+  await Promise.all([...filas].map(row => {
+    const alumnoId = row.dataset.alumnoId;
+    const num = row.querySelector('.exa-calif');
+    const calificacion = num.value === '' ? null : parseFloat(num.value);
+    return setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', String(cual)), {
+      examen: cual, calificacion, actualizado: serverTimestamp(),
+    });
+  }));
+
+  const msg = document.getElementById('exa-msg');
+  msg.textContent = '\u2713 Calificaciones guardadas.';
   msg.hidden = false;
   setTimeout(() => { msg.hidden = true; }, 3000);
 }

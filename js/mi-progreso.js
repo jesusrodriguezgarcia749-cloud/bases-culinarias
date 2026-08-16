@@ -216,11 +216,89 @@ async function renderAvisos() {
   }).join('');
 }
 
+// Calificación de cada bloque, combinando todo lo capturado.
+// Asistencia y prácticas son globales del cuatrimestre (no están ligadas a un
+// bloque específico); participación, ensayos y examen sí son por bloque.
+async function renderBloques() {
+  const cont = document.getElementById('prog-bloques');
+  if (!cont) return;
+  cont.innerHTML = '<p class="empty-inline">Calculando…</p>';
+
+  const base = ['grupos', sesion.grupoId, 'alumnos', sesion.alumnoId];
+  const [actSnap, evalSnap, ensSnap, asisSnap] = await Promise.all([
+    getDocs(collection(db, ...base, 'actividades')).catch(() => null),
+    getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
+    getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
+    getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
+  ]);
+
+  const idsAct = actSnap ? actSnap.docs.map(d => d.id) : [];
+
+  const practicas = evalSnap ? evalSnap.docs.map(d => d.data()) : [];
+  const promPractica = practicas.length
+    ? practicas.reduce((s, p) => s + (p.calificacion || 0), 0) / practicas.length : null;
+
+  const asis = asisSnap ? asisSnap.docs.map(d => d.data()) : [];
+  const presentes = asis.filter(a => a.estado === 'presente').length;
+  const retardos = asis.filter(a => a.estado === 'retardo').length;
+  const pctAsis = asis.length ? (presentes + retardos * 0.5) / asis.length * 100 : null;
+
+  const ensayosPorSemana = {};
+  if (ensSnap) ensSnap.docs.forEach(d => { ensayosPorSemana[d.id] = d.data(); });
+
+  const SEMANAS_BLOQUE = { 1: [1,2,3,4,5], 2: [6,7,8,9,10], 3: [11,12,13,14,15] };
+
+  const filas = await Promise.all([1, 2, 3].map(async (b) => {
+    // Participación del bloque
+    const total = TOTAL_ACTIVIDADES_POR_BLOQUE[b];
+    const hechas = idsAct.filter(id => id.startsWith(`b${b}-`)).length;
+    const pctPart = total ? hechas / total * 100 : 0;
+
+    // Ensayos del bloque
+    const semanas = SEMANAS_BLOQUE[b];
+    const califs = semanas
+      .map(n => ensayosPorSemana[String(n)])
+      .filter(e => e && e.calificacion !== null && e.calificacion !== undefined && e.calificacion !== '')
+      .map(e => Number(e.calificacion));
+    const promEns = califs.length ? califs.reduce((s, x) => s + x, 0) / califs.length : null;
+
+    // Examen del bloque
+    let examen = null;
+    try {
+      const snap = await getDoc(doc(db, ...base, 'examenes', String(b)));
+      if (snap.exists() && snap.data().calificacion !== null && snap.data().calificacion !== undefined) {
+        examen = Number(snap.data().calificacion);
+      }
+    } catch { /* sin examen */ }
+
+    const partes = [];
+    if (pctAsis !== null) partes.push({ peso: 10, pct: pctAsis });
+    partes.push({ peso: 20, pct: pctPart });
+    if (promPractica !== null) partes.push({ peso: 20, pct: promPractica * 10 });
+    if (promEns !== null) partes.push({ peso: 20, pct: promEns * 10 });
+    if (examen !== null) partes.push({ peso: 30, pct: examen * 10 });
+
+    const puntos = partes.reduce((s, p) => s + p.pct / 100 * p.peso, 0);
+    const cubierto = partes.reduce((s, p) => s + p.peso, 0);
+    const pctBarra = Math.min(100, puntos);
+
+    return `
+      <div class="prog-bloque-row">
+        <span class="prog-bloque-nombre">${NOMBRES_BLOQUE[b]}</span>
+        <div class="prog-bloque-bar-track"><div class="prog-bloque-bar-fill" style="width:${pctBarra}%"></div></div>
+        <span class="prog-bloque-stat">${puntos.toFixed(1)} pts${cubierto < 100 ? ` (de ${cubierto} capturados)` : ''}</span>
+      </div>
+    `;
+  }));
+
+  cont.innerHTML = filas.join('');
+}
+
 async function iniciarApp() {
   document.getElementById('alumno-login').hidden = true;
   document.getElementById('progreso-app').hidden = false;
   document.getElementById('act-whoami-nombre').textContent = `Hola, ${sesion.nombre}`;
-  await Promise.all([renderParticipacion(), renderPracticas(), renderEnsayos(), renderAvisos()]);
+  await Promise.all([renderParticipacion(), renderPracticas(), renderEnsayos(), renderBloques(), renderAvisos()]);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
