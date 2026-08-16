@@ -1,4 +1,6 @@
 // mi-progreso.js — panel personal del alumno: solo lee su propia información.
+// Usa la MISMA fórmula que el panel docente (js/calculo.js), para que ambos
+// paneles nunca muestren números distintos.
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
@@ -6,15 +8,34 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import { firebaseConfig } from "./firebase-config.js";
+import { calcularBloque, SEMANAS_DE_BLOQUE, PTS_POR_ENSAYO } from "./calculo.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const SESSION_KEY = 'bc_sesion_alumno';
-const TOTAL_ACTIVIDADES_POR_BLOQUE = { 1: 20, 2: 20, 3: 20 };
 const NOMBRES_BLOQUE = { 1: 'Bloque 1', 2: 'Bloque 2', 3: 'Bloque 3' };
 
+const TEMAS_SEMANA = {
+  1: 'Géneros y Estructura Clásica',
+  2: 'Secuencia Operativa',
+  3: 'Rendimiento y Merma',
+  4: 'Termodinámica y Sanidad',
+  5: 'Escalabilidad — Micro-Ensayo 1',
+  6: 'Aprovisionamiento',
+  7: 'Propiedades Funcionales',
+  8: 'Grasas y Aceites',
+  9: 'Variedades Físicas y Scoville',
+  10: 'Cualidades Gastronómicas — Micro-Ensayo 2',
+  11: 'Técnicas de Cocción',
+  12: 'Destrezas con Proteínas',
+  13: 'Cortes Clásicos',
+  14: 'Semillas y Cereales',
+  15: 'Hierbas y Especias — Micro-Ensayo 3',
+};
+
 let sesion = null;
+let datosCache = null;
 
 function slugNombre(nombre) {
   return nombre
@@ -51,7 +72,7 @@ document.getElementById('form-alumno-login').addEventListener('submit', async (e
     return;
   }
 
-  sesion = { grupoId, alumnoId, nombre: snap.data().nombre, pin, puntosParticipacion: snap.data().puntosParticipacion || 0 };
+  sesion = { grupoId, alumnoId, nombre: snap.data().nombre, pin };
   sessionStorage.setItem(SESSION_KEY, JSON.stringify(sesion));
   await iniciarApp();
 });
@@ -75,161 +96,136 @@ async function cargarGruposEnSelect() {
   });
 }
 
-// Cuenta las actividades completadas POR BLOQUE (no un total global), leyendo
-// los ids reales guardados en Firestore, que llevan el prefijo "bN-".
-async function renderParticipacion() {
+// Carga UNA sola vez todos los datos del alumno y los deja en datosCache.
+async function cargarDatos() {
+  const base = ['grupos', sesion.grupoId, 'alumnos', sesion.alumnoId];
+  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap] = await Promise.all([
+    getDocs(collection(db, ...base, 'actividades')).catch(() => null),
+    getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
+    getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
+    getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
+    getDocs(collection(db, ...base, 'examenes')).catch(() => null),
+  ]);
+
+  const ensayos = {};
+  if (ensSnap) ensSnap.docs.forEach(d => { ensayos[d.id] = d.data(); });
+  const examenes = {};
+  if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
+
+  datosCache = {
+    idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
+    ensayos,
+    practicas: evalSnap ? evalSnap.docs.map(d => d.data()) : [],
+    asistencias: asisSnap ? asisSnap.docs.map(d => d.data()) : [],
+    examenes,
+  };
+}
+
+function renderParticipacion(bloques) {
   const cont = document.getElementById('prog-participacion');
-
-  let completadas = new Set();
-  try {
-    const snap = await getDocs(collection(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'actividades'));
-    completadas = new Set(snap.docs.map(d => d.id));
-  } catch (err) {
-    console.warn('No se pudieron cargar las actividades completadas:', err);
-  }
-
-  const filas = await Promise.all([1, 2, 3].map(async (b) => {
-    let total = TOTAL_ACTIVIDADES_POR_BLOQUE[b];
-    try {
-      const res = await fetch(`data/actividades_bloque${b}.json`, { cache: 'no-store' });
-      if (res.ok) {
-        const data = await res.json();
-        total = data.actividades.length;
-      }
-    } catch { /* usamos el total por defecto */ }
-
-    const hechas = [...completadas].filter(id => id.startsWith(`b${b}-`)).length;
-    const pct = total ? Math.round((hechas / total) * 100) : 0;
+  cont.innerHTML = bloques.map(x => {
+    const pct = x.participacion.tope ? x.participacion.pts / x.participacion.tope * 100 : 0;
     return `
       <div class="prog-bloque-row">
-        <span class="prog-bloque-nombre">${NOMBRES_BLOQUE[b]}</span>
+        <span class="prog-bloque-nombre">${NOMBRES_BLOQUE[x.bloque]}</span>
         <div class="prog-bloque-bar-track"><div class="prog-bloque-bar-fill" style="width:${pct}%"></div></div>
-        <span class="prog-bloque-stat">${hechas}/${total} actividades · ${pct}%</span>
+        <span class="prog-bloque-stat">${x.participacion.pts} / ${x.participacion.tope} pts</span>
       </div>
     `;
-  }));
-
-  cont.innerHTML = filas.join('') +
+  }).join('') +
     `<p style="margin-top:14px;"><a href="actividades.html" class="btn btn-ghost-dark btn-small">Ir a Actividades</a></p>`;
 }
 
-async function renderPracticas() {
+function renderPracticas(bloques) {
   const cont = document.getElementById('prog-practicas');
   const empty = document.getElementById('prog-practicas-empty');
-  const snap = await getDocs(query(
-    collection(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'evaluaciones'),
-    orderBy('fecha', 'desc')
-  ));
+  const hay = bloques.some(x => x.practicas.cuantas > 0);
+  empty.hidden = hay;
+  if (!hay) { cont.innerHTML = ''; return; }
 
-  if (snap.empty) { empty.hidden = false; cont.innerHTML = ''; return; }
-  empty.hidden = true;
+  cont.innerHTML = bloques.map(x => `
+    <h3 class="prog-ens-bloque">Bloque ${x.bloque}</h3>
+    ${x.practicas.lista.length === 0
+      ? '<p class="empty-inline">Sin prácticas evaluadas todavía.</p>'
+      : x.practicas.lista
+          .sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''))
+          .map(p => {
+            const pts = (Number(p.calificacion) || 0) / 10 * 4;
+            return `
+              <div class="prog-ensayo-row">
+                <span class="prog-ensayo-tema">${p.fecha || 'sin fecha'}</span>
+                <span class="prog-ensayo-calif">${(p.calificacion || 0).toFixed(1)}/10 · ${pts.toFixed(1)} pts</span>
+              </div>`;
+          }).join('')}
+    <div class="prog-ens-subtotal">
+      <span>Subtotal Bloque ${x.bloque}</span>
+      <strong>${x.practicas.pts.toFixed(1)} / ${x.practicas.tope} pts</strong>
+    </div>
+  `).join('');
+}
 
-  cont.innerHTML = snap.docs.map(d => {
-    const r = d.data();
+function renderEnsayos(bloques) {
+  const cont = document.getElementById('prog-ensayos');
+  const empty = document.getElementById('prog-ensayos-empty');
+  const hay = Object.keys(datosCache.ensayos).length > 0;
+  empty.hidden = hay;
+  if (!hay) { cont.innerHTML = ''; return; }
+
+  cont.innerHTML = bloques.map(x => {
+    const semanas = SEMANAS_DE_BLOQUE[x.bloque];
     return `
-      <div class="prog-practica-card">
-        <div class="prog-practica-top">
-          <span class="prog-practica-date">${r.fecha || 'sin fecha'}</span>
-          <span class="prog-practica-score">${(r.calificacion || 0).toFixed(1)} / 10</span>
-        </div>
-        ${r.notas ? `<div>${escaparHTML(r.notas)}</div>` : ''}
+      <h3 class="prog-ens-bloque">Bloque ${x.bloque}</h3>
+      ${semanas.map(n => {
+        const d = datosCache.ensayos[String(n)] || {};
+        const entregado = d.entregado === true;
+        const tiene = d.calificacion !== null && d.calificacion !== undefined && d.calificacion !== '';
+        const pts = tiene ? Number(d.calificacion) : null;
+        const derecha = pts !== null
+          ? `${pts.toFixed(1)} / ${PTS_POR_ENSAYO} pts`
+          : (entregado ? 'Entregada' : 'Pendiente');
+        return `
+          <div class="prog-ensayo-row">
+            <span class="prog-ensayo-icon ${entregado ? 'ok' : 'pendiente'}">${entregado ? '✓' : '○'}</span>
+            <span class="prog-ensayo-tema">Sem. ${n} — ${escaparHTML(TEMAS_SEMANA[n] || '')}</span>
+            <span class="prog-ensayo-calif">${derecha}</span>
+          </div>`;
+      }).join('')}
+      <div class="prog-ens-subtotal">
+        <span>Subtotal Bloque ${x.bloque}</span>
+        <strong>${x.ensayos.pts.toFixed(1)} / ${x.ensayos.tope} pts</strong>
       </div>
     `;
   }).join('');
 }
 
-// Semanas de bitácora (deben coincidir con las del panel docente).
-const SEMANAS_ENSAYO = [
-  { n: 1, bloque: 1, tema: 'Géneros y Estructura Clásica' },
-  { n: 2, bloque: 1, tema: 'Secuencia Operativa' },
-  { n: 3, bloque: 1, tema: 'Rendimiento y Merma' },
-  { n: 4, bloque: 1, tema: 'Termodinámica y Sanidad' },
-  { n: 5, bloque: 1, tema: 'Escalabilidad — Micro-Ensayo 1' },
-  { n: 6, bloque: 2, tema: 'Aprovisionamiento' },
-  { n: 7, bloque: 2, tema: 'Propiedades Funcionales' },
-  { n: 8, bloque: 2, tema: 'Grasas y Aceites' },
-  { n: 9, bloque: 2, tema: 'Variedades Físicas y Scoville' },
-  { n: 10, bloque: 2, tema: 'Cualidades Gastronómicas — Micro-Ensayo 2' },
-  { n: 11, bloque: 3, tema: 'Técnicas de Cocción' },
-  { n: 12, bloque: 3, tema: 'Destrezas con Proteínas' },
-  { n: 13, bloque: 3, tema: 'Cortes Clásicos' },
-  { n: 14, bloque: 3, tema: 'Semillas y Cereales' },
-  { n: 15, bloque: 3, tema: 'Hierbas y Especias — Micro-Ensayo 3' },
-];
+function renderBloques(bloques) {
+  const cont = document.getElementById('prog-bloques');
+  if (!cont) return;
 
-async function renderEnsayos() {
-  const cont = document.getElementById('prog-ensayos');
-  const empty = document.getElementById('prog-ensayos-empty');
-  cont.innerHTML = '';
-
-  let datos = {};
-  try {
-    const snap = await getDocs(collection(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'ensayos'));
-    snap.forEach(d => { datos[d.id] = d.data(); });
-  } catch (err) {
-    console.warn('No se pudieron cargar los ensayos:', err);
-  }
-
-  const conRegistro = Object.keys(datos).length > 0;
-  empty.hidden = conRegistro;
-  if (!conRegistro) return;
-
-  // Cada bloque vale 20% de su Evaluación Parcial, repartido entre sus 5
-  // semanas → 4% por bitácora. Si el alumno saca 8/10, gana 3.2% esa semana.
-  const PCT_POR_SEMANA = 4;
-  let html = '';
-
-  [1, 2, 3].forEach(b => {
-    const semanas = SEMANAS_ENSAYO.filter(s => s.bloque === b);
-    html += `<h3 class="prog-ens-bloque">Bloque ${b}</h3>`;
-
-    let acumulado = 0;
-    semanas.forEach(s => {
-      const d = datos[String(s.n)] || {};
-      const entregado = d.entregado === true;
-      const tieneCalif = d.calificacion !== null && d.calificacion !== undefined && d.calificacion !== '';
-      const calif = tieneCalif ? Number(d.calificacion) : null;
-      const puntos = calif !== null ? (calif / 10) * PCT_POR_SEMANA : 0;
-      acumulado += puntos;
-
-      const derecha = calif !== null
-        ? `${calif.toFixed(1)}/10 · ${puntos.toFixed(1)}%`
-        : (entregado ? 'Entregada' : 'Pendiente');
-
-      html += `
-        <div class="prog-ensayo-row">
-          <span class="prog-ensayo-icon ${entregado ? 'ok' : 'pendiente'}">${entregado ? '✓' : '○'}</span>
-          <span class="prog-ensayo-tema">Sem. ${s.n} — ${escaparHTML(s.tema)}</span>
-          <span class="prog-ensayo-calif">${derecha}</span>
-        </div>
-      `;
-    });
-
-    html += `
-      <div class="prog-ens-subtotal">
-        <span>Subtotal Bloque ${b}</span>
-        <strong>${acumulado.toFixed(1)} / 20%</strong>
-      </div>
-    `;
-  });
-
-  // Total del cuatrimestre (los tres bloques juntos)
-  let totalGeneral = 0;
-  SEMANAS_ENSAYO.forEach(s => {
-    const d = datos[String(s.n)] || {};
-    if (d.calificacion !== null && d.calificacion !== undefined && d.calificacion !== '') {
-      totalGeneral += (Number(d.calificacion) / 10) * PCT_POR_SEMANA;
-    }
-  });
-  html += `
-    <div class="prog-ens-total">
-      <span>Total acumulado del cuatrimestre</span>
-      <strong>${totalGeneral.toFixed(1)} / 60%</strong>
+  cont.innerHTML = bloques.map(x => `
+    <div class="prog-bloque-row">
+      <span class="prog-bloque-nombre">${NOMBRES_BLOQUE[x.bloque]}</span>
+      <div class="prog-bloque-bar-track"><div class="prog-bloque-bar-fill" style="width:${Math.min(100, x.total)}%"></div></div>
+      <span class="prog-bloque-stat">${x.total.toFixed(1)} / 100 pts</span>
     </div>
-    <p class="field-hint">Cada bitácora vale 4% de su bloque. Este acumulado alimenta el 35% de "entrega de ensayos" en tu Evaluación Final.</p>
+  `).join('') + `
+    <div class="prog-ens-total">
+      <span>Promedio de los tres bloques</span>
+      <strong>${(bloques.reduce((s, x) => s + x.total, 0) / 3 / 10).toFixed(1)} / 10</strong>
+    </div>
+    <div class="prog-desglose">
+      ${bloques.map(x => `
+        <details class="prog-detalle-bloque">
+          <summary>Ver desglose del Bloque ${x.bloque}</summary>
+          <div class="prog-ensayo-row"><span class="prog-ensayo-tema">Participación</span><span class="prog-ensayo-calif">${x.participacion.pts} / ${x.participacion.tope}</span></div>
+          <div class="prog-ensayo-row"><span class="prog-ensayo-tema">Ensayos</span><span class="prog-ensayo-calif">${x.ensayos.pts.toFixed(1)} / ${x.ensayos.tope}</span></div>
+          <div class="prog-ensayo-row"><span class="prog-ensayo-tema">Prácticas de cocina</span><span class="prog-ensayo-calif">${x.practicas.pts.toFixed(1)} / ${x.practicas.tope}</span></div>
+          <div class="prog-ensayo-row"><span class="prog-ensayo-tema">Asistencia (${x.asistencia.clases}/${x.asistencia.deTotal} clases)</span><span class="prog-ensayo-calif">${x.asistencia.pts.toFixed(2)} / ${x.asistencia.tope}</span></div>
+          <div class="prog-ensayo-row"><span class="prog-ensayo-tema">Examen${x.examen.calificacion !== null ? ` (${x.examen.calificacion}/10)` : ' — sin presentar'}</span><span class="prog-ensayo-calif">${x.examen.pts.toFixed(1)} / ${x.examen.tope}</span></div>
+        </details>
+      `).join('')}
+    </div>
   `;
-
-  cont.innerHTML = html;
 }
 
 async function renderAvisos() {
@@ -259,89 +255,19 @@ async function renderAvisos() {
   }).join('');
 }
 
-// Calificación de cada bloque, combinando todo lo capturado.
-// Asistencia y prácticas son globales del cuatrimestre (no están ligadas a un
-// bloque específico); participación, ensayos y examen sí son por bloque.
-async function renderBloques() {
-  const cont = document.getElementById('prog-bloques');
-  if (!cont) return;
-  cont.innerHTML = '<p class="empty-inline">Calculando…</p>';
-
-  const base = ['grupos', sesion.grupoId, 'alumnos', sesion.alumnoId];
-  const [actSnap, evalSnap, ensSnap, asisSnap] = await Promise.all([
-    getDocs(collection(db, ...base, 'actividades')).catch(() => null),
-    getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
-    getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
-    getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
-  ]);
-
-  const idsAct = actSnap ? actSnap.docs.map(d => d.id) : [];
-
-  const practicas = evalSnap ? evalSnap.docs.map(d => d.data()) : [];
-  const promPractica = practicas.length
-    ? practicas.reduce((s, p) => s + (p.calificacion || 0), 0) / practicas.length : null;
-
-  const asis = asisSnap ? asisSnap.docs.map(d => d.data()) : [];
-  const presentes = asis.filter(a => a.estado === 'presente').length;
-  const retardos = asis.filter(a => a.estado === 'retardo').length;
-  const pctAsis = asis.length ? (presentes + retardos * 0.5) / asis.length * 100 : null;
-
-  const ensayosPorSemana = {};
-  if (ensSnap) ensSnap.docs.forEach(d => { ensayosPorSemana[d.id] = d.data(); });
-
-  const SEMANAS_BLOQUE = { 1: [1,2,3,4,5], 2: [6,7,8,9,10], 3: [11,12,13,14,15] };
-
-  const filas = await Promise.all([1, 2, 3].map(async (b) => {
-    // Participación del bloque
-    const total = TOTAL_ACTIVIDADES_POR_BLOQUE[b];
-    const hechas = idsAct.filter(id => id.startsWith(`b${b}-`)).length;
-    const pctPart = total ? hechas / total * 100 : 0;
-
-    // Ensayos del bloque
-    const semanas = SEMANAS_BLOQUE[b];
-    const califs = semanas
-      .map(n => ensayosPorSemana[String(n)])
-      .filter(e => e && e.calificacion !== null && e.calificacion !== undefined && e.calificacion !== '')
-      .map(e => Number(e.calificacion));
-    const promEns = califs.length ? califs.reduce((s, x) => s + x, 0) / califs.length : null;
-
-    // Examen del bloque
-    let examen = null;
-    try {
-      const snap = await getDoc(doc(db, ...base, 'examenes', String(b)));
-      if (snap.exists() && snap.data().calificacion !== null && snap.data().calificacion !== undefined) {
-        examen = Number(snap.data().calificacion);
-      }
-    } catch { /* sin examen */ }
-
-    const partes = [];
-    if (pctAsis !== null) partes.push({ peso: 10, pct: pctAsis });
-    partes.push({ peso: 20, pct: pctPart });
-    if (promPractica !== null) partes.push({ peso: 20, pct: promPractica * 10 });
-    if (promEns !== null) partes.push({ peso: 20, pct: promEns * 10 });
-    if (examen !== null) partes.push({ peso: 30, pct: examen * 10 });
-
-    const puntos = partes.reduce((s, p) => s + p.pct / 100 * p.peso, 0);
-    const cubierto = partes.reduce((s, p) => s + p.peso, 0);
-    const pctBarra = Math.min(100, puntos);
-
-    return `
-      <div class="prog-bloque-row">
-        <span class="prog-bloque-nombre">${NOMBRES_BLOQUE[b]}</span>
-        <div class="prog-bloque-bar-track"><div class="prog-bloque-bar-fill" style="width:${pctBarra}%"></div></div>
-        <span class="prog-bloque-stat">${puntos.toFixed(1)} pts${cubierto < 100 ? ` (de ${cubierto} capturados)` : ''}</span>
-      </div>
-    `;
-  }));
-
-  cont.innerHTML = filas.join('');
-}
-
 async function iniciarApp() {
   document.getElementById('alumno-login').hidden = true;
   document.getElementById('progreso-app').hidden = false;
   document.getElementById('act-whoami-nombre').textContent = `Hola, ${sesion.nombre}`;
-  await Promise.all([renderParticipacion(), renderPracticas(), renderEnsayos(), renderBloques(), renderAvisos()]);
+
+  await cargarDatos();
+  const bloques = [1, 2, 3].map(b => calcularBloque(b, datosCache));
+
+  renderParticipacion(bloques);
+  renderPracticas(bloques);
+  renderEnsayos(bloques);
+  renderBloques(bloques);
+  await renderAvisos();
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -354,7 +280,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       const ref = doc(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId);
       const snap = await getDoc(ref);
       if (snap.exists() && String(snap.data().pin) === String(sesion.pin)) {
-        sesion.puntosParticipacion = snap.data().puntosParticipacion || 0;
         await iniciarApp();
         return;
       }
