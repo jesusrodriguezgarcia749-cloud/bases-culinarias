@@ -32,6 +32,7 @@ let sesion = null;              // { grupoId, alumnoId, nombre, pin }
 let actividadesPorBloque = {};  // { 1: [ {...}, ... ] }
 let completadasSet = new Set(); // ids de actividades ya correctas ("b1-1.1-a", ...)
 let bloqueActivo = 1;
+let bloquesAbiertos = [1];   // los que el docente permitió responder
 
 function slugNombre(nombre) {
   return nombre
@@ -139,6 +140,18 @@ async function cargarActividadesBloque(bloque) {
   return data.actividades;
 }
 
+// Lee qué bloques dejó abiertos el docente para responder.
+async function cargarBloquesAbiertos() {
+  try {
+    const snap = await getDoc(doc(db, 'grupos', sesion.grupoId, 'config', 'bloques'));
+    bloquesAbiertos = snap.exists() && Array.isArray(snap.data().activos)
+      ? snap.data().activos.map(Number)
+      : [1];
+  } catch {
+    bloquesAbiertos = [1];
+  }
+}
+
 async function cargarCompletadas() {
   try {
     const snap = await getDocs(collection(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'actividades'));
@@ -225,6 +238,13 @@ async function renderBloque() {
 
   root.innerHTML = '';
 
+  if (!bloquesAbiertos.includes(bloqueActivo)) {
+    const aviso = document.createElement('p');
+    aviso.className = 'bloque-cerrado-aviso';
+    aviso.innerHTML = `🔒 <strong>${NOMBRES_BLOQUE[bloqueActivo]} en modo lectura.</strong> Puedes revisar las preguntas para irte preparando, pero todavía no cuentan para tu calificación. Tu docente abrirá este bloque cuando corresponda.`;
+    root.appendChild(aviso);
+  }
+
   const subtemas = [...new Set(actividades.map(a => a.subtema))];
 
   subtemas.forEach(sub => {
@@ -278,6 +298,15 @@ function renderSubtema(sub, actividades) {
 
   const actions = document.createElement('div');
   actions.className = 'quiz-actions';
+
+  // Si el docente aún no abre este bloque, el alumno puede leer pero no responder.
+  if (!bloquesAbiertos.includes(bloqueActivo)) {
+    actions.innerHTML = `<p class="subtema-cerrado-msg">🔒 Este bloque todavía no está abierto para responder. Puedes leer las preguntas, pero tu docente lo habilitará cuando llegue el momento.</p>`;
+    section.appendChild(actions);
+    section.querySelectorAll('input, select').forEach(el => { el.disabled = true; });
+    return section;
+  }
+
   actions.innerHTML = `<button class="btn btn-primary" data-action="revisar-subtema">Revisar subtema</button>`;
   section.appendChild(actions);
 
@@ -452,6 +481,7 @@ async function iniciarApp() {
   document.getElementById('alumno-login').hidden = true;
   document.getElementById('act-app').hidden = false;
   document.getElementById('act-whoami-nombre').textContent = `Hola, ${sesion.nombre}`;
+  await cargarBloquesAbiertos();
   renderTabs();
   await renderBloque();
 }
