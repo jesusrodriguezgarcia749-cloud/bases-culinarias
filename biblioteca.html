@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/biblioteca.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
@@ -22,6 +23,7 @@
       <a href="compendio.html">Compendio</a>
       <a href="actividades.html">Actividades</a>
       <a href="biblioteca.html" aria-current="page">Biblioteca</a>
+      <a href="mi-progreso.html">Mi progreso</a>
       <a href="admin.html" class="nav-admin">Panel docente</a>
     </nav>
     <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
@@ -32,61 +34,127 @@
 
 <section class="bib-hero">
   <div class="wrap">
-    <p class="eyebrow">Acceso restringido · Solo alumnos inscritos</p>
+    <p class="eyebrow">Fuentes y referencias</p>
     <h1>Biblioteca de referencia</h1>
-    <p class="hero-sub">Textos completos usados como fuente del compendio. Este material es de consulta interna: regístrate con tu correo institucional para acceder.</p>
+    <p class="hero-sub">Las obras y documentos que sustentan el compendio de la asignatura. Aquí encuentras la ficha de cada fuente, por qué es relevante para tu formación, y dónde consultarla legalmente.</p>
   </div>
 </section>
 
 <main class="wrap bib-main">
 
-  <!-- ESTADO: NO AUTENTICADO -->
-  <div id="auth-panel" class="auth-panel">
-    <div class="auth-tabs">
-      <button class="auth-tab active" data-tab="login">Iniciar sesión</button>
-      <button class="auth-tab" data-tab="registro">Crear cuenta</button>
+  <!-- ================= BIBLIOGRAFÍA BÁSICA ================= -->
+  <section class="bib-seccion">
+    <p class="section-eyebrow">Bibliografía básica</p>
+    <h2>Textos de la asignatura</h2>
+    <p class="bib-intro">Son las obras que el programa de estudios señala como referencia. Consúltalas en la biblioteca del instituto o adquiérelas directamente con la editorial — son inversiones que te van a acompañar toda la carrera.</p>
+
+    <article class="fuente-card">
+      <div class="fuente-tag">Libro</div>
+      <h3>Arte culinario: Bases y procedimientos</h3>
+      <p class="fuente-autor">Martínez de Flores Escobar, Georgina · Editorial Limusa</p>
+      <p class="fuente-desc">Obra de referencia en la formación culinaria en México. Desarrolla con rigor los fundamentos que trabajamos en el Bloque 1: clasificación de géneros, secuencia de elaboración, y el vocabulario técnico que un cocinero necesita para comunicarse en cualquier cocina profesional.</p>
+      <p class="fuente-uso"><strong>Dónde se usa:</strong> Bloques 1 y 3 del compendio.</p>
+      <p class="fuente-acceso">Consulta en la biblioteca del instituto o solicítala a la editorial.</p>
+    </article>
+
+    <article class="fuente-card">
+      <div class="fuente-tag">Libro</div>
+      <h3>Iniciación en las técnicas culinarias</h3>
+      <p class="fuente-autor">Martínez de Flores Escobar, Georgina y González-Garza Treviño, Georgina · Editorial Limusa</p>
+      <p class="fuente-desc">Complementa al anterior con un enfoque práctico en técnicas de cocción y manipulación de materias primas. Su tratamiento de los métodos por concentración, expansión y mixtos es la base del Bloque 3.</p>
+      <p class="fuente-uso"><strong>Dónde se usa:</strong> Bloques 2 y 3 del compendio.</p>
+      <p class="fuente-acceso">Consulta en la biblioteca del instituto o solicítala a la editorial.</p>
+    </article>
+  </section>
+
+  <!-- ================= NORMATIVA OFICIAL ================= -->
+  <section class="bib-seccion">
+    <p class="section-eyebrow">Normativa</p>
+    <h2>Marco legal mexicano</h2>
+    <p class="bib-intro">Estas normas son de observancia obligatoria en México y son el sustento legal de la rúbrica de higiene y seguridad que usamos en cada práctica de cocina. Son de acceso público y gratuito.</p>
+
+    <article class="fuente-card fuente-abierta">
+      <div class="fuente-tag tag-abierto">Acceso libre</div>
+      <h3>NOM-251-SSA1-2009</h3>
+      <p class="fuente-autor">Prácticas de higiene para el proceso de alimentos, bebidas o suplementos alimenticios · Secretaría de Salud · DOF 01/03/2010</p>
+      <p class="fuente-desc">La norma central de higiene alimentaria en México. Establece los requisitos mínimos de buenas prácticas que debe observar todo establecimiento que procese alimentos. Es la base directa del checklist "Pase de Revista" que aplicamos antes de cada práctica.</p>
+      <p class="fuente-uso"><strong>Dónde se usa:</strong> Rúbrica de práctica de cocina · Anexo A del compendio · Subtema 1.4.</p>
+      <a class="fuente-link" href="https://dof.gob.mx/nota_detalle.php?codigo=5133449&fecha=01/03/2010" target="_blank" rel="noopener">Leer en el Diario Oficial de la Federación →</a>
+    </article>
+
+    <article class="fuente-card fuente-abierta">
+      <div class="fuente-tag tag-abierto">Acceso libre</div>
+      <h3>Principios generales de higiene de los alimentos (CXC 1-1969)</h3>
+      <p class="fuente-autor">Codex Alimentarius · FAO / OMS</p>
+      <p class="fuente-desc">El marco internacional del que parte la normativa mexicana. Introduce el sistema HACCP (Análisis de Peligros y Puntos Críticos de Control) y las Buenas Prácticas de Higiene. Conocerlo te abre la puerta a trabajar bajo estándares internacionales.</p>
+      <p class="fuente-uso"><strong>Dónde se usa:</strong> Fundamento de la NOM-251 · Contexto del Bloque 1.</p>
+      <a class="fuente-link" href="https://www.fao.org/input/download/standards/23/cxp_001s.pdf" target="_blank" rel="noopener">Descargar del sitio de la FAO (PDF) →</a>
+    </article>
+
+    <article class="fuente-card fuente-nota">
+      <div class="fuente-tag tag-nota">Norma cancelada</div>
+      <h3>NOM-093-SSA1-1994</h3>
+      <p class="fuente-autor">Prácticas de higiene y sanidad en la preparación de alimentos en establecimientos fijos</p>
+      <p class="fuente-desc">La incluimos a propósito: esta norma <strong>fue cancelada</strong> por la NOM-251 en 2010, y aun así se sigue citando en manuales, cursos y hasta en algunos restaurantes. Es un buen recordatorio de que en este oficio hay que verificar siempre la vigencia de la norma que aplicas, no solo copiarla de donde la encontraste.</p>
+      <p class="fuente-uso"><strong>Para qué la vemos:</strong> Ejercicio de criterio profesional — verificar fuentes antes de aplicarlas.</p>
+      <a class="fuente-link" href="https://www.dof.gob.mx/nota_detalle.php?codigo=4882432&fecha=04%2F10%2F1995" target="_blank" rel="noopener">Ver el texto histórico en el DOF →</a>
+    </article>
+  </section>
+
+  <!-- ================= REPOSITORIOS ABIERTOS ================= -->
+  <section class="bib-seccion">
+    <p class="section-eyebrow">Para seguir aprendiendo</p>
+    <h2>Repositorios de acceso abierto</h2>
+    <p class="bib-intro">Fuentes gratuitas y confiables para tus investigaciones y ensayos. Úsalas: citar bien es parte de la formación profesional.</p>
+
+    <div class="recurso-grid">
+      <a class="recurso-card" href="https://openknowledge.fao.org/" target="_blank" rel="noopener">
+        <h4>FAO — Repositorio de Conocimiento Abierto</h4>
+        <p>Miles de publicaciones sobre inocuidad alimentaria, cadenas de producción y sistemas agroalimentarios. Todo descargable y citable.</p>
+        <span class="recurso-ir">openknowledge.fao.org →</span>
+      </a>
+
+      <a class="recurso-card" href="https://www.dof.gob.mx/" target="_blank" rel="noopener">
+        <h4>Diario Oficial de la Federación</h4>
+        <p>Texto oficial y vigente de todas las Normas Oficiales Mexicanas. Es la única fuente que debes considerar autoritativa para normativa.</p>
+        <span class="recurso-ir">dof.gob.mx →</span>
+      </a>
+
+      <a class="recurso-card" href="https://www.gob.mx/cofepris" target="_blank" rel="noopener">
+        <h4>COFEPRIS</h4>
+        <p>Comisión Federal para la Protección contra Riesgos Sanitarios. Guías, trámites y criterios de verificación sanitaria para establecimientos de alimentos.</p>
+        <span class="recurso-ir">gob.mx/cofepris →</span>
+      </a>
+
+      <a class="recurso-card" href="https://www.fao.org/fao-who-codexalimentarius/es/" target="_blank" rel="noopener">
+        <h4>Codex Alimentarius</h4>
+        <p>Normas alimentarias internacionales FAO/OMS. Referencia obligada si te interesa la exportación o el trabajo en cadenas internacionales.</p>
+        <span class="recurso-ir">fao.org/codex →</span>
+      </a>
     </div>
+  </section>
 
-    <form id="form-login" class="auth-form">
-      <label for="login-email">Correo institucional</label>
-      <input type="email" id="login-email" placeholder="tunombre@tudominio.edu.mx" required>
-      <label for="login-pass">Contraseña</label>
-      <input type="password" id="login-pass" required>
-      <button type="submit" class="btn btn-primary">Entrar</button>
-      <p class="auth-error" id="login-error" hidden></p>
-    </form>
-
-    <form id="form-registro" class="auth-form" hidden>
-      <label for="reg-nombre">Nombre completo</label>
-      <input type="text" id="reg-nombre" required>
-      <label for="reg-email">Correo institucional</label>
-      <input type="email" id="reg-email" placeholder="tunombre@tudominio.edu.mx" required>
-      <label for="reg-pass">Contraseña (mínimo 6 caracteres)</label>
-      <input type="password" id="reg-pass" minlength="6" required>
-      <button type="submit" class="btn btn-primary">Crear cuenta</button>
-      <p class="auth-error" id="reg-error" hidden></p>
-      <p class="auth-hint" id="reg-hint"></p>
-    </form>
-  </div>
-
-  <!-- ESTADO: AUTENTICADO -->
-  <div id="bib-content" class="bib-content" hidden>
-    <div class="bib-user-bar">
-      <p>Sesión iniciada como <strong id="user-email"></strong></p>
-      <button id="btn-logout" class="btn-link">Cerrar sesión</button>
-    </div>
-    <div id="materiales-list" class="materiales-list"></div>
-  </div>
+  <!-- ================= NOTA SOBRE CITACIÓN ================= -->
+  <section class="bib-nota-final">
+    <h3>Sobre el uso de estas fuentes</h3>
+    <p>Los libros de bibliografía básica están protegidos por derechos de autor: no se distribuyen desde esta plataforma. Consúltalos en la biblioteca del instituto o adquiérelos legalmente.</p>
+    <p>Los documentos normativos y de organismos internacionales son de acceso público — puedes descargarlos, citarlos y usarlos libremente en tus trabajos, siempre indicando la fuente.</p>
+    <p class="nota-cierre">Aprender a distinguir entre una fuente confiable y una que solo circula por internet es parte de tu formación como profesional.</p>
+  </section>
 
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>Compendio digital · Bases Culinarias · Material de apoyo docente, uso interno.</p>
+    <p>Aula Virtual · Bases Culinarias · LudoMente Studio</p>
   </div>
 </footer>
 
+<audio id="bg-music" loop preload="none">
+  <source src="https://commons.wikimedia.org/wiki/Special:FilePath/Gymnopedie_No._1..ogg" type="audio/ogg">
+</audio>
+<button id="bg-music-toggle" class="music-toggle" aria-label="Activar música de fondo" aria-pressed="false">🎵</button>
+
 <script src="js/app.js"></script>
-<script type="module" src="js/biblioteca.js"></script>
 </body>
 </html>
