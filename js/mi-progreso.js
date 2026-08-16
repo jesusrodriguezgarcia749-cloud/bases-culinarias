@@ -8,7 +8,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import { firebaseConfig } from "./firebase-config.js";
-import { calcularBloque, SEMANAS_DE_BLOQUE, PTS_POR_ENSAYO } from "./calculo.js";
+import { calcularBloque, SEMANAS_DE_BLOQUE, PTS_POR_ENSAYO, PUNTOS_ASISTENCIA } from "./calculo.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -96,6 +96,7 @@ async function cargarGruposEnSelect() {
   });
 }
 
+// Carga UNA sola vez todos los datos del alumno y los deja en datosCache.
 async function cargarDatos() {
   const base = ['grupos', sesion.grupoId, 'alumnos', sesion.alumnoId];
   const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap] = await Promise.all([
@@ -216,6 +217,67 @@ function renderAcumuladoEnsayos(bloques) {
   `;
 }
 
+// Asistencia: resumen compacto + calendario desplegable con colores.
+function renderAsistencia(bloques) {
+  const cont = document.getElementById('prog-asistencia');
+  const empty = document.getElementById('prog-asistencia-empty');
+  if (!cont) return;
+
+  const todas = datosCache.asistencias || [];
+  empty.hidden = todas.length > 0;
+  if (todas.length === 0) { cont.innerHTML = ''; return; }
+
+  const ETIQUETAS = {
+    presente: 'Presente', justificado: 'Justificado',
+    retardo: 'Retardo', falta: 'Falta',
+  };
+
+  cont.innerHTML = bloques.map(x => {
+    const delBloque = todas
+      .filter(a => Number(a.bloque) === x.bloque)
+      .sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''));
+
+    const c = x.asistencia.conteo;
+    const resumen = [
+      c.presente ? `${c.presente} asistencia${c.presente !== 1 ? 's' : ''}` : null,
+      c.justificado ? `${c.justificado} justificada${c.justificado !== 1 ? 's' : ''}` : null,
+      c.retardo ? `${c.retardo} retardo${c.retardo !== 1 ? 's' : ''}` : null,
+      c.falta ? `${c.falta} falta${c.falta !== 1 ? 's' : ''}` : null,
+    ].filter(Boolean).join(' · ') || 'Sin registros';
+
+    return `
+      <h3 class="prog-ens-bloque">Bloque ${x.bloque}</h3>
+      <div class="prog-asis-resumen">
+        <span>${resumen}</span>
+        <strong>${x.asistencia.pts.toFixed(2)} / ${x.asistencia.tope} pts</strong>
+      </div>
+      ${delBloque.length === 0 ? '' : `
+        <details class="prog-detalle-bloque">
+          <summary>Ver días registrados (${delBloque.length})</summary>
+          <div class="prog-cal-leyenda">
+            <span><i class="cal-dot cal-presente"></i> Presente</span>
+            <span><i class="cal-dot cal-justificado"></i> Justificado</span>
+            <span><i class="cal-dot cal-retardo"></i> Retardo</span>
+            <span><i class="cal-dot cal-falta"></i> Falta</span>
+          </div>
+          <div class="prog-calendario">
+            ${delBloque.map(a => {
+              const estado = a.estado || 'presente';
+              const f = (a.fecha || '').split('-');
+              const dia = f.length === 3 ? `${f[2]}/${f[1]}` : (a.fecha || '?');
+              return `
+                <div class="cal-dia cal-${estado}" title="${a.fecha} — ${ETIQUETAS[estado] || estado}">
+                  <span class="cal-fecha">${dia}</span>
+                  <span class="cal-pts">${PUNTOS_ASISTENCIA[estado] ?? 0}</span>
+                </div>`;
+            }).join('')}
+          </div>
+        </details>
+      `}
+    `;
+  }).join('');
+}
+
 function renderBloques(bloques) {
   const cont = document.getElementById('prog-bloques');
   if (!cont) return;
@@ -280,6 +342,7 @@ async function iniciarApp() {
   renderParticipacion(bloques);
   renderPracticas(bloques);
   renderEnsayos(bloques);
+  renderAsistencia(bloques);
   renderBloques(bloques);
   await renderAvisos();
 }
