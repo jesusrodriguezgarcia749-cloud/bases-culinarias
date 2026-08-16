@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/index.css">
 </head>
 <body>
 
@@ -53,6 +54,7 @@
       <label for="grupo-select" class="sr-only">Grupo activo</label>
       <select id="grupo-select"><option value="">— Elige un grupo —</option></select>
       <button id="btn-nuevo-grupo" class="btn-icon" title="Nuevo grupo">+ grupo</button>
+      <button id="btn-eliminar-grupo" class="btn-icon btn-icon-peligro" title="Eliminar grupo">🗑</button>
     </div>
     <button id="btn-logout" class="btn-logout">Salir</button>
   </div>
@@ -112,6 +114,15 @@
   </div>
 
   <div id="tab-historial" class="tab-panel">
+    <label for="hist-modo" class="field-label">Exportar calificaciones</label>
+    <select id="hist-modo">
+      <option value="grupo">Todo el grupo</option>
+      <option value="alumno">Por alumno</option>
+    </select>
+    <button id="btn-exportar" class="btn btn-primary btn-block">Descargar Excel</button>
+    <p id="export-msg" class="save-msg" hidden></p>
+
+    <h3 class="section-title">Resumen por alumno</h3>
     <p class="field-hint">Toca un alumno para ver su resumen completo del cuatrimestre.</p>
     <div id="hist-lista-alumnos" class="asis-list"></div>
     <p id="historial-empty" class="empty-state" hidden>Elige un grupo primero.</p>
@@ -119,7 +130,16 @@
   </div>
 
   <div id="tab-participacion" class="tab-panel">
-    <p class="field-hint">Actividades digitales de Aula Virtual. Cada actividad correcta vale <strong>1 punto</strong> (20 actividades = 20 pts del bloque).</p>
+    <div class="bloques-activos-card">
+      <h3 class="section-title" style="margin-top:0;">Bloques abiertos para responder</h3>
+      <p class="field-hint">Los alumnos siempre pueden <strong>leer</strong> las actividades de todos los bloques, pero solo pueden <strong>responder</strong> (y ganar puntos) en los bloques que actives aquí.</p>
+      <div id="bloques-activos-lista" class="asis-list"></div>
+      <button id="btn-guardar-bloques" class="btn btn-primary btn-block">Guardar bloques abiertos</button>
+      <p id="bloques-msg" class="save-msg" hidden></p>
+    </div>
+
+    <h3 class="section-title">Avance de los alumnos</h3>
+    <p class="field-hint">Cada actividad correcta vale <strong>1 punto</strong> (20 actividades = 20 pts del bloque).</p>
     <div id="participacion-lista" class="part-list"></div>
     <p id="participacion-empty" class="empty-state" hidden>Elige un grupo primero.</p>
   </div>
@@ -190,9 +210,14 @@
   </div>
 </footer>
 
+<audio id="bg-music" loop preload="none">
+  <source src="https://commons.wikimedia.org/wiki/Special:FilePath/Gymnopedie_No._1..ogg" type="audio/ogg">
+</audio>
+<button id="bg-music-toggle" class="music-toggle" aria-label="Activar música de fondo" aria-pressed="false">🎵</button>
+
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 <script>eruda.init();</script>
 <script src="js/app.js"></script>
 <script type="module" src="js/admin.js"></script>
 </body>
-  </html>
+</html>
