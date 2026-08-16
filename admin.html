@@ -31,7 +31,6 @@
   </div>
 </header>
 
-<!-- ===== PANTALLA DE LOGIN ===== -->
 <section id="login-screen" class="admin-wrap">
   <div class="login-card">
     <h1>Panel docente</h1>
@@ -47,7 +46,6 @@
   </div>
 </section>
 
-<!-- ===== APP (visible tras login) ===== -->
 <section id="app-screen" class="admin-wrap" hidden>
 
   <div class="admin-topbar">
@@ -61,15 +59,15 @@
 
   <nav class="admin-tabs" aria-label="Secciones del panel">
     <button class="tab-btn active" data-tab="alumnos">Alumnos</button>
-    <button class="tab-btn" data-tab="evaluar">Evaluar</button>
+    <button class="tab-btn" data-tab="evaluar">Práctica de cocina</button>
     <button class="tab-btn" data-tab="historial">Historial</button>
     <button class="tab-btn" data-tab="participacion">Participación</button>
     <button class="tab-btn" data-tab="asistencia">Asistencia</button>
     <button class="tab-btn" data-tab="ensayos">Ensayos</button>
+    <button class="tab-btn" data-tab="examenes">Exámenes</button>
     <button class="tab-btn" data-tab="avisos">Avisos</button>
   </nav>
 
-  <!-- --- TAB ALUMNOS --- -->
   <div id="tab-alumnos" class="tab-panel active">
     <form id="form-alumno" class="inline-form">
       <input id="input-alumno-nombre" type="text" placeholder="Nombre completo del alumno" required>
@@ -79,7 +77,6 @@
     <p id="alumnos-empty" class="empty-state" hidden>Aún no hay alumnos en este grupo.</p>
   </div>
 
-  <!-- --- TAB EVALUAR --- -->
   <div id="tab-evaluar" class="tab-panel">
     <p class="field-hint">Toca un alumno de la lista para calificar su práctica.</p>
     <div id="eval-lista-alumnos" class="asis-list"></div>
@@ -92,12 +89,12 @@
     <input id="eval-fecha" type="date">
 
     <h3 class="section-title">Rúbrica de competencias</h3>
-    <div class="rubric-grid" id="rubric-grid"><!-- se rellena por JS --></div>
+    <div class="rubric-grid" id="rubric-grid"></div>
 
     <div class="score-display" id="score-display">Calificación: —</div>
 
     <h3 class="section-title">Checklist "Pase de Revista" <span class="tag-info">informativo</span></h3>
-    <div id="checklist-grid" class="checklist-grid"><!-- se rellena por JS --></div>
+    <div id="checklist-grid" class="checklist-grid"></div>
 
     <label for="eval-notas" class="field-label">Notas / observaciones</label>
     <textarea id="eval-notas" rows="3" placeholder="Opcional"></textarea>
@@ -107,22 +104,19 @@
     </div>
   </div>
 
-  <!-- --- TAB HISTORIAL --- -->
   <div id="tab-historial" class="tab-panel">
-    <label for="hist-alumno-select" class="field-label">Filtrar por alumno</label>
-    <select id="hist-alumno-select"><option value="">— Todos los alumnos del grupo —</option></select>
-    <div id="historial-lista"><!-- se rellena por JS --></div>
-    <p id="historial-empty" class="empty-state" hidden>No hay evaluaciones registradas todavía.</p>
+    <p class="field-hint">Toca un alumno para ver su resumen completo del cuatrimestre.</p>
+    <div id="hist-lista-alumnos" class="asis-list"></div>
+    <p id="historial-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+    <div id="hist-resumen" hidden></div>
   </div>
 
-  <!-- --- TAB PARTICIPACIÓN --- -->
   <div id="tab-participacion" class="tab-panel">
     <p class="field-label">Actividades digitales de Aula Virtual — 20% de la Evaluación Parcial. Cada actividad respondida correctamente suma 1 punto de participación; no cuenta si falla, puede repetirla.</p>
     <div id="participacion-lista" class="part-list"></div>
     <p id="participacion-empty" class="empty-state" hidden>Elige un grupo primero.</p>
   </div>
 
-  <!-- --- TAB ASISTENCIA --- -->
   <div id="tab-asistencia" class="tab-panel">
     <label for="asis-fecha" class="field-label">Fecha</label>
     <input id="asis-fecha" type="date">
@@ -133,7 +127,6 @@
     <p id="asis-msg" class="save-msg" hidden></p>
   </div>
 
-  <!-- --- TAB ENSAYOS --- -->
   <div id="tab-ensayos" class="tab-panel">
     <label for="ens-semana-select" class="field-label">Semana</label>
     <select id="ens-semana-select"></select>
@@ -144,7 +137,21 @@
     <p id="ens-msg" class="save-msg" hidden></p>
   </div>
 
-  <!-- --- TAB AVISOS --- -->
+  <div id="tab-examenes" class="tab-panel">
+    <label for="exa-select" class="field-label">Examen</label>
+    <select id="exa-select">
+      <option value="1">Examen Bloque 1 (30% del parcial)</option>
+      <option value="2">Examen Bloque 2 (30% del parcial)</option>
+      <option value="3">Examen Bloque 3 (30% del parcial)</option>
+      <option value="final">Examen Final — Semana 16 (30% de la final)</option>
+    </select>
+    <p class="field-hint">Captura la calificación (0–10) de cada alumno. Se refleja al instante en su panel.</p>
+    <div id="examenes-lista" class="asis-list"></div>
+    <p id="examenes-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+    <button id="btn-guardar-examenes" class="btn btn-primary btn-block">Guardar calificaciones</button>
+    <p id="exa-msg" class="save-msg" hidden></p>
+  </div>
+
   <div id="tab-avisos" class="tab-panel">
     <p class="field-hint">Preguntas detonadoras de la semana, indicaciones y recordatorios. Todos los alumnos del grupo los ven en "Mi progreso".</p>
 
