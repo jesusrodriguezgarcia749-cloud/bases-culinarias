@@ -167,11 +167,6 @@ async function crearGrupo() {
 
 // ---------- ALUMNOS ----------
 
-// Convierte un nombre en un ID de documento estable y legible, sin acentos ni
-// espacios (ej. "María López" → "maria-lopez"). El alumno usa este mismo
-// nombre para entrar a Actividades / Mi Progreso — por eso el ID se deriva
-// del nombre y no es aleatorio: así el sitio público puede leer su propio
-// documento sin necesidad de "listar" alumnos (ver reglas de Firestore).
 function slugNombre(nombre) {
   return nombre
     .trim()
@@ -228,7 +223,6 @@ async function agregarAlumno(e) {
   let id = slugNombre(nombre);
   if (!id) { alert('Ese nombre no es válido.'); return; }
 
-  // Evita chocar con un alumno existente con el mismo nombre (agrega -2, -3…)
   let idFinal = id;
   let sufijo = 2;
   while ((await getDoc(doc(db, 'grupos', grupoActivo, 'alumnos', idFinal))).exists()) {
@@ -262,6 +256,7 @@ function renderListaEvaluar() {
   const cont = document.getElementById('eval-lista-alumnos');
   const empty = document.getElementById('eval-alumnos-empty');
   const form = document.getElementById('eval-form');
+  if (!cont) return;
   cont.innerHTML = '';
 
   if (!grupoActivo) {
@@ -307,8 +302,8 @@ function renderRubrica() {
         <span class="crit-name">${c.nombre}</span>
         <span class="crit-weight">${Math.round(c.peso * 100)}%</span>
       </div>
-      <input type="range" min="0" max="10" step="1" value="8" id="crit-${c.id}">
-      <div class="rubric-row-val" id="crit-${c.id}-val">8</div>
+      <input type="range" min="0" max="10" step="1" value="10" id="crit-${c.id}">
+      <div class="rubric-row-val" id="crit-${c.id}-val">10</div>
     `;
     grid.appendChild(row);
   });
@@ -330,12 +325,14 @@ function actualizarScore() {
 }
 
 function resetRubricaYChecklist() {
+  // Todo arranca en el máximo y con el checklist completo: con 40 alumnos es
+  // mucho más rápido bajar solo lo que falló que subir todo lo que cumplió.
   CRITERIOS.forEach(c => {
-    document.getElementById(`crit-${c.id}`).value = 8;
+    document.getElementById(`crit-${c.id}`).value = 10;
   });
   actualizarScore();
   CHECKLIST_ITEMS.forEach(item => {
-    document.getElementById(`chk-${item.id}`).checked = false;
+    document.getElementById(`chk-${item.id}`).checked = true;
   });
   document.getElementById('eval-notas').value = '';
   document.getElementById('eval-fecha').valueAsDate = new Date();
@@ -347,7 +344,7 @@ function renderChecklist() {
   grid.innerHTML = '';
   CHECKLIST_ITEMS.forEach(item => {
     const label = document.createElement('label');
-    label.innerHTML = `<input type="checkbox" id="chk-${item.id}"><span>${item.texto}</span>`;
+    label.innerHTML = `<input type="checkbox" id="chk-${item.id}" checked><span>${item.texto}</span>`;
     grid.appendChild(label);
   });
 }
@@ -423,7 +420,6 @@ async function mostrarResumenAlumno(alumno) {
     getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
   ]);
 
-  // --- Participación (20%) ---
   const idsAct = actSnap ? actSnap.docs.map(d => d.id) : [];
   const partPorBloque = [1, 2, 3].map(b => {
     const total = TOTAL_ACTIVIDADES_POR_BLOQUE[b];
@@ -435,26 +431,22 @@ async function mostrarResumenAlumno(alumno) {
     Math.max(1, partPorBloque.reduce((s, x) => s + x.total, 0)) * 100
   );
 
-  // --- Prácticas de cocina (20%) ---
   const practicas = evalSnap ? evalSnap.docs.map(d => d.data()) : [];
   const promPractica = practicas.length
     ? practicas.reduce((s, p) => s + (p.calificacion || 0), 0) / practicas.length : null;
 
-  // --- Ensayos (20%) ---
   const ensayos = ensSnap ? ensSnap.docs.map(d => d.data()) : [];
   const entregados = ensayos.filter(e => e.entregado).length;
   const conCalif = ensayos.filter(e => e.calificacion !== null && e.calificacion !== undefined && e.calificacion !== '');
   const promEnsayo = conCalif.length
     ? conCalif.reduce((s, e) => s + Number(e.calificacion), 0) / conCalif.length : null;
 
-  // --- Asistencia (10%) ---
   const asis = asisSnap ? asisSnap.docs.map(d => d.data()) : [];
   const presentes = asis.filter(a => a.estado === 'presente').length;
   const retardos = asis.filter(a => a.estado === 'retardo').length;
   const faltas = asis.filter(a => a.estado === 'falta').length;
   const pctAsis = asis.length ? Math.round((presentes + retardos * 0.5) / asis.length * 100) : null;
 
-  // --- Total ponderado (solo con lo que ya hay capturado) ---
   const partes = [];
   if (pctAsis !== null) partes.push({ n: 'Asistencia', peso: 10, pct: pctAsis });
   partes.push({ n: 'Participación', peso: 20, pct: partGlobalPct });
@@ -510,7 +502,7 @@ async function mostrarResumenAlumno(alumno) {
   `;
 }
 
-// ---------- PARTICIPACIÓN (actividades digitales, tipo lista con desplegables) ----------
+// ---------- PARTICIPACIÓN ----------
 async function cargarParticipacion() {
   const cont = document.getElementById('participacion-lista');
   const empty = document.getElementById('participacion-empty');
@@ -524,7 +516,6 @@ async function cargarParticipacion() {
     const detalle = document.createElement('details');
     detalle.className = 'part-row';
 
-    // Contamos por bloque leyendo los ids reales ("bN-..."), no un total global.
     let completadas = [];
     try {
       const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', alumno.id, 'actividades'));
@@ -564,7 +555,7 @@ async function cargarParticipacion() {
 }
 
 // ---------- ASISTENCIA ----------
-var asistenciaEstados = {}; // { alumnoId: 'presente' | 'retardo' | 'falta' }
+var asistenciaEstados = {};
 
 var CICLO_ESTADO = { presente: 'retardo', retardo: 'falta', falta: 'presente' };
 var ETIQUETA_ESTADO = { presente: 'Presente', retardo: 'Retardo', falta: 'Falta' };
@@ -572,6 +563,7 @@ var ETIQUETA_ESTADO = { presente: 'Presente', retardo: 'Retardo', falta: 'Falta'
 async function cargarAsistencia() {
   const cont = document.getElementById('asistencia-lista');
   const empty = document.getElementById('asistencia-empty');
+  if (!cont) return;
   cont.innerHTML = '';
 
   if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
@@ -581,7 +573,6 @@ async function cargarAsistencia() {
   const fecha = document.getElementById('asis-fecha').value;
   asistenciaEstados = {};
 
-  // Carga lo ya guardado ese día (si existe); si no, todos quedan 'presente'.
   await Promise.all(alumnosCache.map(async (a) => {
     try {
       const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
@@ -632,10 +623,7 @@ async function guardarAsistencia() {
   setTimeout(() => { msg.hidden = true; }, 3000);
 }
 
-// ---------- ENSAYOS (bitácoras semanales manuscritas) ----------
-// Semanas 1-15 agrupadas por bloque (cada bloque cierra con un micro-ensayo
-// en su última semana); la Semana 16 (proyecto final) se maneja aparte, en
-// la Evaluación Final del cuatrimestre.
+// ---------- ENSAYOS ----------
 var SEMANAS_ENSAYO = [
   { n: 1, bloque: 1, tema: 'Géneros y Estructura Clásica' },
   { n: 2, bloque: 1, tema: 'Secuencia Operativa' },
@@ -658,7 +646,7 @@ var semanaSeleccionada = null;
 
 function poblarSelectSemanas() {
   const select = document.getElementById('ens-semana-select');
-  if (select.options.length > 0) return; // ya poblado
+  if (!select || select.options.length > 0) return;
   SEMANAS_ENSAYO.forEach(s => {
     const opt = document.createElement('option');
     opt.value = s.n;
@@ -671,6 +659,7 @@ function poblarSelectSemanas() {
 async function cargarEnsayos() {
   const cont = document.getElementById('ensayos-lista');
   const empty = document.getElementById('ensayos-empty');
+  if (!cont) return;
   cont.innerHTML = '';
 
   if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
@@ -679,7 +668,6 @@ async function cargarEnsayos() {
 
   semanaSeleccionada = document.getElementById('ens-semana-select').value || SEMANAS_ENSAYO[0].n;
 
-  // Carga lo ya guardado esa semana para cada alumno del grupo.
   const datos = {};
   await Promise.all(alumnosCache.map(async (a) => {
     try {
@@ -736,7 +724,7 @@ async function guardarEnsayos() {
   setTimeout(() => { msg.hidden = true; }, 3000);
 }
 
-// ---------- EXÁMENES (3 parciales + final) ----------
+// ---------- EXÁMENES ----------
 async function cargarExamenes() {
   const cont = document.getElementById('examenes-lista');
   const empty = document.getElementById('examenes-empty');
@@ -786,15 +774,16 @@ async function guardarExamenes() {
   }));
 
   const msg = document.getElementById('exa-msg');
-  msg.textContent = '\u2713 Calificaciones guardadas.';
+  msg.textContent = '✓ Calificaciones guardadas.';
   msg.hidden = false;
   setTimeout(() => { msg.hidden = true; }, 3000);
 }
 
-// ---------- AVISOS (preguntas semanales e indicaciones para el grupo) ----------
+// ---------- AVISOS ----------
 async function cargarAvisos() {
   const cont = document.getElementById('avisos-lista');
   const empty = document.getElementById('avisos-empty');
+  if (!cont) return;
   cont.innerHTML = '';
 
   if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
@@ -836,7 +825,7 @@ async function publicarAviso() {
   document.getElementById('aviso-titulo').value = '';
   document.getElementById('aviso-texto').value = '';
   const msg = document.getElementById('aviso-msg');
-  msg.textContent = '\u2713 Aviso publicado.';
+  msg.textContent = '✓ Aviso publicado.';
   msg.hidden = false;
   setTimeout(() => { msg.hidden = true; }, 3000);
   cargarAvisos();
