@@ -78,12 +78,19 @@
   </div>
 
   <div id="tab-evaluar" class="tab-panel">
-    <p class="field-hint">Toca un alumno de la lista para calificar su práctica.</p>
+    <p class="field-hint">Toca un alumno de la lista para calificar su práctica. Cada práctica vale <strong>4 puntos</strong> (5 prácticas = 20 pts del bloque).</p>
     <div id="eval-lista-alumnos" class="asis-list"></div>
     <p id="eval-alumnos-empty" class="empty-state" hidden>Elige un grupo primero.</p>
 
     <div id="eval-form" hidden>
     <p class="eval-alumno-activo" id="eval-alumno-activo"></p>
+
+    <label for="eval-bloque" class="field-label">Bloque</label>
+    <select id="eval-bloque">
+      <option value="1">Bloque 1 (semanas 1-5)</option>
+      <option value="2">Bloque 2 (semanas 6-10)</option>
+      <option value="3">Bloque 3 (semanas 11-15)</option>
+    </select>
 
     <label for="eval-fecha" class="field-label">Fecha de la práctica</label>
     <input id="eval-fecha" type="date">
@@ -112,15 +119,21 @@
   </div>
 
   <div id="tab-participacion" class="tab-panel">
-    <p class="field-label">Actividades digitales de Aula Virtual — 20% de la Evaluación Parcial. Cada actividad respondida correctamente suma 1 punto de participación; no cuenta si falla, puede repetirla.</p>
+    <p class="field-hint">Actividades digitales de Aula Virtual. Cada actividad correcta vale <strong>1 punto</strong> (20 actividades = 20 pts del bloque).</p>
     <div id="participacion-lista" class="part-list"></div>
     <p id="participacion-empty" class="empty-state" hidden>Elige un grupo primero.</p>
   </div>
 
   <div id="tab-asistencia" class="tab-panel">
+    <label for="asis-bloque" class="field-label">Bloque</label>
+    <select id="asis-bloque">
+      <option value="1">Bloque 1 (semanas 1-5)</option>
+      <option value="2">Bloque 2 (semanas 6-10)</option>
+      <option value="3">Bloque 3 (semanas 11-15)</option>
+    </select>
     <label for="asis-fecha" class="field-label">Fecha</label>
     <input id="asis-fecha" type="date">
-    <p class="field-hint">Todos inician como <strong>presente</strong>. Toca a un alumno para cambiar su estado.</p>
+    <p class="field-hint">Todos inician como <strong>presente</strong>. Toca a un alumno para ciclar: Presente (0.5) → Retardo (0.25) → Justificado (0.5) → Falta (0).</p>
     <div id="asistencia-lista" class="asis-list"></div>
     <p id="asistencia-empty" class="empty-state" hidden>Elige un grupo primero.</p>
     <button id="btn-guardar-asistencia" class="btn btn-primary btn-block">Guardar asistencia del día</button>
@@ -130,7 +143,7 @@
   <div id="tab-ensayos" class="tab-panel">
     <label for="ens-semana-select" class="field-label">Semana</label>
     <select id="ens-semana-select"></select>
-    <p class="field-hint">20% de la Evaluación Parcial. Bitácora manuscrita de esa semana — marca entregada y captura la calificación (0–10) de cada alumno.</p>
+    <p class="field-hint">Cada bitácora vale <strong>4 puntos</strong> (5 bitácoras = 20 pts del bloque). Marca entregada y captura los puntos de 0 a 4.</p>
     <div id="ensayos-lista" class="asis-list"></div>
     <p id="ensayos-empty" class="empty-state" hidden>Elige un grupo primero.</p>
     <button id="btn-guardar-ensayos" class="btn btn-primary btn-block">Guardar ensayos de esta semana</button>
@@ -140,12 +153,12 @@
   <div id="tab-examenes" class="tab-panel">
     <label for="exa-select" class="field-label">Examen</label>
     <select id="exa-select">
-      <option value="1">Examen Bloque 1 (30% del parcial)</option>
-      <option value="2">Examen Bloque 2 (30% del parcial)</option>
-      <option value="3">Examen Bloque 3 (30% del parcial)</option>
-      <option value="final">Examen Final — Semana 16 (30% de la final)</option>
+      <option value="1">Examen Bloque 1</option>
+      <option value="2">Examen Bloque 2</option>
+      <option value="3">Examen Bloque 3</option>
+      <option value="final">Examen Final — Semana 16</option>
     </select>
-    <p class="field-hint">Captura la calificación (0–10) de cada alumno. Se refleja al instante en su panel.</p>
+    <p class="field-hint">El examen vale <strong>30 puntos</strong> del bloque. Captura la calificación de 0 a 10 (se convierte automáticamente).</p>
     <div id="examenes-lista" class="asis-list"></div>
     <p id="examenes-empty" class="empty-state" hidden>Elige un grupo primero.</p>
     <button id="btn-guardar-examenes" class="btn btn-primary btn-block">Guardar calificaciones</button>
@@ -182,4 +195,4 @@
 <script src="js/app.js"></script>
 <script type="module" src="js/admin.js"></script>
 </body>
-</html>
+  </html>
