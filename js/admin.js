@@ -131,6 +131,8 @@ on('btn-publicar-aviso', 'click', publicarAviso);
 on('exa-select', 'change', cargarExamenes);
 on('btn-guardar-examenes', 'click', guardarExamenes);
 on('btn-guardar-bloques', 'click', guardarBloquesActivos);
+on('btn-guardar-examenes-abiertos', 'click', guardarExamenesAbiertos);
+on('enlinea-bloque', 'change', cargarIntentos);
 on('btn-eliminar-grupo', 'click', eliminarGrupo);
 on('btn-exportar', 'click', exportarCalificaciones);
 on('btn-pdf', 'click', generarPDF);
@@ -148,6 +150,7 @@ function switchTab(tab) {
   if (tab === 'asistencia') cargarAsistencia();
   if (tab === 'ensayos') { poblarSelectSemanas(); cargarEnsayos(); }
   if (tab === 'examenes') cargarExamenes();
+  if (tab === 'enlinea') { cargarExamenesAbiertos(); cargarIntentos(); }
   if (tab === 'avisos') cargarAvisos();
 }
 
@@ -1112,6 +1115,178 @@ async function guardarExamenes() {
   msg.textContent = '\u2713 Calificaciones guardadas.';
   msg.hidden = false;
   setTimeout(() => { msg.hidden = true; }, 3000);
+}
+
+// ---------- EXAMEN EN LÍNEA ----------
+var examenesAbiertos = [];
+
+async function cargarExamenesAbiertos() {
+  const cont = document.getElementById('examenes-abiertos-lista');
+  if (!cont) return;
+  if (!grupoActivo) { cont.innerHTML = '<p class="empty-inline">Elige un grupo primero.</p>'; return; }
+  try {
+    const snap = await getDoc(doc(db, 'grupos', grupoActivo, 'config', 'examenes'));
+    examenesAbiertos = snap.exists() && Array.isArray(snap.data().abiertos)
+      ? snap.data().abiertos.map(Number) : [];
+  } catch { examenesAbiertos = []; }
+  renderExamenesAbiertos();
+}
+
+function renderExamenesAbiertos() {
+  const cont = document.getElementById('examenes-abiertos-lista');
+  cont.innerHTML = '';
+  [1, 2, 3].forEach(b => {
+    const abierto = examenesAbiertos.includes(b);
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'asis-row ' + (abierto ? 'asis-presente' : 'asis-falta');
+    row.innerHTML = `
+      <span class="asis-dot"></span>
+      <span class="student-name">Examen del Bloque ${b}</span>
+      <span class="asis-estado-label">${abierto ? 'Abierto' : 'Cerrado'}</span>`;
+    row.addEventListener('click', () => {
+      examenesAbiertos = abierto
+        ? examenesAbiertos.filter(x => x !== b)
+        : [...examenesAbiertos, b].sort();
+      renderExamenesAbiertos();
+    });
+    cont.appendChild(row);
+  });
+}
+
+async function guardarExamenesAbiertos() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  await setDoc(doc(db, 'grupos', grupoActivo, 'config', 'examenes'), {
+    abiertos: examenesAbiertos, actualizado: serverTimestamp(),
+  });
+  const msg = document.getElementById('abiertos-msg');
+  msg.textContent = '\u2713 Guardado.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+}
+
+async function cargarIntentos() {
+  const cont = document.getElementById('intentos-lista');
+  const empty = document.getElementById('intentos-empty');
+  if (!cont) return;
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
+
+  const bloque = document.getElementById('enlinea-bloque').value;
+  cont.innerHTML = '<p class="empty-inline">Cargando…</p>';
+
+  const filas = [];
+  for (const a of alumnosCache) {
+    let est = null;
+    try {
+      const snap = await getDoc(doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'intentos', String(bloque)));
+      est = snap.exists() ? snap.data() : null;
+    } catch { /* sin intento */ }
+    filas.push({ alumno: a, est });
+  }
+
+  cont.innerHTML = '';
+  filas.forEach(({ alumno, est }) => {
+    const div = document.createElement('div');
+    div.className = 'intento-card';
+
+    if (!est) {
+      div.innerHTML = `
+        <div class="intento-top">
+          <span class="student-name">${escaparHTML(alumno.nombre)}</span>
+          <span class="intento-estado est-sin">Sin iniciar</span>
+        </div>`;
+    } else if (est.estado === 'entregado') {
+      div.innerHTML = `
+        <div class="intento-top">
+          <span class="student-name">${escaparHTML(alumno.nombre)}</span>
+          <span class="intento-estado est-ok">${Number(est.calificacion).toFixed(1)} / 10</span>
+        </div>
+        <p class="intento-detalle">${est.aciertos}/${est.total} correctas${est.automatico ? ' · se acabó el tiempo' : ''}${est.salidas ? ` · ${est.salidas} salida(s) previas` : ''}</p>`;
+    } else if (est.estado === 'bloqueado') {
+      div.innerHTML = `
+        <div class="intento-top">
+          <span class="student-name">${escaparHTML(alumno.nombre)}</span>
+          <span class="intento-estado est-bloq">Bloqueado</span>
+        </div>
+        <p class="intento-detalle">Salió de la pantalla ${est.salidas || 1} vez(ces). Contestadas: ${Object.keys(est.respuestas || {}).length} de ${(est.ids || []).length}</p>
+        <div class="intento-acciones">
+          <button class="btn btn-primary btn-small" data-reabrir="${alumno.id}">Reabrir examen</button>
+          <button class="btn btn-ghost-dark btn-small" data-extra="${alumno.id}">+ tiempo</button>
+        </div>`;
+    } else {
+      const totalMin = (est.minutos || 30) + (est.minutosExtra || 0);
+      const restante = Math.max(0, Math.round(totalMin - (Date.now() - est.iniciado) / 60000));
+      div.innerHTML = `
+        <div class="intento-top">
+          <span class="student-name">${escaparHTML(alumno.nombre)}</span>
+          <span class="intento-estado est-curso">En curso</span>
+        </div>
+        <p class="intento-detalle">Le quedan ~${restante} min · contestadas ${Object.keys(est.respuestas || {}).length} de ${(est.ids || []).length}</p>
+        <div class="intento-acciones">
+          <button class="btn btn-ghost-dark btn-small" data-extra="${alumno.id}">+ tiempo</button>
+        </div>`;
+    }
+    cont.appendChild(div);
+  });
+
+  cont.querySelectorAll('[data-reabrir]').forEach(b => {
+    b.addEventListener('click', () => reabrirExamen(b.dataset.reabrir, bloque));
+  });
+  cont.querySelectorAll('[data-extra]').forEach(b => {
+    b.addEventListener('click', () => darTiempoExtra(b.dataset.extra, bloque));
+  });
+}
+
+// Reabre un examen cerrado por salida de pantalla. Conserva respuestas y le
+// devuelve el tiempo que estuvo bloqueado, para no castigarlo por la pausa.
+async function reabrirExamen(alumnoId, bloque) {
+  const alumno = alumnosCache.find(a => a.id === alumnoId);
+  if (!confirm(`¿Reabrir el examen de ${alumno?.nombre || 'este alumno'}?\n\nConservará las respuestas que ya había dado y el tiempo que le quedaba.`)) return;
+
+  const ref = doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'intentos', String(bloque));
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return;
+  const est = snap.data();
+
+  let extra = est.minutosExtra || 0;
+  if (est.bloqueadoEn) {
+    const pausa = (Date.now() - new Date(est.bloqueadoEn).getTime()) / 60000;
+    extra += Math.min(pausa, 60);
+  }
+
+  await setDoc(ref, {
+    ...est, estado: 'en_curso',
+    minutosExtra: Math.round(extra),
+    reabiertoEn: new Date().toISOString(),
+    actualizado: serverTimestamp(),
+  });
+
+  alert('Examen reabierto. El alumno ya puede continuar desde su dispositivo.');
+  cargarIntentos();
+}
+
+async function darTiempoExtra(alumnoId, bloque) {
+  const alumno = alumnosCache.find(a => a.id === alumnoId);
+  const min = prompt(`¿Cuántos minutos extra para ${alumno?.nombre || 'este alumno'}?`, '10');
+  const n = parseInt(min, 10);
+  if (isNaN(n) || n <= 0) return;
+
+  const ref = doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'intentos', String(bloque));
+  const snap = await getDoc(ref);
+  if (!snap.exists()) { alert('Ese alumno todavía no ha iniciado el examen.'); return; }
+  const est = snap.data();
+
+  await setDoc(ref, {
+    ...est, minutosExtra: (est.minutosExtra || 0) + n,
+    actualizado: serverTimestamp(),
+  });
+
+  alert(`Se agregaron ${n} minutos.`);
+  cargarIntentos();
 }
 
 // ---------- AVISOS (preguntas semanales e indicaciones para el grupo) ----------
