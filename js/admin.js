@@ -104,10 +104,13 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 on('btn-nuevo-grupo', 'click', crearGrupo);
-on('grupo-select', 'change', (e) => {
+on('grupo-select', 'change', async (e) => {
   grupoActivo = e.target.value || null;
   if (grupoActivo) {
-    cargarAlumnos();
+    await cargarAlumnos();
+    // Refresca la pestaña que esté abierta, para no tener que volver a tocarla
+    const activa = document.querySelector('.tab-btn.active');
+    if (activa) switchTab(activa.dataset.tab);
   } else {
     renderAlumnos([]);
   }
