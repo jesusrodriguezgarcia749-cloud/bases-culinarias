@@ -1,0 +1,385 @@
+{
+  "bloque": 3,
+  "titulo": "Examen del Bloque 3 — Desarrollo de habilidades para la cocina",
+  "config": { "preguntasPorExamen": 20, "minutos": 30 },
+  "reactivos": [
+
+    { "id": "3-001", "subtema": "3.1", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿En qué se diferencian las tres familias de técnicas de cocción?",
+      "opciones": [
+        "En cómo se transmite el calor: sellando la superficie, permitiendo intercambio con el medio, o combinando ambos",
+        "En la temperatura máxima que alcanza el alimento durante la cocción",
+        "En el tipo de equipo requerido: sartén, olla o horno",
+        "En el tiempo total que requiere cada preparación"
+      ], "correcta": 0,
+      "explicacion": "El criterio es el mecanismo de transmisión del calor y qué ocurre con los jugos del alimento, no el equipo ni el tiempo. Una misma técnica puede ejecutarse en distintos equipos." },
+
+    { "id": "3-002", "subtema": "3.1", "origen": "actividad", "tipo": "relacionar",
+      "pregunta": "Relaciona cada familia de técnica de cocción con su principio.",
+      "pares": [
+        { "izquierda": "Por concentración", "derecha": "Sella rápido la superficie y retiene los jugos en el interior" },
+        { "izquierda": "Por expansión", "derecha": "Permite el intercambio gradual entre alimento y medio de cocción" },
+        { "izquierda": "Mixta", "derecha": "Combina sellado inicial con cocción lenta en líquido" },
+        { "izquierda": "Elección de la familia", "derecha": "Depende de la terneza del corte y del resultado buscado" }
+      ],
+      "explicacion": "Concentración retiene, expansión intercambia, mixta hace ambas en secuencia. Elegir mal la familia arruina el producto aunque la ejecución sea impecable." },
+
+    { "id": "3-003", "subtema": "3.1", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «La cocción por concentración NO busca penetración gradual: busca ________ la superficie desde el inicio».",
+      "opciones": [ "sellar", "humedecer", "ablandar", "deshidratar" ],
+      "correcta": 0,
+      "explicacion": "El sellado forma una costra que retiene los jugos dentro. Lo contrario —penetración gradual e intercambio con el medio— define a la cocción por expansión." },
+
+    { "id": "3-004", "subtema": "3.1", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué un corte tierno como el filete se arruina si se cocina por horas con técnica mixta?",
+      "opciones": [
+        "Porque pierde humedad y su textura se vuelve fibrosa: no necesita ese tiempo para ablandarse",
+        "Porque el sellado inicial se pierde al prolongar la cocción en líquido",
+        "Porque el colágeno se gelatiniza en exceso y el corte se deshace",
+        "Porque absorbe demasiado líquido y diluye su sabor propio"
+      ], "correcta": 0,
+      "explicacion": "La técnica mixta existe para ablandar cortes duros ricos en colágeno. Un corte que ya es tierno no gana nada: solo pierde jugos y se vuelve fibroso." },
+
+    { "id": "3-005", "subtema": "3.1", "tipo": "opcion_multiple",
+      "pregunta": "Recibes un corte duro, rico en tejido conectivo. ¿Qué familia de técnica corresponde y por qué?",
+      "opciones": [
+        "Mixta: el sellado aporta sabor y la cocción lenta en líquido gelatiniza el colágeno",
+        "Concentración: el sellado rápido evita que el corte pierda sus jugos",
+        "Expansión: el intercambio con el medio extrae la dureza del tejido",
+        "Cualquiera, siempre que se respete la temperatura interna de seguridad"
+      ], "correcta": 0,
+      "explicacion": "El colágeno necesita tiempo y humedad para convertirse en gelatina. El sellado previo aporta el sabor de la reacción de Maillard, pero por sí solo no ablanda nada." },
+
+    { "id": "3-006", "subtema": "3.1", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es el criterio profesional para elegir entre concentración y expansión?",
+      "opciones": [
+        "Si se busca retener los jugos y el sabor dentro del alimento, o transferirlos al medio de cocción",
+        "Si se dispone de más o menos tiempo de servicio",
+        "Si el alimento es de origen animal o vegetal",
+        "Si la preparación se va a servir caliente o fría"
+      ], "correcta": 0,
+      "explicacion": "Es una decisión sobre dónde queremos el sabor. En un consomé buscamos que el sabor pase al líquido (expansión); en un sellado, que se quede dentro (concentración)." },
+
+    { "id": "3-007", "subtema": "3.2.1", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué se corta la carne en contra de la fibra al momento de servir?",
+      "opciones": [
+        "Porque acorta las fibras musculares y la misma pieza se percibe más suave al morderla",
+        "Porque permite obtener porciones de tamaño más uniforme",
+        "Porque evita que la pieza pierda jugos al rebanarla",
+        "Porque mejora la presentación al mostrar el punto de cocción"
+      ], "correcta": 0,
+      "explicacion": "El corte transversal acorta las fibras, así que la mordida las rompe con menos esfuerzo. La misma carne, cocinada igual, se percibe dura o suave según cómo se rebane." },
+
+    { "id": "3-008", "subtema": "3.2.1", "origen": "actividad", "tipo": "relacionar",
+      "pregunta": "Relaciona cada punto de cocción de carnes rojas con su rango de temperatura interna aproximado.",
+      "pares": [
+        { "izquierda": "A la inglesa / rojo inglés", "derecha": "Aproximadamente 50-55°C" },
+        { "izquierda": "A punto / término medio", "derecha": "Aproximadamente 60-65°C" },
+        { "izquierda": "Bien cocida", "derecha": "Aproximadamente 70-80°C" },
+        { "izquierda": "Mínimo seguro en corte entero", "derecha": "63°C con 3 minutos de reposo" }
+      ],
+      "explicacion": "Ojo con la última: el punto que pide el comensal y el mínimo sanitario son cosas distintas. Un término inglés queda por debajo del mínimo seguro, y eso debe informarse." },
+
+    { "id": "3-009", "subtema": "3.2.1", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «El desvenado del camarón se realiza ________ de pelarlo».",
+      "opciones": [ "después", "antes", "al mismo tiempo que", "sin necesidad" ],
+      "correcta": 0,
+      "explicacion": "Primero se pela, y con el cuerpo expuesto se retira la vena dorsal. Intentar desvenar con cáscara complica el corte y maltrata la pieza." },
+
+    { "id": "3-010", "subtema": "3.2.1", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué importa el porcionado consistente al dividir una pieza de carne?",
+      "opciones": [
+        "Porque piezas de tamaño irregular se cuecen a ritmos distintos en la misma tanda",
+        "Porque facilita el cálculo del costo por porción del platillo",
+        "Porque mejora la presentación uniforme en el plato",
+        "Porque reduce la merma durante el proceso de corte"
+      ], "correcta": 0,
+      "explicacion": "Las otras tres son ventajas reales del porcionado, pero la razón técnica de fondo es la cocción pareja: es el mismo principio del corte uniforme de vegetales." },
+
+    { "id": "3-011", "subtema": "3.2.1", "tipo": "opcion_multiple",
+      "pregunta": "Un comensal pide su corte «a la inglesa». ¿Cuál es el manejo profesional correcto?",
+      "opciones": [
+        "Servirlo a 50-55°C informando que queda por debajo del mínimo sanitario recomendado",
+        "Servirlo a 63°C, que es el mínimo seguro, aunque no corresponda al término pedido",
+        "Negarse a prepararlo por representar un riesgo sanitario",
+        "Sellarlo a alta temperatura para compensar la baja temperatura interna"
+      ], "correcta": 0,
+      "explicacion": "El término inglés (50-55°C) está por debajo del mínimo seguro de 63°C. Es una decisión informada del comensal, no un error del cocinero, pero corresponde advertirla." },
+
+    { "id": "3-012", "subtema": "3.2.1", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué los pescados requieren un manejo de cocción distinto al de las carnes rojas?",
+      "opciones": [
+        "Porque sus proteínas se desnaturalizan mucho más rápido y toleran muy poca sobrecocción",
+        "Porque su temperatura interna mínima segura es más alta",
+        "Porque su contenido de colágeno exige cocciones prolongadas",
+        "Porque requieren siempre técnicas de expansión"
+      ], "correcta": 0,
+      "explicacion": "El margen de error en un pescado es de minutos, a veces de segundos. Su mínimo seguro (63°C) no es más alto que el de la carne: lo que cambia es la velocidad con que llega ahí." },
+
+    { "id": "3-013", "subtema": "3.2.2", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la diferencia entre el agarre de pivote y el de caída libre al cortar?",
+      "opciones": [
+        "El pivote mantiene la punta apoyada en la tabla para mayor control; la caída libre levanta todo el filo",
+        "El pivote se usa con cuchillo cebollero y la caída libre con puntilla",
+        "El pivote sirve para cortes gruesos y la caída libre para cortes finos",
+        "El pivote es para diestros y la caída libre para zurdos"
+      ], "correcta": 0,
+      "explicacion": "La diferencia está en si la punta permanece anclada. El pivote da control y ritmo; la caída libre da fuerza, pero exige más precisión y expone más la mano." },
+
+    { "id": "3-014", "subtema": "3.2.2", "origen": "actividad", "tipo": "relacionar",
+      "pregunta": "Relaciona cada corte clásico con su descripción.",
+      "pares": [
+        { "izquierda": "Brunoise", "derecha": "Cubos muy pequeños, de 3 a 5 mm por lado" },
+        { "izquierda": "Juliana", "derecha": "Tiras finas de unos 4 cm de largo por 0.5 cm de grosor" },
+        { "izquierda": "Chiffonade", "derecha": "Corte fino en hojas, que se enrollan antes de cortarse" },
+        { "izquierda": "Mirepoix", "derecha": "Corte irregular grueso, base aromática de fondos y guisos" }
+      ],
+      "explicacion": "Cada corte tiene una función: la brunoise se integra sin notarse, la juliana aporta textura visible, el mirepoix se descarta o se cuela tras aportar su sabor." },
+
+    { "id": "3-015", "subtema": "3.2.2", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «La oxidación enzimática de frutas y vegetales cortados se puede prevenir aplicando ________».",
+      "opciones": [ "un ácido como jugo de limón", "una grasa como aceite de oliva", "sal en la superficie del corte", "calor seco inmediato" ],
+      "correcta": 0,
+      "explicacion": "El ácido inhibe la enzima responsable del pardeamiento. Por eso una manzana cortada con limón conserva su color mucho más tiempo." },
+
+    { "id": "3-016", "subtema": "3.2.2", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué el tamaño uniforme de las piezas cortadas es un criterio técnico y no estético?",
+      "opciones": [
+        "Porque garantiza que todo el producto se cocine al mismo ritmo, sin trozos crudos ni quemados",
+        "Porque permite calcular con exactitud el rendimiento del insumo",
+        "Porque facilita el emplatado y la presentación del platillo",
+        "Porque reduce el tiempo total de cocción de la preparación"
+      ], "correcta": 0,
+      "explicacion": "Es el mismo principio que aparece en el Bloque 1 y en el porcionado de carnes: piezas de distinto grosor llegan a su punto en momentos distintos." },
+
+    { "id": "3-017", "subtema": "3.2.2", "tipo": "opcion_multiple",
+      "pregunta": "Se necesita una base aromática para un fondo que después se colará. ¿Qué corte corresponde?",
+      "opciones": [
+        "Mirepoix: corte irregular grueso, porque aportará sabor y luego se retira",
+        "Brunoise: cubos muy pequeños, para que liberen sabor más rápido",
+        "Juliana: tiras finas, para maximizar la superficie de contacto",
+        "Chiffonade: corte fino, para que se integre completamente al líquido"
+      ], "correcta": 0,
+      "explicacion": "Un corte fino en un fondo de cocción larga se deshace y enturbia el líquido. El mirepoix grueso aporta su sabor y se retira entero al colar." },
+
+    { "id": "3-018", "subtema": "3.2.2", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la razón de seguridad detrás del agarre de pivote?",
+      "opciones": [
+        "Mantener la punta anclada reduce el desplazamiento del filo y da control sobre cada corte",
+        "Permite cortar con la mano de apoyo alejada de la tabla",
+        "Reduce la fuerza necesaria, disminuyendo la fatiga del cocinero",
+        "Evita que el cuchillo resbale sobre superficies húmedas"
+      ], "correcta": 0,
+      "explicacion": "El control sobre la trayectoria del filo es lo que previene el accidente. Un filo que se levanta por completo en cada corte tiene más margen de desviarse." },
+
+    { "id": "3-019", "subtema": "3.2.3", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo se verifica correctamente el punto de cocción de un grano?",
+      "opciones": [
+        "Probándolo: debe estar suave completo, sin núcleo duro y crudo en el centro",
+        "Verificando que haya absorbido todo el líquido de la olla",
+        "Midiendo el tiempo transcurrido según la proporción usada",
+        "Observando que los granos se separen fácilmente entre sí"
+      ], "correcta": 0,
+      "explicacion": "Que se haya absorbido el líquido no garantiza que el grano esté cocido: puede haberse evaporado. El único criterio confiable es probar y sentir si hay núcleo duro." },
+
+    { "id": "3-020", "subtema": "3.2.3", "origen": "actividad", "tipo": "relacionar",
+      "pregunta": "Relaciona cada grano con su proporción aproximada de grano : líquido.",
+      "pares": [
+        { "izquierda": "Arroz blanco", "derecha": "1 : 2" },
+        { "izquierda": "Arroz integral", "derecha": "1 : 2.5" },
+        { "izquierda": "Cuscús", "derecha": "1 : 1" },
+        { "izquierda": "Quinoa", "derecha": "1 : 2" }
+      ],
+      "explicacion": "El integral pide más líquido porque conserva el salvado, que retarda la absorción. El cuscús pide menos porque está precocido: solo se hidrata." },
+
+    { "id": "3-021", "subtema": "3.2.3", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué no se debe destapar la olla mientras se cocina arroz?",
+      "opciones": [
+        "Porque cada apertura deja escapar vapor necesario para la cocción uniforme del grano",
+        "Porque el cambio brusco de temperatura endurece la superficie del grano",
+        "Porque permite que entren contaminantes a la preparación",
+        "Porque el arroz absorbe olores del ambiente durante la cocción"
+      ], "correcta": 0,
+      "explicacion": "El arroz se cuece por vapor atrapado. Cada destapada rompe ese equilibrio y el resultado es grano desigual: unos cocidos y otros con centro duro." },
+
+    { "id": "3-022", "subtema": "3.2.3", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «La proporción grano : líquido no es una sugerencia aproximada: es un ________ que determina el resultado».",
+      "opciones": [ "parámetro técnico", "criterio estético", "dato informativo", "referencia histórica" ],
+      "correcta": 0,
+      "explicacion": "Poco líquido deja el grano crudo; demasiado lo deja aguado o pastoso. Es el mismo principio de precisión del Bloque 1 aplicado a granos." },
+
+    { "id": "3-023", "subtema": "3.2.3", "tipo": "opcion_multiple",
+      "pregunta": "Un arroz quedó con el líquido absorbido pero con núcleo duro al centro. ¿Qué ocurrió?",
+      "opciones": [
+        "Faltó líquido o el fuego fue demasiado alto: se evaporó antes de que el grano terminara de hidratarse",
+        "Se usó demasiado líquido y el grano no alcanzó a absorberlo todo",
+        "Se destapó la olla al final de la cocción",
+        "La proporción fue correcta pero el reposo posterior fue insuficiente"
+      ], "correcta": 0,
+      "explicacion": "Líquido ausente + grano crudo significa que el líquido se fue por evaporación, no por absorción. Suele ser fuego demasiado alto o tapa mal ajustada." },
+
+    { "id": "3-024", "subtema": "3.2.3", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué el arroz integral requiere más líquido y más tiempo que el blanco?",
+      "opciones": [
+        "Porque conserva el salvado, que retarda la penetración del agua al interior del grano",
+        "Porque su almidón es de estructura más compleja y tarda en gelatinizar",
+        "Porque su grano es de mayor tamaño y volumen",
+        "Porque requiere una temperatura de cocción más alta"
+      ], "correcta": 0,
+      "explicacion": "El salvado es una capa que el agua debe atravesar. El blanco, ya pulido, no tiene esa barrera: por eso pide menos líquido y menos tiempo." },
+
+    { "id": "3-025", "subtema": "3.2.4", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la regla general de equivalencia entre hierba fresca y hierba seca?",
+      "opciones": [
+        "Aproximadamente 3 a 1 en volumen: tres partes de fresca por una de seca",
+        "Aproximadamente 1 a 1: se sustituyen en la misma cantidad",
+        "Aproximadamente 2 a 1: dos partes de fresca por una de seca",
+        "Aproximadamente 1 a 3: una parte de fresca por tres de seca"
+      ], "correcta": 0,
+      "explicacion": "Al secarse la hierba pierde agua y concentra sus aromáticos: por eso se necesita menos. Invertir la proporción es un error que arruina la preparación." },
+
+    { "id": "3-026", "subtema": "3.2.4", "origen": "actividad", "tipo": "relacionar",
+      "pregunta": "Relaciona cada tipo de hierba o especia con el momento correcto de agregarla.",
+      "pares": [
+        { "izquierda": "Especias secas robustas (romero, tomillo, laurel)", "derecha": "Al inicio de la cocción" },
+        { "izquierda": "Hierbas frescas delicadas (albahaca, cilantro)", "derecha": "Casi al final o tras retirar del fuego" },
+        { "izquierda": "Especias enteras que se van a moler", "derecha": "Se tuestan en seco antes de molerse" },
+        { "izquierda": "Especias molidas finas", "derecha": "En la etapa media, para que no se quemen" }
+      ],
+      "explicacion": "Lo robusto necesita tiempo para liberar su aroma; lo delicado lo pierde con el calor prolongado. Agregar albahaca al inicio de un guiso es desperdiciarla." },
+
+    { "id": "3-027", "subtema": "3.2.4", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Para qué sirve tostar especias enteras en seco antes de molerlas?",
+      "opciones": [
+        "Para liberar y realzar sus compuestos aromáticos mediante el calor",
+        "Para eliminar la humedad y facilitar el molido",
+        "Para reducir su intensidad y suavizar su sabor",
+        "Para desinfectarlas antes de incorporarlas al platillo"
+      ], "correcta": 0,
+      "explicacion": "El calor activa los aceites esenciales. Facilitar el molido es un efecto secundario real, pero el objetivo es el aroma: una especia tostada es notablemente más intensa." },
+
+    { "id": "3-028", "subtema": "3.2.4", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «Las hierbas frescas delicadas como la albahaca deben agregarse ________ de la cocción».",
+      "opciones": [ "casi al final", "al inicio", "a la mitad", "antes del sellado" ],
+      "correcta": 0,
+      "explicacion": "Sus aromáticos son volátiles: con calor prolongado se pierden y solo queda la hoja oscurecida. Al final conservan su aroma y su color." },
+
+    { "id": "3-029", "subtema": "3.2.4", "tipo": "opcion_multiple",
+      "pregunta": "Una receta pide 3 cucharadas de albahaca fresca y solo hay seca. ¿Cuánto se usa?",
+      "opciones": [
+        "1 cucharada de seca",
+        "3 cucharadas de seca",
+        "9 cucharadas de seca",
+        "1 y media cucharadas de seca"
+      ], "correcta": 0,
+      "explicacion": "Regla 3 a 1: se divide entre tres. Usar la misma cantidad de seca triplicaría la intensidad y desequilibraría el platillo." },
+
+    { "id": "3-030", "subtema": "3.2.4", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué las especias molidas finas no deben agregarse al inicio de una cocción larga?",
+      "opciones": [
+        "Porque su gran superficie expuesta las hace quemarse y amargar la preparación",
+        "Porque pierden por completo su aroma antes de terminar la cocción",
+        "Porque espesan el líquido de cocción de forma indeseada",
+        "Porque su color se transfiere y oscurece el platillo"
+      ], "correcta": 0,
+      "explicacion": "Molida fina significa mucha superficie expuesta al calor: se quema fácil y aporta amargor. Por eso van en etapa media, no al inicio como las robustas enteras." },
+
+    { "id": "3-031", "subtema": "3.1", "tipo": "ordenar",
+      "pregunta": "Ordena las etapas de una cocción mixta (tipo estofado).",
+      "pasos": [
+        "Secar la superficie de la pieza para favorecer el sellado",
+        "Sellar a fuego alto hasta formar costra dorada",
+        "Retirar la pieza y sofreír la base aromática en la misma olla",
+        "Regresar la pieza y agregar el líquido de cocción",
+        "Cocinar tapado a fuego bajo hasta gelatinizar el colágeno"
+      ],
+      "explicacion": "El secado previo es el paso que más se omite: una superficie húmeda no sella, se cuece al vapor. Y el sofrito va en la misma olla para aprovechar los jugos caramelizados del sellado." },
+
+    { "id": "3-032", "subtema": "3.2.1", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué ocurre a nivel de proteína cuando una carne se sobrecuece?",
+      "opciones": [
+        "Las fibras se contraen y expulsan la humedad, dejando una textura seca y fibrosa",
+        "El colágeno se endurece y la pieza se vuelve correosa",
+        "Las grasas se separan y la carne pierde su sabor característico",
+        "El agua se redistribuye hacia el centro dejando el exterior seco"
+      ], "correcta": 0,
+      "explicacion": "El calor contrae las fibras musculares y estas exprimen el agua hacia afuera. Por eso una carne pasada está seca aunque se haya cocinado en líquido." },
+
+    { "id": "3-033", "subtema": "3.2.2", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué se enrollan las hojas antes de hacer un chiffonade?",
+      "opciones": [
+        "Para poder cortar todas las capas de una vez, obteniendo tiras finas y parejas",
+        "Para evitar que las hojas se oxiden durante el corte",
+        "Para liberar sus aceites aromáticos por presión",
+        "Para reducir el volumen y ocupar menos espacio en la tabla"
+      ], "correcta": 0,
+      "explicacion": "El enrollado agrupa las hojas y permite un corte único y limpio. Cortarlas sueltas da tiras irregulares y maltrata la hoja." },
+
+    { "id": "3-034", "subtema": "3.2.3", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué el cuscús usa proporción 1:1 mientras el arroz blanco usa 1:2?",
+      "opciones": [
+        "Porque el cuscús está precocido: solo necesita hidratarse, no cocerse",
+        "Porque su grano es más pequeño y absorbe menos líquido",
+        "Porque se prepara con líquido a mayor temperatura",
+        "Porque su contenido de almidón es menor que el del arroz"
+      ], "correcta": 0,
+      "explicacion": "El cuscús ya pasó por cocción y secado en su elaboración. Al agregarle líquido caliente solo recupera el agua que perdió: por eso pide mucho menos." },
+
+    { "id": "3-035", "subtema": "3.2.4", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es el criterio para decidir si una especia va entera o molida?",
+      "opciones": [
+        "Entera si se va a retirar o si la cocción es larga; molida si debe integrarse al conjunto",
+        "Entera siempre que sea posible, porque conserva mejor su aroma",
+        "Molida siempre, porque libera más rápido sus compuestos",
+        "Entera para preparaciones saladas y molida para dulces"
+      ], "correcta": 0,
+      "explicacion": "Es una decisión de integración y tiempo: la entera aporta aroma sin dejar textura y puede retirarse; la molida se queda en el platillo y aporta cuerpo y color." },
+
+    { "id": "3-036", "subtema": "3.2.1", "tipo": "completar",
+      "pregunta": "Completa: «Cortar la carne a favor de la fibra deja las fibras ________, lo que hace la mordida más dura».",
+      "opciones": [ "largas y enteras", "cortas y separadas", "comprimidas", "deshidratadas" ],
+      "correcta": 0,
+      "explicacion": "A favor de la fibra deja hebras largas que la mordida tiene que romper a lo largo. En contra las secciona, y el trabajo ya está hecho antes de llegar a la boca." },
+
+    { "id": "3-037", "subtema": "3.2.2", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la relación entre el corte y la técnica de cocción elegida?",
+      "opciones": [
+        "El corte debe ajustarse al tiempo de la técnica: cortes finos para cocciones rápidas, gruesos para prolongadas",
+        "Son decisiones independientes: el corte responde a la presentación y la técnica al resultado",
+        "El corte siempre debe ser lo más fino posible para acelerar la cocción",
+        "La técnica determina el corte solo en preparaciones con proteína animal"
+      ], "correcta": 0,
+      "explicacion": "Un brunoise en un guiso de tres horas desaparece; un mirepoix grueso en un salteado de cinco minutos queda crudo. Corte y técnica se eligen juntos." },
+
+    { "id": "3-038", "subtema": "3.2.3", "tipo": "opcion_multiple",
+      "pregunta": "Tras cocer el arroz se recomienda un reposo tapado antes de servir. ¿Por qué?",
+      "opciones": [
+        "Para que la humedad se redistribuya de forma pareja entre todos los granos",
+        "Para que baje la temperatura y no queme al comensal",
+        "Para que el almidón superficial termine de gelatinizar",
+        "Para que se separen los granos y no queden apelmazados"
+      ], "correcta": 0,
+      "explicacion": "Durante la cocción la humedad queda desigual entre el fondo y la superficie. El reposo la empareja, y por eso el grano queda uniforme." },
+
+    { "id": "3-039", "subtema": "3.1", "tipo": "opcion_multiple",
+      "pregunta": "Un vegetal con alto contenido de agua se pone en una sartén caliente y en vez de dorarse suelta líquido y se cuece. ¿Qué pasó?",
+      "opciones": [
+        "El agua liberada bajó la temperatura de la sartén e impidió el sellado, convirtiendo la concentración en expansión",
+        "La sartén no estaba lo suficientemente caliente al inicio",
+        "El corte fue demasiado grueso para esa técnica",
+        "Faltó grasa suficiente para transferir el calor"
+      ], "correcta": 0,
+      "explicacion": "Este es el puente entre Bloques 2 y 3: la característica física del insumo (contenido de agua) determina si la técnica elegida es viable. El agua liberada impide superar los 100°C y sin eso no hay sellado." },
+
+    { "id": "3-040", "subtema": "3.2.4", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué el laurel se agrega al inicio y se retira antes de servir?",
+      "opciones": [
+        "Porque necesita cocción prolongada para liberar su aroma, pero su hoja no se consume",
+        "Porque su sabor se vuelve amargo si permanece hasta el final",
+        "Porque se hidrata y pierde toda su intensidad aromática",
+        "Porque su color oscurece el líquido de la preparación"
+      ], "correcta": 0,
+      "explicacion": "Es una especia robusta: pide tiempo. Pero la hoja permanece rígida y no es agradable en boca, así que se retira. Aporta y se va." }
+
+  ]
+}

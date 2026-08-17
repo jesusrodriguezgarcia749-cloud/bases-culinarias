@@ -1,0 +1,380 @@
+{
+  "bloque": 1,
+  "titulo": "Examen del Bloque 1 — Conceptos y definiciones de cocina",
+  "config": { "preguntasPorExamen": 20, "minutos": 30 },
+  "reactivos": [
+
+    { "id": "1-001", "subtema": "1.1", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál define correctamente qué es un género culinario?",
+      "opciones": [
+        "Una categoría que agrupa preparaciones según la técnica que emplean, su estructura o su función en el menú",
+        "Una clasificación de preparaciones según su región de origen y tradición culinaria",
+        "Un conjunto de recetas que comparten el mismo ingrediente principal",
+        "Una agrupación de platillos según su costo y su lugar en la carta"
+      ], "correcta": 0,
+      "explicacion": "El género se define por técnica, estructura o función. Las otras opciones describen criterios reales de clasificación (origen, ingrediente, costo), pero ninguno es el que define un género: por eso un mole y una bechamel son ambos salsas." },
+
+    { "id": "1-002", "subtema": "1.1", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál de las siguientes SÍ es una elaboración culinaria sencilla?",
+      "opciones": [
+        "Un fondo claro de ave",
+        "Una salsa suprema",
+        "Un velouté de pescado",
+        "Una salsa aurora"
+      ], "correcta": 0,
+      "explicacion": "El fondo no depende de ninguna preparación previa. Las otras tres son compuestas: el velouté necesita un fondo, la suprema necesita un velouté, y la aurora deriva de otra salsa madre. Todas suenan a «base», pero solo una lo es." },
+
+    { "id": "1-003", "subtema": "1.1", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "Un cocinero reconoce el género de un platillo antes de cocinarlo. ¿Cuál es la utilidad práctica principal?",
+      "opciones": [
+        "Anticipar su técnica de cocción, tiempo aproximado y función en el menú, aun sin conocer la receta",
+        "Determinar el costo de producción y el precio de venta sugerido",
+        "Elegir la vajilla y el montaje adecuados para el servicio",
+        "Saber en qué estación de la brigada debe prepararse"
+      ], "correcta": 0,
+      "explicacion": "Las otras tres son consecuencias posibles, pero la utilidad de fondo es operativa: el género permite prever técnica, tiempo y función incluso ante una preparación que nunca has hecho." },
+
+    { "id": "1-004", "subtema": "1.1", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «Una elaboración culinaria sencilla es aquella que ________ de otra preparación previa para existir».",
+      "opciones": [ "no depende", "depende parcialmente", "siempre depende", "depende solo en cocina profesional" ],
+      "correcta": 0,
+      "explicacion": "La elaboración sencilla es el «ladrillo»: un caldo, una vinagreta, un puré. Existe por sí misma. Las compuestas son las que dependen de ella." },
+
+    { "id": "1-005", "subtema": "1.1", "tipo": "relacionar",
+      "pregunta": "Relaciona cada género con la función que cumple dentro del menú.",
+      "pares": [
+        { "izquierda": "Entremeses", "derecha": "Abren el apetito al inicio de la comida, en porciones pequeñas" },
+        { "izquierda": "Farináceos", "derecha": "Pastas, arroces y granos como plato o guarnición" },
+        { "izquierda": "Salsas", "derecha": "Acompañan y realzan el platillo aportando humedad y sabor" },
+        { "izquierda": "Guarniciones", "derecha": "Equilibran textura, color y valor nutricional del principal" }
+      ],
+      "explicacion": "Los cuatro son géneros distintos con funciones distintas. El error común es confundir salsa con guarnición: la salsa realza el principal, la guarnición lo acompaña como elemento aparte." },
+
+    { "id": "1-006", "subtema": "1.1", "tipo": "opcion_multiple",
+      "pregunta": "Se te pide preparar «un velouté de ave». Sin haber visto la receta, ¿qué puedes anticipar?",
+      "opciones": [
+        "Que es una salsa madre ligada con roux blanco y fondo claro",
+        "Que es una sopa clara que se sirve como entrada",
+        "Que es un plato fuerte de ave cocido por concentración",
+        "Que es una guarnición que acompaña al principal"
+      ], "correcta": 0,
+      "explicacion": "El velouté es una de las cinco salsas madre. Que diga «de ave» indica el fondo que se usa, no que sea un plato de ave." },
+
+    { "id": "1-007", "subtema": "1.1", "tipo": "opcion_multiple",
+      "pregunta": "Un alumno clasifica el mole como «platillo mexicano» y la bechamel como «salsa francesa». ¿Cuál es el error?",
+      "opciones": [
+        "Clasifica por nacionalidad y no por función y técnica: ambas son salsas",
+        "El mole no es salsa porque lleva chiles y especias molidas",
+        "La bechamel no es salsa madre sino una derivada",
+        "Debió indicar primero la técnica y después el país"
+      ], "correcta": 0,
+      "explicacion": "El género nunca se define por nacionalidad. Ambas son salsas aunque vengan de tradiciones distintas: reconocerlo permite ver las semejanzas técnicas entre cocinas." },
+
+    { "id": "1-008", "subtema": "1.1", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué «carnes», «aves» y «pescados y mariscos» se consideran un solo género?",
+      "opciones": [
+        "Porque cumplen la misma función —ser el plato fuerte— aunque cada uno exija manejo distinto",
+        "Porque comparten el mismo perfil nutricional al ser proteínas animales",
+        "Porque se cocinan con las mismas técnicas de concentración",
+        "Porque Escoffier los agrupó para simplificar la carta"
+      ], "correcta": 0,
+      "explicacion": "El criterio del género es la función en el menú. Se subdividen porque un pescado se desnaturaliza mucho más rápido que una carne roja, pero la función es la misma." },
+
+    { "id": "1-009", "subtema": "1.2", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué abarca correctamente el mise en place?",
+      "opciones": [
+        "Insumos pesados y cortados, área de trabajo lista y equipo al alcance, antes de encender el fuego",
+        "Únicamente los insumos pesados, cortados y dispuestos en compoteras",
+        "La planeación del menú del servicio y el cronograma de producción",
+        "El emplatado y la disposición final de los elementos en el plato"
+      ], "correcta": 0,
+      "explicacion": "El mise en place no es solo ingredientes: incluye estación limpia y equipo a la mano. Un cocinero con todo pesado pero sin la espátula lista no completó su mise en place." },
+
+    { "id": "1-010", "subtema": "1.2", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es el orden correcto de una elaboración culinaria básica?",
+      "opciones": [
+        "Selección y mise en place → cocción → rectificación de sabor → presentación",
+        "Selección y mise en place → cocción → presentación → rectificación de sabor",
+        "Selección y mise en place → rectificación de sabor → cocción → presentación",
+        "Cocción → selección y mise en place → rectificación de sabor → presentación"
+      ], "correcta": 0,
+      "explicacion": "Rectificar va ANTES de montar. Corregir sal o acidez cuando el platillo ya está emplatado es tarde y arruina la presentación: por eso la segunda opción, que parece razonable, es incorrecta." },
+
+    { "id": "1-011", "subtema": "1.2", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué distingue a una cocina organizada de una improvisada, según el mise en place?",
+      "opciones": [
+        "Que en la organizada no hay que detenerse durante la cocción a buscar o preparar nada",
+        "Que en la organizada cada cocinero tiene una estación asignada de la brigada",
+        "Que en la organizada se trabaja con fichas técnicas escritas de cada preparación",
+        "Que en la organizada se limpia la estación al terminar cada preparación"
+      ], "correcta": 0,
+      "explicacion": "Las otras tres son buenas prácticas reales, pero la que define el mise en place es esta: si durante la cocción activa tienes que parar a preparar algo, tu mise en place estuvo incompleto." },
+
+    { "id": "1-012", "subtema": "1.2", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «La secuencia de la elaboración básica es una estructura ________, aplicable a prácticamente cualquier platillo».",
+      "opciones": [ "repetible", "exclusiva de la cocina profesional", "propia de cada receta", "fijada por la normativa sanitaria" ],
+      "correcta": 0,
+      "explicacion": "Entenderla como estructura repetible —y no como pasos de una receta particular— es lo que permite adaptarse rápido a preparaciones nuevas." },
+
+    { "id": "1-013", "subtema": "1.2", "tipo": "ordenar",
+      "pregunta": "Ordena los pasos del mise en place para un salteado sencillo.",
+      "pasos": [
+        "Leer la receta completa e identificar ingredientes y técnicas",
+        "Lavar, desinfectar y cortar los vegetales agrupándolos por tiempo de cocción",
+        "Pesar y porcionar la proteína, retirándola del refrigerador con anticipación",
+        "Medir líquidos y condimentos en recipientes pequeños",
+        "Disponer todo en el orden de uso junto a la estación de cocción",
+        "Verificar que el equipo esté limpio y a la mano, y encender el fuego"
+      ],
+      "explicacion": "El fuego se enciende hasta el final. Leer la receta va primero porque sin eso no sabes qué vas a necesitar: comenzar a cocinar sin haberla leído completa es uno de los errores más frecuentes." },
+
+    { "id": "1-014", "subtema": "1.2", "tipo": "opcion_multiple",
+      "pregunta": "Un alumno corta los vegetales de tamaños desiguales. ¿Cuál es la consecuencia técnica directa?",
+      "opciones": [
+        "Unas piezas quedarán crudas y otras sobrecocidas en la misma tanda",
+        "Se perderá presentación, pero el sabor no se afectará",
+        "Aumentará la merma porque los cortes irregulares desperdician producto",
+        "Se alterará el cálculo de porciones al emplatar"
+      ], "correcta": 0,
+      "explicacion": "El tamaño uniforme no es capricho estético: garantiza cocción pareja. Piezas de distinto grosor llegan a su punto en momentos distintos." },
+
+    { "id": "1-015", "subtema": "1.2", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué se retira la proteína del refrigerador con anticipación antes de cocinarla?",
+      "opciones": [
+        "Para que no esté completamente fría y la cocción sea uniforme",
+        "Para que absorba mejor los condimentos por ósmosis",
+        "Para reducir el tiempo total de cocción y ahorrar energía",
+        "Para romper la cadena de frío de forma controlada"
+      ], "correcta": 0,
+      "explicacion": "Una proteína fría se cocina desigual: el exterior se pasa antes de que el centro llegue a temperatura. Ojo: «con anticipación» no significa horas, eso la metería en zona de peligro." },
+
+    { "id": "1-016", "subtema": "1.3", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué instrumento verifica la temperatura interna de una proteína durante la cocción?",
+      "opciones": [
+        "Termómetro de sonda",
+        "Termómetro láser o infrarrojo",
+        "Refractómetro",
+        "Termómetro de horno"
+      ], "correcta": 0,
+      "explicacion": "La sonda penetra el alimento y mide su interior. El láser mide superficie —sirve para planchas y freidoras, no para saber si un pollo llegó a 74°C por dentro." },
+
+    { "id": "1-017", "subtema": "1.3", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué en cocina profesional la harina se mide por peso y no por volumen?",
+      "opciones": [
+        "Porque una taza de harina varía según qué tan compactada esté",
+        "Porque las tazas anglosajonas no tienen equivalencia exacta en gramos",
+        "Porque la harina absorbe humedad del ambiente y cambia de volumen",
+        "Porque el volumen se mide en mililitros y la harina no es líquida"
+      ], "correcta": 0,
+      "explicacion": "El problema es la densidad variable, no la conversión de unidades. La misma taza contiene distinta cantidad según se llenó suelta o compactada. Igual pasa con miel, mantequilla derretida y azúcar mascabado apretado." },
+
+    { "id": "1-018", "subtema": "1.3", "origen": "actividad", "tipo": "relacionar",
+      "pregunta": "Relaciona cada instrumento con lo que mide.",
+      "pares": [
+        { "izquierda": "Báscula de cocina", "derecha": "Masa en gramos y kilogramos" },
+        { "izquierda": "Jarra graduada", "derecha": "Volumen en mililitros y litros" },
+        { "izquierda": "Termómetro de sonda", "derecha": "Temperatura interna del alimento" },
+        { "izquierda": "Refractómetro", "derecha": "Concentración de azúcares en grados Brix" }
+      ],
+      "explicacion": "Masa y volumen no son intercambiables: 100 g de harina y 100 ml de harina son cantidades distintas. Y el refractómetro mide azúcar, no temperatura —el punto del caramelo se controla con termómetro." },
+
+    { "id": "1-019", "subtema": "1.3", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «Un instrumento descalibrado es peor que no medir en absoluto, porque genera una falsa sensación de ________».",
+      "opciones": [ "precisión", "rapidez", "higiene", "rendimiento" ],
+      "correcta": 0,
+      "explicacion": "Ese es el punto: el cocinero cree que está midiendo bien, sigue la receta al pie de la letra, y aun así obtiene resultados inconsistentes sin saber por qué." },
+
+    { "id": "1-020", "subtema": "1.3", "tipo": "opcion_multiple",
+      "pregunta": "Un cocinero sigue la receta al pie de la letra y su técnica es correcta, pero obtiene resultados distintos entre tandas. ¿Causa más probable?",
+      "opciones": [
+        "Alguno de sus instrumentos de medida está descalibrado",
+        "Mide demasiado rápido y no deja estabilizar la lectura",
+        "La materia prima viene de proveedores distintos cada vez",
+        "La receta está expresada en unidades anglosajonas"
+      ], "correcta": 0,
+      "explicacion": "Es el error silencioso: todo lo demás se hace bien y aun así el resultado varía. Por eso las básculas deben verificarse periódicamente con un peso patrón conocido." },
+
+    { "id": "1-021", "subtema": "1.3", "tipo": "ordenar",
+      "pregunta": "Ordena los pasos para verificar la calibración de una báscula digital.",
+      "pasos": [
+        "Colocarla sobre una superficie plana y estable",
+        "Encenderla y verificar que marque 0.0 sin nada encima",
+        "Colocar un peso patrón conocido sobre la plataforma",
+        "Comparar la lectura obtenida contra el valor real del patrón"
+      ],
+      "explicacion": "La superficie plana es condición previa: sobre superficie irregular todas las lecturas son falsas. Y si no marca 0.0 en vacío, la lectura con el patrón no significaría nada." },
+
+    { "id": "1-022", "subtema": "1.3", "tipo": "opcion_multiple",
+      "pregunta": "Necesitas verificar la temperatura de una plancha sin interrumpir el servicio ni tocarla. ¿Qué usas?",
+      "opciones": [
+        "Termómetro láser o infrarrojo",
+        "Termómetro de sonda",
+        "Refractómetro",
+        "Báscula de precisión"
+      ], "correcta": 0,
+      "explicacion": "El láser mide temperatura de superficie sin contacto. La sonda requiere penetrar el alimento, así que no sirve para una plancha." },
+
+    { "id": "1-023", "subtema": "1.3", "tipo": "opcion_multiple",
+      "pregunta": "El tamiz aparece entre los instrumentos de la cocina estandarizada aunque no da lectura numérica. ¿Por qué?",
+      "opciones": [
+        "Porque estandariza textura y granulometría, aunque no mida en cifras",
+        "Porque permite calcular la merma de harinas y polvos",
+        "Porque su malla tiene una medida certificada en micras",
+        "Porque su uso es obligatorio según la normativa sanitaria"
+      ], "correcta": 0,
+      "explicacion": "No mide números, pero garantiza que la textura de un cernido o una salsa colada sea la misma cada vez. Estandarizar no siempre significa medir." },
+
+    { "id": "1-024", "subtema": "1.4", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Entre qué rango se ubica la «zona de peligro» bacteriano?",
+      "opciones": [
+        "6°C a 65°C",
+        "0°C a 60°C",
+        "4°C a 74°C",
+        "10°C a 63°C"
+      ], "correcta": 0,
+      "explicacion": "6°C a 65°C. Las otras cifras son reales pero de otros contextos: 4°C es el límite de refrigeración, 63°C y 74°C son temperaturas internas de cocción. Mezclarlas es el error típico." },
+
+    { "id": "1-025", "subtema": "1.4", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Para qué sirven las tablas de temperaturas críticas en repostería, como los puntos del caramelo?",
+      "opciones": [
+        "Para identificar el punto exacto en que el azúcar cambia de estructura y color, y detener la cocción a tiempo",
+        "Para calcular el tiempo total de cocción según la cantidad de azúcar",
+        "Para determinar la temperatura de servicio adecuada del postre",
+        "Para cumplir con el registro sanitario de preparaciones azucaradas"
+      ], "correcta": 0,
+      "explicacion": "En el caramelo el margen entre el punto correcto y el quemado es de pocos grados y de segundos. Sin termómetro se trabaja a ciegas." },
+
+    { "id": "1-026", "subtema": "1.4", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la razón de leer el manual de un equipo nuevo antes de usarlo?",
+      "opciones": [
+        "Documenta rangos, tiempos de precalentado y capacidad de carga de ese equipo en particular",
+        "Es un requisito de la normativa sanitaria para equipos de cocina industrial",
+        "Permite reclamar la garantía en caso de falla del equipo",
+        "Contiene las recetas recomendadas por el fabricante"
+      ], "correcta": 0,
+      "explicacion": "Cada equipo tiene su comportamiento. Ignorar el manual es causa común de accidentes y de resultados que no se repiten igual dos veces." },
+
+    { "id": "1-027", "subtema": "1.4", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «Las tablas de temperatura no son memorización arbitraria: cada rango responde a fenómenos ________ concretos».",
+      "opciones": [ "físicos y microbiológicos", "históricos y culturales", "comerciales y normativos", "sensoriales y organolépticos" ],
+      "correcta": 0,
+      "explicacion": "El calor desnaturaliza proteínas y destruye microorganismos a umbrales específicos. Entender el porqué permite razonar ante una situación nueva, no solo recordar cifras." },
+
+    { "id": "1-028", "subtema": "1.4", "tipo": "relacionar",
+      "pregunta": "Relaciona cada alimento con su temperatura interna mínima segura.",
+      "pares": [
+        { "izquierda": "Aves enteras o molidas", "derecha": "74°C" },
+        { "izquierda": "Carne molida de res o cerdo", "derecha": "71°C" },
+        { "izquierda": "Cortes enteros de res (término medio)", "derecha": "63°C con 3 min de reposo" },
+        { "izquierda": "Mantenimiento en caliente (buffet)", "derecha": "65°C o mayor" }
+      ],
+      "explicacion": "Las cuatro cifras se parecen y se confunden fácil. La clave: molida siempre exige más que corte entero (la contaminación se distribuye en toda la masa), y 65°C es mantenimiento, no cocción." },
+
+    { "id": "1-029", "subtema": "1.4", "tipo": "opcion_multiple",
+      "pregunta": "Un alimento estuvo 50 minutos fuera de refrigeración en la mañana y hoy lleva 40 más en la mesa. Según la regla de las dos horas, ¿qué procede?",
+      "opciones": [
+        "Le quedan unos 30 minutos, porque el tiempo en zona de peligro es acumulado",
+        "Puede estar 2 horas más, porque el conteo se reinicia al refrigerar",
+        "Debe desecharse ya, porque se rompió la cadena de frío dos veces",
+        "No hay problema si cada exposición individual no pasa de dos horas"
+      ], "correcta": 0,
+      "explicacion": "La regla es acumulativa: se suma todo el tiempo en zona de peligro. 50 + 40 = 90 minutos consumidos de los 120 disponibles." },
+
+    { "id": "1-030", "subtema": "1.4", "tipo": "opcion_multiple",
+      "pregunta": "Tras la cocción, un caldo debe enfriarse antes de refrigerarse. ¿Cuál es el criterio correcto?",
+      "opciones": [
+        "Bajar de 65°C a 21°C en un máximo de 2 horas",
+        "Dejarlo a temperatura ambiente hasta que deje de emitir vapor",
+        "Refrigerarlo de inmediato para no perder tiempo en zona de peligro",
+        "Bajarlo a 4°C en máximo 2 horas usando baño de hielo"
+      ], "correcta": 0,
+      "explicacion": "La primera etapa crítica es de 65°C a 21°C en máximo 2 horas. Meterlo caliente al refrigerador eleva la temperatura de toda la cámara y pone en riesgo el resto del producto." },
+
+    { "id": "1-031", "subtema": "1.4", "tipo": "opcion_multiple",
+      "pregunta": "Se van a recalentar sobras del servicio anterior. ¿A qué temperatura interna deben llegar?",
+      "opciones": [ "74°C", "63°C", "65°C", "71°C" ], "correcta": 0,
+      "explicacion": "Las sobras exigen 74°C, igual que las aves. Los 65°C son mantenimiento en caliente durante el servicio: recalentar y mantener son cosas distintas." },
+
+    { "id": "1-032", "subtema": "1.4", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es el rango correcto de refrigeración para alimentos perecederos?",
+      "opciones": [ "0°C a 4°C", "0°C a 6°C", "2°C a 8°C", "-4°C a 2°C" ], "correcta": 0,
+      "explicacion": "0°C a 4°C deja margen bajo el umbral de la zona de peligro (6°C). Un refrigerador a 6°C ya está en el límite: cualquier apertura de puerta lo mete en riesgo." },
+
+    { "id": "1-033", "subtema": "1.5", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué sistema de unidades usa principalmente la cocina profesional de referencia?",
+      "opciones": [
+        "Métrico decimal: gramos, kilogramos, mililitros, litros",
+        "Anglosajón: onzas, libras, tazas",
+        "Imperial británico",
+        "Mixto, según el origen de cada receta"
+      ], "correcta": 0,
+      "explicacion": "La referencia es el métrico decimal, aunque muchos recetarios vengan en anglosajón. De ahí la necesidad de saber convertir, no de cambiar de sistema." },
+
+    { "id": "1-034", "subtema": "1.5", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿En qué caso es aceptable usar unidades como «una pizca» o «al gusto»?",
+      "opciones": [
+        "En el ajuste final de sabor, donde interviene el criterio del cocinero",
+        "En cualquier preparación, si el cocinero tiene experiencia suficiente",
+        "En recetas tradicionales, donde la precisión no es determinante",
+        "Nunca: en cocina profesional toda cantidad debe ser numérica"
+      ], "correcta": 0,
+      "explicacion": "Son unidades válidas del oficio en la rectificación final. Lo que no admiten es un proceso que exige reproducibilidad: una ficha técnica o una receta de panadería." },
+
+    { "id": "1-035", "subtema": "1.5", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué se estandarizan las unidades en un recetario interno o ficha técnica?",
+      "opciones": [
+        "Para que el platillo salga igual sin importar cuál cocinero lo prepare",
+        "Para cumplir con el requisito de etiquetado nutricional",
+        "Para reducir el número de ingredientes por receta",
+        "Para que los proveedores surtan cantidades exactas"
+      ], "correcta": 0,
+      "explicacion": "La estandarización busca consistencia entre cocineros y turnos. Es central en cocina de producción y en cualquier operación donde cocine más de una persona." },
+
+    { "id": "1-036", "subtema": "1.5", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «Los recetarios de origen anglosajón expresan sus cantidades en ________».",
+      "opciones": [ "onzas, libras y tazas", "gramos y mililitros", "grados Brix y micras", "porciones y raciones" ],
+      "correcta": 0,
+      "explicacion": "Onzas, libras y tazas. Cuidado: la onza puede ser de peso o de volumen, y no son equivalentes —confundirlas es un error frecuente al convertir." },
+
+    { "id": "1-037", "subtema": "1.5", "tipo": "opcion_multiple",
+      "pregunta": "Debes escalar una vinagreta de 4 a 30 porciones. ¿Cuál es el procedimiento correcto?",
+      "opciones": [
+        "Calcular el factor (30 ÷ 4 = 7.5) y multiplicar cada ingrediente por él",
+        "Multiplicar todo por 7 y ajustar al gusto al final",
+        "Escalar solo los ingredientes principales y dejar los condimentos igual",
+        "Preparar la receta original siete veces por separado"
+      ], "correcta": 0,
+      "explicacion": "El factor se aplica a cada ingrediente por igual, y eso preserva las proporciones. Redondear a 7 o no escalar condimentos rompe el equilibrio de la fórmula." },
+
+    { "id": "1-038", "subtema": "1.5", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué la escalabilidad de una receta depende de que las unidades estén bien expresadas?",
+      "opciones": [
+        "Porque una cantidad imprecisa no puede multiplicarse sin arrastrar el error",
+        "Porque el escalado solo funciona con unidades de peso",
+        "Porque al aumentar el volumen cambian proporcionalmente los tiempos de cocción",
+        "Porque las recetas grandes exigen equipo industrial con medidas fijas"
+      ], "correcta": 0,
+      "explicacion": "Si un ingrediente dice «una pizca», ¿cuánto es una pizca por 7.5? El error inicial se multiplica junto con la receta." },
+
+    { "id": "1-039", "subtema": "1.5", "tipo": "opcion_multiple",
+      "pregunta": "Dos cocineros preparan la misma receta con las mismas unidades y miden correctamente, pero obtienen cantidades finales distintas. ¿Qué lo explica mejor?",
+      "opciones": [
+        "Uno usó un instrumento descalibrado, así que su medición «correcta» no lo era",
+        "Uno interpretó las unidades del oficio con criterio distinto",
+        "Uno aplicó mal el factor de conversión al escalar",
+        "Uno midió por peso y el otro por volumen"
+      ], "correcta": 0,
+      "explicacion": "El enunciado dice que ambos midieron bien y usaron las mismas unidades: eso descarta interpretación, escalado y peso/volumen. Queda la calibración." },
+
+    { "id": "1-040", "subtema": "1.5", "tipo": "relacionar",
+      "pregunta": "Relaciona cada situación con el criterio de medición que corresponde.",
+      "pares": [
+        { "izquierda": "Harina para un pan", "derecha": "Por peso: su densidad varía según compactación" },
+        { "izquierda": "Caldo para una sopa", "derecha": "Por volumen: es líquido de densidad estable" },
+        { "izquierda": "Levadura para 20 panes", "derecha": "Báscula de precisión: cantidades muy pequeñas" },
+        { "izquierda": "Sal en la rectificación final", "derecha": "Al gusto: interviene el criterio del cocinero" }
+      ],
+      "explicacion": "No todo se mide igual ni con el mismo rigor. El criterio profesional está en saber cuándo la precisión es indispensable y cuándo el juicio del cocinero es la herramienta correcta." }
+
+  ]
+}

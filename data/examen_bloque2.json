@@ -1,0 +1,385 @@
+{
+  "bloque": 2,
+  "titulo": "Examen del Bloque 2 — Conocimiento y manipulación de materias primas",
+  "config": { "preguntasPorExamen": 20, "minutos": 30 },
+  "reactivos": [
+
+    { "id": "2-001", "subtema": "2.1", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué comprende el aprovisionamiento de materias primas?",
+      "opciones": [
+        "Seleccionar, solicitar y recibir los insumos que la cocina necesita para operar",
+        "Almacenar y rotar los insumos ya recibidos según su caducidad",
+        "Calcular el rendimiento y la merma de cada insumo antes de comprarlo",
+        "Negociar precios y condiciones de pago con los proveedores"
+      ], "correcta": 0,
+      "explicacion": "Las otras tres son actividades reales y relacionadas, pero posteriores o paralelas. El aprovisionamiento es el ciclo selección → solicitud → recepción." },
+
+    { "id": "2-002", "subtema": "2.1", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué debe verificarse al recibir mercancía en la cocina?",
+      "opciones": [
+        "Temperatura de llegada, integridad del empaque, fecha de caducidad y documentación",
+        "Temperatura de llegada y precio facturado contra la orden de compra",
+        "Integridad del empaque y presentación comercial del producto",
+        "Fecha de caducidad y cantidad recibida contra lo solicitado"
+      ], "correcta": 0,
+      "explicacion": "Las otras opciones incluyen elementos correctos pero incompletos. La verificación en recepción debe cubrir los cuatro puntos: si falta la temperatura, un producto pudo venir en zona de peligro sin que nadie lo note." },
+
+    { "id": "2-003", "subtema": "2.1", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué la recepción de mercancía se considera un punto crítico de control?",
+      "opciones": [
+        "Porque es el último momento para detectar problemas de temperatura, empaque o caducidad antes de que el insumo entre a la operación",
+        "Porque es donde se registra el costo real de los insumos para el control financiero",
+        "Porque es donde se decide el destino de cada insumo dentro del almacén",
+        "Porque es el momento en que se rompe la cadena de frío del proveedor"
+      ], "correcta": 0,
+      "explicacion": "Es punto crítico porque una vez aceptado, el producto entra al flujo y el problema se propaga. Rechazar en recepción es barato; detectar el problema en el plato ya servido, no." },
+
+    { "id": "2-004", "subtema": "2.1", "origen": "actividad", "tipo": "relacionar",
+      "pregunta": "Relaciona cada herramienta de aprovisionamiento con su función.",
+      "pares": [
+        { "izquierda": "Lista de pedido estandarizada", "derecha": "Evita variaciones en las cantidades solicitadas" },
+        { "izquierda": "Ficha de especificación por producto", "derecha": "Define variedad, calibre y origen esperado" },
+        { "izquierda": "Control de fechas de recepción", "derecha": "Evita que ingresen productos próximos a caducar" },
+        { "izquierda": "Bitácora de temperatura en recepción", "derecha": "Documenta que el insumo llegó fuera de zona de peligro" }
+      ],
+      "explicacion": "Cada herramienta ataca un riesgo distinto. La ficha de especificación es la que suele faltar: sin ella el proveedor manda «papa» y cada vez llega una variedad distinta." },
+
+    { "id": "2-005", "subtema": "2.1", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «Un buen aprovisionamiento impacta directamente en el costo, pero también en las ________ y en la seguridad alimentaria».",
+      "opciones": [ "mermas", "porciones", "recetas", "temporadas" ],
+      "correcta": 0,
+      "explicacion": "Comprar mal genera merma: producto que se pudre antes de usarse, calibres que obligan a desperdiciar, insumos que llegan dañados. El costo no termina en el precio de compra." },
+
+    { "id": "2-006", "subtema": "2.1", "tipo": "opcion_multiple",
+      "pregunta": "Llega un pedido de pescado fresco a 8°C. ¿Cuál es la acción correcta?",
+      "opciones": [
+        "Rechazarlo: llegó dentro de zona de peligro y no hay forma de saber cuánto tiempo estuvo ahí",
+        "Aceptarlo y refrigerarlo de inmediato para bajar su temperatura",
+        "Aceptarlo si el empaque está íntegro y la fecha de caducidad es amplia",
+        "Aceptarlo y usarlo el mismo día para no dar tiempo a la proliferación"
+      ], "correcta": 0,
+      "explicacion": "8°C está por encima del umbral de 6°C. Aceptarlo y refrigerarlo no revierte la multiplicación bacteriana que ya ocurrió durante el transporte." },
+
+    { "id": "2-007", "subtema": "2.1", "tipo": "opcion_multiple",
+      "pregunta": "Una ficha de especificación de producto debe definir, como mínimo:",
+      "opciones": [
+        "Variedad, calibre y origen esperado del insumo",
+        "Precio máximo autorizado y proveedor asignado",
+        "Cantidad a pedir y frecuencia de reposición",
+        "Método de cocción al que se destinará el insumo"
+      ], "correcta": 0,
+      "explicacion": "La ficha define QUÉ producto es, no cuánto cuesta ni cuánto se pide. Sin variedad y calibre definidos, dos entregas del mismo proveedor pueden ser productos muy distintos." },
+
+    { "id": "2-008", "subtema": "2.2", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo se agrupan las materias primas de uso común en una cocina profesional?",
+      "opciones": [
+        "En familias: cárnicos, pescados y mariscos, lácteos y huevo, cereales, hortalizas y frutas",
+        "Por temporada de disponibilidad y región de procedencia",
+        "Por su nivel de perecibilidad, de mayor a menor",
+        "Por el área de la cocina donde se almacenan"
+      ], "correcta": 0,
+      "explicacion": "La agrupación por familias es la estándar porque cada familia comparte necesidades de manejo, conservación e higiene. Las otras son clasificaciones útiles pero secundarias." },
+
+    { "id": "2-009", "subtema": "2.2", "origen": "actividad", "tipo": "relacionar",
+      "pregunta": "Relaciona cada familia de materia prima con su cuidado higiénico principal.",
+      "pares": [
+        { "izquierda": "Cárnicos y pescados", "derecha": "Cadena de frío estricta y áreas de trabajo separadas" },
+        { "izquierda": "Hortalizas", "derecha": "Lavado y desinfección antes de su uso" },
+        { "izquierda": "Lácteos", "derecha": "Control estricto de temperatura de refrigeración" },
+        { "izquierda": "Cereales y granos secos", "derecha": "Almacenamiento en seco, protegido de humedad y plagas" }
+      ],
+      "explicacion": "Cada familia tiene su riesgo dominante. El error frecuente es aplicar el mismo criterio a todas: los granos secos no necesitan frío, pero sí protección contra humedad." },
+
+    { "id": "2-010", "subtema": "2.2", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué cárnicos y pescados requieren áreas de trabajo separadas de otros alimentos?",
+      "opciones": [
+        "Para evitar contaminación cruzada de microorganismos hacia alimentos que se consumen crudos",
+        "Porque sus olores se transfieren a las hortalizas y alteran su sabor",
+        "Porque requieren tablas de materiales distintos por su dureza",
+        "Porque se manejan en volúmenes mayores y necesitan más espacio"
+      ], "correcta": 0,
+      "explicacion": "La razón es sanitaria: el jugo de una pechuga cruda sobre la tabla donde luego se pica lechuga transfiere patógenos a un alimento que ya no pasará por cocción." },
+
+    { "id": "2-011", "subtema": "2.2", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «Las hortalizas y los cárnicos NO requieren el mismo manejo: los cárnicos exigen cadena de frío estricta, mientras que las hortalizas exigen ________».",
+      "opciones": [ "lavado y desinfección", "congelación previa", "empaque al vacío", "maduración controlada" ],
+      "correcta": 0,
+      "explicacion": "Cada familia tiene su riesgo propio. Aplicar cadena de frío estricta a una hortaliza no la desinfecta, y lavar un cárnico no lo hace seguro." },
+
+    { "id": "2-012", "subtema": "2.2", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la utilidad práctica de conocer las familias de materias primas, más allá de memorizar una lista?",
+      "opciones": [
+        "Permite anticipar el manejo, la conservación y los riesgos de un insumo que nunca habías usado",
+        "Permite calcular con precisión el costo por porción de cada preparación",
+        "Permite organizar el almacén por orden alfabético dentro de cada categoría",
+        "Permite determinar qué insumos son de temporada en cada región"
+      ], "correcta": 0,
+      "explicacion": "Es la misma lógica de los géneros del Bloque 1: clasificar sirve para anticipar. Si sabes que algo es un lácteo, ya sabes qué exige aunque nunca lo hayas manejado." },
+
+    { "id": "2-013", "subtema": "2.2", "tipo": "opcion_multiple",
+      "pregunta": "Se van a preparar en la misma jornada pollo crudo y una ensalada. ¿Cuál es el orden y manejo correcto?",
+      "opciones": [
+        "Preparar primero la ensalada, luego el pollo, con tablas y utensilios distintos para cada uno",
+        "Preparar primero el pollo y después la ensalada, lavando bien la tabla entre ambos",
+        "Prepararlos simultáneamente en estaciones contiguas para optimizar tiempo",
+        "Preparar primero el pollo y sanitizar el área completa antes de la ensalada"
+      ], "correcta": 0,
+      "explicacion": "Lo que no pasa por cocción va primero, y con equipo separado. Lavar entre uno y otro reduce el riesgo pero no lo elimina: por eso el criterio profesional es separar, no solo limpiar." },
+
+    { "id": "2-014", "subtema": "2.3", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué determina el uso ideal de una variedad dentro de una misma materia prima?",
+      "opciones": [
+        "Sus características físicas: textura, contenido de agua, almidón y firmeza",
+        "Su disponibilidad en el mercado y su precio de temporada",
+        "El prestigio de la variedad y su reconocimiento comercial",
+        "El tamaño de la pieza y su uniformidad en el lote"
+      ], "correcta": 0,
+      "explicacion": "Son las propiedades físicas las que determinan a qué técnica responde bien una variedad. Una papa con mucho almidón se deshace al hervir pero es ideal para puré." },
+
+    { "id": "2-015", "subtema": "2.3", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿En qué se apoya un cocinero para identificar las características físicas de una variedad?",
+      "opciones": [
+        "En sus sentidos entrenados —color, aroma, firmeza al tacto— y en criterios objetivos como calibre y grado de maduración",
+        "Únicamente en criterios objetivos medibles, porque los sentidos son subjetivos",
+        "Exclusivamente en la etiqueta y la ficha técnica del proveedor",
+        "En la experiencia acumulada, sin necesidad de parámetros externos"
+      ], "correcta": 0,
+      "explicacion": "La respuesta correcta combina ambos: sentidos entrenados Y criterios objetivos. Las opciones que descartan uno de los dos describen posturas incompletas." },
+
+    { "id": "2-016", "subtema": "2.3", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál de estas SÍ es una característica física relevante para elegir una variedad?",
+      "opciones": [
+        "La firmeza al tacto",
+        "El nombre comercial del proveedor",
+        "La región donde se cultivó",
+        "El tipo de empaque en que llegó"
+      ], "correcta": 0,
+      "explicacion": "Origen y empaque son datos de trazabilidad, útiles pero no características físicas. La firmeza sí te dice cómo va a responder el producto a la cocción." },
+
+    { "id": "2-017", "subtema": "2.3", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «Afirmar que todas las papas sirven igual para cualquier técnica es ________, porque su contenido de almidón varía entre variedades».",
+      "opciones": [ "falso", "verdadero", "válido solo en cocina doméstica", "correcto si son del mismo calibre" ],
+      "correcta": 0,
+      "explicacion": "Una papa cerosa mantiene su forma al hervir y sirve para ensalada; una harinosa se deshace, pero da el mejor puré. Usarlas al revés arruina ambos platillos." },
+
+    { "id": "2-018", "subtema": "2.3", "tipo": "relacionar",
+      "pregunta": "Relaciona cada característica física con lo que permite anticipar.",
+      "pares": [
+        { "izquierda": "Alto contenido de almidón", "derecha": "Se deshace al hervir; ideal para purés y espesantes" },
+        { "izquierda": "Alto contenido de agua", "derecha": "Suelta líquido al calentarse; dificulta el sellado" },
+        { "izquierda": "Firmeza al tacto", "derecha": "Resiste la cocción sin perder estructura" },
+        { "izquierda": "Grado de maduración avanzado", "derecha": "Mayor dulzor y menor firmeza; uso inmediato" }
+      ],
+      "explicacion": "Leer estas propiedades permite decidir la técnica antes de cocinar. Un vegetal con mucha agua en una sartén no se sella: se cuece en su propio jugo." },
+
+    { "id": "2-019", "subtema": "2.3", "tipo": "opcion_multiple",
+      "pregunta": "Un cocinero necesita vegetales que mantengan su forma en un guiso de cocción larga. ¿Qué característica debe buscar?",
+      "opciones": [
+        "Firmeza alta y bajo contenido de almidón",
+        "Alto contenido de almidón y maduración avanzada",
+        "Alto contenido de agua y calibre pequeño",
+        "Maduración avanzada y textura suave"
+      ], "correcta": 0,
+      "explicacion": "En cocción larga, un producto blando o muy almidonado se deshace. La firmeza es la propiedad que permite resistir tiempo prolongado de calor sin perder estructura." },
+
+    { "id": "2-020", "subtema": "2.4", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son las cualidades gastronómicas que aporta una materia prima?",
+      "opciones": [
+        "Sabor, aroma, textura en boca y color",
+        "Sabor, valor nutricional, rendimiento y costo",
+        "Aroma, temporada, origen y trazabilidad",
+        "Textura, calibre, firmeza y grado de maduración"
+      ], "correcta": 0,
+      "explicacion": "Las cualidades gastronómicas son sensoriales: lo que el comensal percibe. Calibre y firmeza son características físicas (subtema 2.3), y el costo es criterio de aprovisionamiento (2.1)." },
+
+    { "id": "2-021", "subtema": "2.4", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué es la afinidad de sabores?",
+      "opciones": [
+        "Que ciertos ingredientes combinan naturalmente entre sí sin necesitar un elemento puente",
+        "Que dos ingredientes comparten la misma temporada de disponibilidad",
+        "Que dos ingredientes tienen tiempos de cocción compatibles",
+        "Que dos ingredientes pertenecen a la misma familia de materias primas"
+      ], "correcta": 0,
+      "explicacion": "La afinidad es sensorial: tomate y albahaca combinan solos. Cuando NO hay afinidad natural es cuando se necesita un elemento puente." },
+
+    { "id": "2-022", "subtema": "2.4", "origen": "actividad", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la función de un elemento puente entre dos ingredientes?",
+      "opciones": [
+        "Integrarlos en un mismo platillo cuando no tienen afinidad natural entre sí",
+        "Aportar volumen y rendimiento a la preparación final",
+        "Reducir el tiempo de cocción necesario para ambos ingredientes",
+        "Sustituir a uno de los dos cuando no está disponible"
+      ], "correcta": 0,
+      "explicacion": "El puente resuelve la falta de afinidad. Una grasa suaviza y liga, un ácido corta lo pesado, una especia aromatiza y une el conjunto." },
+
+    { "id": "2-023", "subtema": "2.4", "origen": "actividad", "tipo": "relacionar",
+      "pregunta": "Relaciona cada tipo de elemento puente con su función al integrar sabores.",
+      "pares": [
+        { "izquierda": "Una grasa", "derecha": "Suaviza y liga los sabores entre sí" },
+        { "izquierda": "Un ácido", "derecha": "Equilibra y corta lo pesado del platillo" },
+        { "izquierda": "Una especia", "derecha": "Aromatiza y realza el conjunto" },
+        { "izquierda": "Un elemento dulce", "derecha": "Modera la acidez o el amargor excesivo" }
+      ],
+      "explicacion": "Cada puente resuelve un desequilibrio distinto. Si un platillo está pesado, más grasa lo empeora: lo que necesita es un ácido." },
+
+    { "id": "2-024", "subtema": "2.4", "origen": "actividad", "tipo": "completar",
+      "pregunta": "Completa: «El equilibrio de sabores no solo se corrige al final: también se puede ________ desde el diseño de la preparación».",
+      "opciones": [ "planear", "medir", "certificar", "escalar" ],
+      "correcta": 0,
+      "explicacion": "Esperar al final para descubrir que un platillo está desequilibrado limita mucho las opciones de arreglo. El cocinero con criterio anticipa el equilibrio desde que elige los ingredientes." },
+
+    { "id": "2-025", "subtema": "2.4", "tipo": "opcion_multiple",
+      "pregunta": "Un guiso quedó demasiado pesado en boca. ¿Cuál es el ajuste más adecuado?",
+      "opciones": [
+        "Agregar un elemento ácido para cortar la sensación de pesadez",
+        "Agregar más grasa para suavizar e integrar los sabores",
+        "Agregar un elemento dulce para moderar el conjunto",
+        "Prolongar la cocción para que los sabores se integren solos"
+      ], "correcta": 0,
+      "explicacion": "El ácido es el puente que corta lo pesado. Más grasa acentuaría el problema, y el dulce se usa contra la acidez o el amargor, no contra la pesadez." },
+
+    { "id": "2-026", "subtema": "2.4", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué el color se considera una cualidad gastronómica y no solo un detalle estético?",
+      "opciones": [
+        "Porque influye en la percepción del comensal antes de probar el platillo",
+        "Porque indica el grado de cocción alcanzado por el alimento",
+        "Porque revela el contenido nutricional de la materia prima",
+        "Porque permite identificar la variedad usada en la preparación"
+      ], "correcta": 0,
+      "explicacion": "La experiencia gastronómica empieza por la vista. Un platillo pardo y sin contraste se percibe menos apetecible aunque su sabor sea correcto." },
+
+    { "id": "2-027", "subtema": "2.1", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la consecuencia de operar sin lista de pedido estandarizada?",
+      "opciones": [
+        "Las cantidades varían entre pedidos, generando faltantes o sobrantes que se convierten en merma",
+        "El proveedor cobra precios distintos en cada entrega",
+        "Los insumos llegan sin la documentación sanitaria requerida",
+        "Se pierde la trazabilidad del origen de cada producto"
+      ], "correcta": 0,
+      "explicacion": "Sin lista estandarizada cada quien pide «lo que cree»: unas semanas sobra producto que se echa a perder, otras falta y se detiene la producción." },
+
+    { "id": "2-028", "subtema": "2.2", "tipo": "completar",
+      "pregunta": "Completa: «El principal riesgo al manipular cárnicos junto a alimentos de consumo crudo es la contaminación ________».",
+      "opciones": [ "cruzada", "química", "por oxidación", "por sobremaduración" ],
+      "correcta": 0,
+      "explicacion": "Contaminación cruzada: transferencia de microorganismos de un alimento a otro por contacto directo, utensilios compartidos o superficies." },
+
+    { "id": "2-029", "subtema": "2.3", "tipo": "opcion_multiple",
+      "pregunta": "Dos entregas del mismo proveedor traen «jitomate», pero de calibres muy distintos. ¿Cuál fue la falla de origen?",
+      "opciones": [
+        "No existía una ficha de especificación que definiera variedad y calibre esperados",
+        "El control de fechas de recepción no se aplicó correctamente",
+        "Se aceptó producto fuera de la temperatura correcta",
+        "La lista de pedido no especificaba la cantidad exacta"
+      ], "correcta": 0,
+      "explicacion": "La cantidad y la fecha pueden estar bien y aun así llegar producto distinto. Lo que define QUÉ producto se espera es la ficha de especificación." },
+
+    { "id": "2-030", "subtema": "2.4", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué distingue a la textura en boca de la firmeza al tacto?",
+      "opciones": [
+        "La textura en boca es una cualidad gastronómica percibida al comer; la firmeza es una característica física medible antes de cocinar",
+        "Son sinónimos: ambas describen la resistencia del alimento",
+        "La textura en boca se mide con instrumentos; la firmeza se evalúa con los sentidos",
+        "La firmeza aplica a vegetales y la textura en boca solo a proteínas"
+      ], "correcta": 0,
+      "explicacion": "Son de subtemas distintos: la firmeza (2.3) ayuda a elegir la variedad y anticipar su comportamiento; la textura en boca (2.4) es lo que el comensal percibe en el producto terminado." },
+
+    { "id": "2-031", "subtema": "2.1", "tipo": "ordenar",
+      "pregunta": "Ordena las etapas del aprovisionamiento de materias primas.",
+      "pasos": [
+        "Definir la especificación del producto requerido",
+        "Elaborar y enviar la lista de pedido estandarizada",
+        "Recibir la mercancía verificando temperatura, empaque, caducidad y documentación",
+        "Aceptar o rechazar, y registrar la recepción en bitácora",
+        "Almacenar en la zona que corresponde a su familia"
+      ],
+      "explicacion": "La especificación va primero: sin definir qué se necesita, el pedido queda a interpretación del proveedor. Y el registro va antes del almacenaje, porque un producto rechazado no debe entrar." },
+
+    { "id": "2-032", "subtema": "2.2", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué los cereales y granos secos no requieren cadena de frío?",
+      "opciones": [
+        "Porque su baja humedad no permite proliferación bacteriana; su riesgo es humedad y plagas",
+        "Porque su empaque hermético los protege de cualquier contaminación",
+        "Porque su alto contenido de almidón actúa como conservador natural",
+        "Porque se consumen siempre después de una cocción prolongada"
+      ], "correcta": 0,
+      "explicacion": "La proliferación bacteriana necesita agua. Los granos secos están fuera de ese riesgo, pero si se humedecen aparecen hongos: por eso su enemigo es la humedad, no la temperatura." },
+
+    { "id": "2-033", "subtema": "2.3", "tipo": "opcion_multiple",
+      "pregunta": "Un cocinero recibe un lote de fruta con maduración muy avanzada. ¿Cuál es la decisión profesional?",
+      "opciones": [
+        "Destinarla a preparaciones de uso inmediato donde el mayor dulzor y la menor firmeza sean una ventaja",
+        "Rechazarla, porque no cumple con la especificación de calibre",
+        "Refrigerarla para detener la maduración y usarla la siguiente semana",
+        "Mezclarla con fruta firme para promediar la calidad del lote"
+      ], "correcta": 0,
+      "explicacion": "La maduración avanzada no es un defecto en sí: es una característica que determina el uso. Esa fruta no sirve para una ensalada que requiere firmeza, pero es ideal para un puré o una salsa." },
+
+    { "id": "2-034", "subtema": "2.4", "tipo": "opcion_multiple",
+      "pregunta": "Se combinan dos ingredientes sin afinidad natural y el resultado es un platillo donde cada sabor se percibe por separado. ¿Qué faltó?",
+      "opciones": [
+        "Un elemento puente que integrara ambos sabores",
+        "Mayor tiempo de cocción conjunta",
+        "Ajustar las proporciones a favor del ingrediente dominante",
+        "Sustituir uno de los dos por otro de la misma familia"
+      ], "correcta": 0,
+      "explicacion": "Cuando no hay afinidad natural, el puente es lo que integra. Prolongar la cocción no crea afinidad donde no la hay." },
+
+    { "id": "2-035", "subtema": "2.1", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la relación entre aprovisionamiento y seguridad alimentaria?",
+      "opciones": [
+        "El aprovisionamiento es la primera barrera: lo que se acepta en recepción determina el riesgo que entra a la cocina",
+        "Son procesos independientes: la seguridad alimentaria empieza en la manipulación",
+        "El aprovisionamiento solo afecta la seguridad cuando se trata de productos cárnicos",
+        "La seguridad alimentaria depende de la cocción, que corrige cualquier problema de origen"
+      ], "correcta": 0,
+      "explicacion": "La cocción no corrige todo: no elimina toxinas ya formadas ni revierte una cadena de frío rota. Por eso la recepción es punto crítico de control." },
+
+    { "id": "2-036", "subtema": "2.2", "tipo": "relacionar",
+      "pregunta": "Relaciona cada familia con su condición de almacenamiento correcta.",
+      "pares": [
+        { "izquierda": "Cárnicos frescos", "derecha": "Refrigeración de 0°C a 4°C, en la zona más fría" },
+        { "izquierda": "Hortalizas de hoja", "derecha": "Refrigeración con circulación de aire, sin exceso de humedad" },
+        { "izquierda": "Harinas y granos", "derecha": "Área seca, elevada del piso y protegida de plagas" },
+        { "izquierda": "Productos congelados", "derecha": "-18°C o menor, sin interrupciones de la cadena" }
+      ],
+      "explicacion": "Cada familia tiene su condición óptima. Meter harina al refrigerador, por ejemplo, la expone a humedad y acelera su deterioro." },
+
+    { "id": "2-037", "subtema": "2.3", "tipo": "opcion_multiple",
+      "pregunta": "El calibre de un producto es un criterio objetivo. ¿Para qué sirve principalmente en cocina?",
+      "opciones": [
+        "Para garantizar uniformidad de porción y de tiempo de cocción entre piezas",
+        "Para determinar el precio de compra por kilogramo",
+        "Para identificar la variedad a la que pertenece el producto",
+        "Para estimar su grado de maduración"
+      ], "correcta": 0,
+      "explicacion": "Piezas de calibre disparejo se cocinan de forma desigual y dan porciones inconsistentes. Es el mismo principio del corte uniforme del Bloque 1." },
+
+    { "id": "2-038", "subtema": "2.4", "tipo": "completar",
+      "pregunta": "Completa: «Tomate y albahaca combinan sin necesitar intermediarios: eso es un caso de ________ natural».",
+      "opciones": [ "afinidad", "equilibrio", "compensación", "sustitución" ],
+      "correcta": 0,
+      "explicacion": "La afinidad natural permite combinar directo. Cuando no existe, hay que construir la integración con un elemento puente." },
+
+    { "id": "2-039", "subtema": "2.2", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es el error conceptual de decir que «todas las materias primas necesitan cadena de frío»?",
+      "opciones": [
+        "Que generaliza un cuidado propio de familias perecederas a productos cuyo riesgo es otro",
+        "Que la cadena de frío solo aplica a productos de origen animal",
+        "Que la cadena de frío es un requisito del proveedor, no de la cocina",
+        "Que confunde refrigeración con congelación"
+      ], "correcta": 0,
+      "explicacion": "Generalizar impide ver el riesgo real de cada familia. Los granos secos en refrigeración se dañan; lo que necesitan es área seca y protección contra plagas." },
+
+    { "id": "2-040", "subtema": "2.3", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la relación entre las características físicas (2.3) y las cualidades gastronómicas (2.4) de una materia prima?",
+      "opciones": [
+        "Las físicas se evalúan antes de cocinar para elegir y anticipar; las gastronómicas son lo que el comensal percibe en el resultado",
+        "Son la misma cosa descrita con vocabulario distinto",
+        "Las físicas aplican a vegetales y las gastronómicas a proteínas",
+        "Las gastronómicas se miden con instrumentos y las físicas con los sentidos"
+      ], "correcta": 0,
+      "explicacion": "Son dos momentos distintos: elegir bien (características físicas) es lo que permite que el producto final tenga las cualidades gastronómicas buscadas." }
+
+  ]
+}
