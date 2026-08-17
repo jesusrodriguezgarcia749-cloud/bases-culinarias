@@ -261,6 +261,8 @@ async function iniciarExamen(bloque) {
       minutos: banco.config?.minutos || 30,
       minutosExtra: 0,
       iniciado: Date.now(),
+      reanudadoEn: Date.now(),
+      segundosAlPausar: (banco.config?.minutos || 30) * 60,
       estado: 'en_curso',
       salidas: 0,
       pinVerificado: sesion.pin,
@@ -456,10 +458,18 @@ function vigilarConexion() {
 }
 
 // ---------- cronómetro ----------
+// El tiempo se cuenta desde la última vez que el examen arrancó o se reanudó
+// (reanudadoEn). Cuando el docente reabre un examen bloqueado, se guarda cuánto
+// tiempo le quedaba (segundosAlPausar) y se reanuda exactamente con eso: el rato
+// que estuvo bloqueado no corre, pero tampoco regala minutos de más.
 function segundosRestantes() {
-  const totalMin = (intento.minutos || 30) + (intento.minutosExtra || 0);
-  const transcurrido = Math.floor((Date.now() - intento.iniciado) / 1000);
-  return Math.max(0, totalMin * 60 - transcurrido);
+  const base = intento.segundosAlPausar !== undefined && intento.segundosAlPausar !== null
+    ? intento.segundosAlPausar
+    : (intento.minutos || 30) * 60;
+  const extra = (intento.minutosExtra || 0) * 60;
+  const desde = intento.reanudadoEn || intento.iniciado;
+  const transcurrido = Math.floor((Date.now() - desde) / 1000);
+  return Math.max(0, base + extra - transcurrido);
 }
 
 function arrancarCronometro() {
@@ -535,6 +545,9 @@ async function cerrarPorSalida() {
   intento.estado = 'bloqueado';
   intento.salidas = (intento.salidas || 0) + 1;
   intento.bloqueadoEn = new Date().toISOString();
+  // Congelamos el tiempo que le quedaba: al reabrir continuará justo con eso.
+  intento.segundosAlPausar = segundosRestantes();
+  intento.minutosExtra = 0;
 
   try {
     await setDoc(doc(db, 'grupos', sesion.grupoId, 'alumnos', sesion.alumnoId, 'intentos', String(bloqueActivo)),
@@ -638,9 +651,14 @@ async function entregar(automatico) {
   }
 
   if (!guardado) {
-    alert('Tu examen se calificó, pero no hay conexión para guardarlo.\n\n' +
-      'Tus respuestas quedaron guardadas en este teléfono. NO cierres esta pantalla ' +
-      'y avisa a tu docente: en cuanto vuelva la señal, vuelve a entrar y se guardará solo.');
+    const sinRed = !navigator.onLine;
+    alert(sinRed
+      ? 'Tu examen se calificó, pero no hay conexión para guardarlo.\n\n' +
+        'Tus respuestas quedaron guardadas en este teléfono. NO cierres esta pantalla ' +
+        'y avisa a tu docente: en cuanto vuelva la señal, vuelve a entrar y se guardará solo.'
+      : 'Tu examen se calificó, pero el servidor rechazó guardarlo.\n\n' +
+        'Tus respuestas están guardadas en este teléfono. Avisa a tu docente ' +
+        'mostrándole esta pantalla — es un problema de configuración, no tuyo.');
   } else {
     try { localStorage.removeItem(claveLocal()); } catch { /* nada */ }
   }

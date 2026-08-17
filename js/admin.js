@@ -104,13 +104,10 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 on('btn-nuevo-grupo', 'click', crearGrupo);
-on('grupo-select', 'change', async (e) => {
+on('grupo-select', 'change', (e) => {
   grupoActivo = e.target.value || null;
   if (grupoActivo) {
-    await cargarAlumnos();
-    // Refresca la pestaña que esté abierta, para no tener que volver a tocarla
-    const activa = document.querySelector('.tab-btn.active');
-    if (activa) switchTab(activa.dataset.tab);
+    cargarAlumnos();
   } else {
     renderAlumnos([]);
   }
@@ -1255,33 +1252,47 @@ async function reabrirExamen(alumnoId, bloque) {
   if (!snap.exists()) return;
   const est = snap.data();
 
-  let extra = est.minutosExtra || 0;
-  if (est.bloqueadoEn) {
-    const pausa = (Date.now() - new Date(est.bloqueadoEn).getTime()) / 60000;
-    extra += Math.min(pausa, 60);
-  }
+  // No se regalan minutos: el examen continúa con el tiempo exacto que le
+  // quedaba al bloquearse. Si el alumno merece más tiempo por una causa
+  // justificada, se le da aparte con el botón "+ tiempo".
+  const seg = est.segundosAlPausar ?? ((est.minutos || 30) * 60);
 
   await setDoc(ref, {
-    ...est, estado: 'en_curso',
-    minutosExtra: Math.round(extra),
+    ...est,
+    estado: 'en_curso',
+    segundosAlPausar: seg,
+    minutosExtra: 0,
+    reanudadoEn: Date.now(),
     reabiertoEn: new Date().toISOString(),
     actualizado: serverTimestamp(),
   });
 
-  alert('Examen reabierto. El alumno ya puede continuar desde su dispositivo.');
+  const m = Math.floor(seg / 60), s = seg % 60;
+  alert(`Examen reabierto. Continuará con ${m}:${String(s).padStart(2, '0')} — el tiempo exacto que le quedaba.`);
   cargarIntentos();
 }
 
 async function darTiempoExtra(alumnoId, bloque) {
   const alumno = alumnosCache.find(a => a.id === alumnoId);
-  const min = prompt(`¿Cuántos minutos extra para ${alumno?.nombre || 'este alumno'}?`, '10');
-  const n = parseInt(min, 10);
-  if (isNaN(n) || n <= 0) return;
 
   const ref = doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'intentos', String(bloque));
   const snap = await getDoc(ref);
   if (!snap.exists()) { alert('Ese alumno todavía no ha iniciado el examen.'); return; }
   const est = snap.data();
+
+  // Le mostramos cuánto le queda ahora, para decidir con criterio
+  const base = est.segundosAlPausar ?? ((est.minutos || 30) * 60);
+  const desde = est.reanudadoEn || est.iniciado;
+  const restante = est.estado === 'bloqueado'
+    ? base
+    : Math.max(0, base + (est.minutosExtra || 0) * 60 - Math.floor((Date.now() - desde) / 1000));
+  const rm = Math.floor(restante / 60), rs = restante % 60;
+
+  const min = prompt(
+    `${alumno?.nombre || 'Este alumno'} tiene ${rm}:${String(rs).padStart(2, '0')} restantes.\n\n` +
+    `¿Cuántos minutos EXTRA le agrego?`, '10');
+  const n = parseInt(min, 10);
+  if (isNaN(n) || n <= 0) return;
 
   await setDoc(ref, {
     ...est, minutosExtra: (est.minutosExtra || 0) + n,
