@@ -1,0 +1,10 @@
+# Aula Virtual — Bases Culinarias
+# Instituto Tecnológico de Estudios Superiores René Descartes
+
+User-agent: *
+Allow: /
+
+# El panel docente no tiene por qué aparecer en buscadores.
+Disallow: /admin.html
+
+Sitemap: https://jesusrodriguezgarcia749-cloud.github.io/bases-culinarias/sitemap.xml
