@@ -67,6 +67,7 @@
     <button class="tab-btn" data-tab="asistencia">Asistencia</button>
     <button class="tab-btn" data-tab="ensayos">Ensayos</button>
     <button class="tab-btn" data-tab="examenes">Exámenes</button>
+    <button class="tab-btn" data-tab="enlinea">Examen en línea</button>
     <button class="tab-btn" data-tab="avisos">Avisos</button>
   </nav>
 
@@ -196,6 +197,25 @@
     <p id="exa-msg" class="save-msg" hidden></p>
   </div>
 
+  <div id="tab-enlinea" class="tab-panel">
+    <div class="bloques-activos-card">
+      <h3 class="section-title" style="margin-top:0;">Exámenes abiertos</h3>
+      <p class="field-hint">Mientras un examen esté cerrado, los alumnos no pueden abrirlo. Ábrelo solo el día de aplicación y ciérralo al terminar.</p>
+      <div id="examenes-abiertos-lista" class="asis-list"></div>
+      <button id="btn-guardar-examenes-abiertos" class="btn btn-primary btn-block">Guardar</button>
+      <p id="abiertos-msg" class="save-msg" hidden></p>
+    </div>
+
+    <label for="enlinea-bloque" class="field-label">Ver intentos del bloque</label>
+    <select id="enlinea-bloque">
+      <option value="1">Bloque 1</option>
+      <option value="2">Bloque 2</option>
+      <option value="3">Bloque 3</option>
+    </select>
+    <p class="field-hint">Aquí ves quién va en curso, quién entregó y a quién se le cerró el examen por salir de la pantalla.</p>
+    <div id="intentos-lista"></div>
+    <p id="intentos-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+  </div>
   <div id="tab-avisos" class="tab-panel">
     <p class="field-hint">Preguntas detonadoras de la semana, indicaciones y recordatorios. Todos los alumnos del grupo los ven en "Mi progreso".</p>
 
