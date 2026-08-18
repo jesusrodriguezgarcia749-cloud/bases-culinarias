@@ -630,16 +630,11 @@ async function entregar(automatico) {
   let guardado = false;
   for (let i = 0; i < 10 && !guardado; i++) {
     try {
+      // Se guarda SOLO en el intento. calculo.js lo lee de aquí para los 30 pts
+      // del bloque, así no hay dos copias de la misma calificación que puedan
+      // contradecirse. El docente puede ajustarla aparte desde su panel.
       await setDoc(doc(db, ...base, 'intentos', String(bloqueActivo)),
         { ...intento, actualizado: serverTimestamp() });
-      // Alimenta los 30 pts del bloque que lee calculo.js
-      await setDoc(doc(db, ...base, 'examenes', String(bloqueActivo)), {
-        examen: String(bloqueActivo),
-        calificacion,
-        origen: 'examen en línea',
-        aciertos, total,
-        actualizado: serverTimestamp(),
-      });
       guardado = true;
       marcarConexion(true);
     } catch (e) {

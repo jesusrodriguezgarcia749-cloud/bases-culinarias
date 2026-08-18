@@ -45,7 +45,8 @@ function tope(valor, max) {
 //   ensayos:   { '1': {entregado, calificacion}, ... },
 //   practicas: [ {bloque, calificacion}, ... ],
 //   asistencias: [ {bloque, estado}, ... ],
-//   examenes:  { '1': {calificacion}, ... },
+//   examenes:  { '1': {calificacion}, ... },   ajuste manual del docente
+//   intentos:  { '1': {estado, calificacion, aciertos, total}, ... },  examen en línea
 // }
 export function calcularBloque(bloque, datos) {
   // --- Participación: 1 punto por actividad correcta de ESE bloque ---
@@ -86,9 +87,34 @@ export function calcularBloque(bloque, datos) {
   ptsAsistencia = tope(ptsAsistencia, TOPES.asistencia);
 
   // --- Examen: calificación 0-10 × 3 ---
-  const exa = (datos.examenes || {})[String(bloque)];
-  const califExamen = (exa && exa.calificacion !== null && exa.calificacion !== undefined && exa.calificacion !== '')
-    ? Number(exa.calificacion) : null;
+  // Puede venir de dos fuentes:
+  //   1. El intento del examen en línea (se califica solo al entregarse).
+  //   2. Un ajuste manual del docente, que SIEMPRE manda sobre lo automático
+  //      (por si el alumno hizo un trabajo extra o hay que subirle puntos).
+  const exaManual = (datos.examenes || {})[String(bloque)];
+  const intento = (datos.intentos || {})[String(bloque)];
+
+  const hayManual = exaManual
+    && exaManual.calificacion !== null
+    && exaManual.calificacion !== undefined
+    && exaManual.calificacion !== '';
+
+  const hayEnLinea = intento
+    && intento.estado === 'entregado'
+    && intento.calificacion !== null
+    && intento.calificacion !== undefined;
+
+  let califExamen = null;
+  let origenExamen = null;
+
+  if (hayManual) {
+    califExamen = Number(exaManual.calificacion);
+    origenExamen = 'ajuste del docente';
+  } else if (hayEnLinea) {
+    califExamen = Number(intento.calificacion);
+    origenExamen = 'examen en línea';
+  }
+
   const ptsExamen = califExamen !== null ? tope(califExamen * 3, TOPES.examen) : 0;
 
   const total = ptsParticipacion + ptsEnsayos + ptsPracticas + ptsAsistencia + ptsExamen;
@@ -99,7 +125,9 @@ export function calcularBloque(bloque, datos) {
     ensayos:       { pts: ptsEnsayos, tope: TOPES.ensayos, entregados: ensayosEntregados, deTotal: semanas.length },
     practicas:     { pts: ptsPracticas, tope: TOPES.practicas, cuantas: practicasBloque.length, deTotal: 5, lista: practicasBloque },
     asistencia:    { pts: ptsAsistencia, tope: TOPES.asistencia, conteo, clases: asisBloque.length, deTotal: 20 },
-    examen:        { pts: ptsExamen, tope: TOPES.examen, calificacion: califExamen },
+    examen:        { pts: ptsExamen, tope: TOPES.examen, calificacion: califExamen, origen: origenExamen,
+                     aciertos: hayEnLinea ? intento.aciertos : null,
+                     deTotal: hayEnLinea ? intento.total : null },
     total,
   };
 }
@@ -107,4 +135,4 @@ export function calcularBloque(bloque, datos) {
 // Convierte puntos (0-100) a calificación sobre 10, como la pide la escuela.
 export function aCalificacion10(puntos) {
   return Math.round(puntos) / 10;
-  }
+}

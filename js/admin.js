@@ -263,18 +263,21 @@ function renderBloquesReporte() {
 // Lee de Firestore todo lo necesario para calcular las calificaciones de un alumno.
 async function datosDeAlumno(alumnoId) {
   const base = ['grupos', grupoActivo, 'alumnos', alumnoId];
-  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap] = await Promise.all([
+  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, intSnap] = await Promise.all([
     getDocs(collection(db, ...base, 'actividades')).catch(() => null),
     getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
     getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
     getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
     getDocs(collection(db, ...base, 'examenes')).catch(() => null),
+    getDocs(collection(db, ...base, 'intentos')).catch(() => null),
   ]);
 
   const ensayos = {};
   if (ensSnap) ensSnap.docs.forEach(d => { ensayos[d.id] = d.data(); });
   const examenes = {};
   if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
+  const intentos = {};
+  if (intSnap) intSnap.docs.forEach(d => { intentos[d.id] = d.data(); });
 
   return {
     idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
@@ -282,6 +285,7 @@ async function datosDeAlumno(alumnoId) {
     practicas: evalSnap ? evalSnap.docs.map(d => d.data()) : [],
     asistencias: asisSnap ? asisSnap.docs.map(d => d.data()) : [],
     examenes,
+    intentos,
   };
 }
 
@@ -717,18 +721,21 @@ async function mostrarResumenAlumno(alumno) {
 
   const base = ['grupos', grupoActivo, 'alumnos', alumno.id];
 
-  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap] = await Promise.all([
+  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, intSnap] = await Promise.all([
     getDocs(collection(db, ...base, 'actividades')).catch(() => null),
     getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
     getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
     getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
     getDocs(collection(db, ...base, 'examenes')).catch(() => null),
+    getDocs(collection(db, ...base, 'intentos')).catch(() => null),
   ]);
 
   const ensayos = {};
   if (ensSnap) ensSnap.docs.forEach(d => { ensayos[d.id] = d.data(); });
   const examenes = {};
   if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
+  const intentos = {};
+  if (intSnap) intSnap.docs.forEach(d => { intentos[d.id] = d.data(); });
 
   const datos = {
     idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
@@ -736,6 +743,7 @@ async function mostrarResumenAlumno(alumno) {
     practicas: evalSnap ? evalSnap.docs.map(d => d.data()) : [],
     asistencias: asisSnap ? asisSnap.docs.map(d => d.data()) : [],
     examenes,
+    intentos,
   };
 
   const bloques = [1, 2, 3].map(b => calcularBloque(b, datos));
@@ -755,7 +763,7 @@ async function mostrarResumenAlumno(alumno) {
         ${fila('Ensayos', x.ensayos, `${x.ensayos.entregados}/${x.ensayos.deTotal} bitácoras`)}
         ${fila('Prácticas de cocina', x.practicas, `${x.practicas.cuantas}/${x.practicas.deTotal} prácticas`)}
         ${fila('Asistencia', x.asistencia, `${x.asistencia.clases}/${x.asistencia.deTotal} clases · ${x.asistencia.conteo.falta} faltas`)}
-        ${fila('Examen', x.examen, x.examen.calificacion !== null ? `${x.examen.calificacion}/10` : 'sin capturar')}
+        ${fila('Examen', x.examen, x.examen.calificacion !== null ? `${x.examen.calificacion}/10 · ${x.examen.origen}` : 'sin presentar')}
         <div class="res-row res-total">
           <span>Total Bloque ${x.bloque}</span>
           <strong>${x.total.toFixed(1)} / 100 pts</strong>
@@ -1105,9 +1113,15 @@ async function guardarExamenes() {
   await Promise.all([...filas].map(row => {
     const alumnoId = row.dataset.alumnoId;
     const num = row.querySelector('.exa-calif');
-    const calificacion = num.value === '' ? null : parseFloat(num.value);
-    return setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', String(cual)), {
-      examen: cual, calificacion, actualizado: serverTimestamp(),
+    const ref = doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', String(cual));
+    // Campo vacío = quitar el ajuste manual y dejar que mande la nota del
+    // examen en línea (si la hay).
+    if (num.value === '') return deleteDoc(ref).catch(() => {});
+    return setDoc(ref, {
+      examen: cual,
+      calificacion: parseFloat(num.value),
+      origen: 'ajuste del docente',
+      actualizado: serverTimestamp(),
     });
   }));
 

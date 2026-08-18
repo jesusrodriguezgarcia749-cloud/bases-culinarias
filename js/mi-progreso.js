@@ -99,18 +99,21 @@ async function cargarGruposEnSelect() {
 // Carga UNA sola vez todos los datos del alumno y los deja en datosCache.
 async function cargarDatos() {
   const base = ['grupos', sesion.grupoId, 'alumnos', sesion.alumnoId];
-  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap] = await Promise.all([
+  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, intSnap] = await Promise.all([
     getDocs(collection(db, ...base, 'actividades')).catch(() => null),
     getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
     getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
     getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
     getDocs(collection(db, ...base, 'examenes')).catch(() => null),
+    getDocs(collection(db, ...base, 'intentos')).catch(() => null),
   ]);
 
   const ensayos = {};
   if (ensSnap) ensSnap.docs.forEach(d => { ensayos[d.id] = d.data(); });
   const examenes = {};
   if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
+  const intentos = {};
+  if (intSnap) intSnap.docs.forEach(d => { intentos[d.id] = d.data(); });
 
   datosCache = {
     idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
@@ -118,6 +121,7 @@ async function cargarDatos() {
     practicas: evalSnap ? evalSnap.docs.map(d => d.data()) : [],
     asistencias: asisSnap ? asisSnap.docs.map(d => d.data()) : [],
     examenes,
+    intentos,
   };
 }
 
@@ -278,6 +282,43 @@ function renderAsistencia(bloques) {
   }).join('');
 }
 
+// Tarjeta propia para los exámenes de cada bloque.
+function renderExamenes(bloques) {
+  const cont = document.getElementById('prog-examenes');
+  const empty = document.getElementById('prog-examenes-empty');
+  if (!cont) return;
+
+  const hay = bloques.some(x => x.examen.calificacion !== null);
+  empty.hidden = hay;
+  if (!hay) { cont.innerHTML = ''; return; }
+
+  cont.innerHTML = bloques.map(x => {
+    const e = x.examen;
+    if (e.calificacion === null) {
+      return `
+        <div class="prog-examen-row">
+          <span class="prog-examen-bloque">${NOMBRES_BLOQUE[x.bloque]}</span>
+          <span class="prog-examen-pendiente">Sin presentar</span>
+        </div>`;
+    }
+    const detalle = e.aciertos !== null && e.aciertos !== undefined
+      ? `${e.aciertos} de ${e.deTotal} correctas`
+      : (e.origen === 'ajuste del docente' ? 'Registrado por tu docente' : '');
+    return `
+      <div class="prog-examen-row hecho">
+        <div class="prog-examen-info">
+          <span class="prog-examen-bloque">${NOMBRES_BLOQUE[x.bloque]}</span>
+          ${detalle ? `<span class="prog-examen-detalle">${detalle}</span>` : ''}
+        </div>
+        <div class="prog-examen-nums">
+          <span class="prog-examen-calif">${e.calificacion.toFixed(1)} / 10</span>
+          <span class="prog-examen-pts">${e.pts.toFixed(1)} / ${e.tope} pts</span>
+        </div>
+      </div>`;
+  }).join('') +
+  `<p style="margin-top:14px;"><a href="examen.html" class="btn btn-ghost-dark btn-small">Ir a Exámenes</a></p>`;
+}
+
 function renderBloques(bloques) {
   const cont = document.getElementById('prog-bloques');
   if (!cont) return;
@@ -343,6 +384,7 @@ async function iniciarApp() {
   renderPracticas(bloques);
   renderEnsayos(bloques);
   renderAsistencia(bloques);
+  renderExamenes(bloques);
   renderBloques(bloques);
   await renderAvisos();
 }
