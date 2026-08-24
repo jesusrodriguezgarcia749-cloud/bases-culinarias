@@ -1,7 +1,7 @@
 {
   "bloque": 1,
   "titulo": "Examen del Bloque 1 — Conceptos y definiciones de cocina",
-  "config": { "preguntasPorExamen": 20, "minutos": 30 },
+  "config": { "preguntasPorExamen": 20, "minutos": 50 },
   "reactivos": [
 
     { "id": "1-001", "subtema": "1.1", "origen": "actividad", "tipo": "opcion_multiple",
@@ -374,7 +374,99 @@
         { "izquierda": "Levadura para 20 panes", "derecha": "Báscula de precisión: cantidades muy pequeñas" },
         { "izquierda": "Sal en la rectificación final", "derecha": "Al gusto: interviene el criterio del cocinero" }
       ],
-      "explicacion": "No todo se mide igual ni con el mismo rigor. El criterio profesional está en saber cuándo la precisión es indispensable y cuándo el juicio del cocinero es la herramienta correcta." }
+      "explicacion": "No todo se mide igual ni con el mismo rigor. El criterio profesional está en saber cuándo la precisión es indispensable y cuándo el juicio del cocinero es la herramienta correcta." },
+
+    { "id": "1-041", "subtema": "1.1", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué distingue principalmente al cocinero profesional de alguien que cocina bien en casa?",
+      "opciones": [
+        "Producir alimentos de forma consistente, higiénica y rentable, bajo presión de tiempo y para un número variable de comensales",
+        "Conocer un mayor número de recetas y técnicas de cocción distintas",
+        "Tener acceso a ingredientes y equipo de mayor calidad",
+        "Haber recibido una certificación oficial reconocida internacionalmente"
+      ], "correcta": 0,
+      "explicacion": "La diferencia es de escala y exigencia operativa —consistencia, higiene, rentabilidad, presión de tiempo—, no solo de conocimiento de recetas o de equipo disponible." },
+
+    { "id": "1-042", "subtema": "1.1", "tipo": "opcion_multiple",
+      "pregunta": "¿Quién creó la brigada de cocina clásica y con qué propósito?",
+      "opciones": [
+        "Auguste Escoffier, para organizar cocinas de hotel de gran volumen a finales del siglo XIX",
+        "Wilbur Scoville, para estandarizar la producción industrial de alimentos",
+        "La Asociación de Chefs del Ecuador, para certificar cocinas profesionales modernas",
+        "Un gremio medieval de cocineros, para regular el aprendizaje del oficio"
+      ], "correcta": 0,
+      "explicacion": "Escoffier codificó la brigada a finales del siglo XIX para organizar cocinas de hotel de gran volumen; Scoville pertenece a otra área (la escala de picor), y el gremio medieval es anterior a la sistematización moderna." },
+
+    { "id": "1-043", "subtema": "1.1", "tipo": "relacionar",
+      "pregunta": "Relaciona cada puesto de la brigada de cocina con su función principal.",
+      "pares": [
+        { "izquierda": "Chef ejecutivo / Chef de cocina", "derecha": "Dirige toda la cocina: menú, costos, personal y estándar de calidad final" },
+        { "izquierda": "Sous chef", "derecha": "Segundo al mando; supervisa la operación diaria y sustituye al chef ejecutivo en su ausencia" },
+        { "izquierda": "Chef de partida (chef de partie)", "derecha": "Responsable de una estación específica (salsas, pescados, parrilla, etc.)" },
+        { "izquierda": "Steward / Ayudante de cocina", "derecha": "Apoyo general de limpieza, mise en place básico y abastecimiento" }
+      ],
+      "explicacion": "Cada rol reparte una responsabilidad distinta, precisamente para que nadie dependa de la memoria de una sola persona durante un servicio con decenas de comandas simultáneas." },
+
+    { "id": "1-044", "subtema": "1.1", "tipo": "completar",
+      "pregunta": "Completa: «La brigada de cocina no es solo jerarquía: es una forma de repartir ________ para que nadie dependa de la memoria de una sola persona durante el servicio».",
+      "opciones": [ "responsabilidad", "el sueldo", "el menú", "los horarios" ],
+      "correcta": 0,
+      "explicacion": "Repartir responsabilidad —no solo tareas— es lo que evita el caos cuando hay decenas de comandas simultáneas y ningún cocinero puede recordarlo todo por sí solo." },
+
+    { "id": "1-045", "subtema": "1.2", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuándo debe un cocinero lavarse las manos según el protocolo de higiene personal?",
+      "opciones": [
+        "Al iniciar el turno, después de tocar alimentos crudos distintos, después de ir al baño y cada vez que cambia de tarea",
+        "Únicamente al iniciar el turno y al finalizarlo",
+        "Solo después de manipular carnes o pescados crudos",
+        "Cada dos horas, independientemente de la tarea que esté realizando"
+      ], "correcta": 0,
+      "explicacion": "El lavado de manos no es periódico por reloj ni se limita a proteínas crudas: se repite en cada punto de la operación donde puede haber transferencia de contaminación." },
+
+    { "id": "1-046", "subtema": "1.2", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué se usan tablas de picar separadas por tipo de alimento en el área de trabajo?",
+      "opciones": [
+        "Para evitar la contaminación cruzada entre alimentos crudos y alimentos listos para consumir",
+        "Para que cada estación de la brigada tenga su propio equipo asignado",
+        "Para reducir el desgaste de una sola tabla por uso excesivo",
+        "Para cumplir con el color institucional del uniforme de cada área"
+      ], "correcta": 0,
+      "explicacion": "Es el mismo principio de contaminación cruzada que se retoma en el Bloque 2: separar superficies por función, no por comodidad ni por estética." },
+
+    { "id": "1-047", "subtema": "1.3", "tipo": "opcion_multiple",
+      "pregunta": "Según la tabla de cortes estandarizados del subtema 1.3, ¿cuál es la dimensión aproximada de un brunoise?",
+      "opciones": [
+        "2-3 mm por lado",
+        "6 mm por lado",
+        "1.2 cm por lado",
+        "3 x 3 x 40 mm"
+      ], "correcta": 0,
+      "explicacion": "2-3 mm corresponde al brunoise; 6 mm es el small dice, 1.2 cm el dice mediano, y 3x3x40 mm la julianne — todos cortes reales de la misma tabla, pero de tamaño distinto." },
+
+    { "id": "1-048", "subtema": "1.3", "tipo": "completar",
+      "pregunta": "Completa: «El objetivo del corte estandarizado no es la elegancia visual por sí sola: es que todas las piezas terminen de ________ al mismo tiempo».",
+      "opciones": [ "cocinarse", "pesarse", "enfriarse", "servirse" ],
+      "correcta": 0,
+      "explicacion": "Piezas de tamaño uniforme llegan a su punto de cocción al mismo ritmo — ese es el fundamento técnico detrás del corte parejo, más allá de la presentación." },
+
+    { "id": "1-049", "subtema": "1.5", "tipo": "opcion_multiple",
+      "pregunta": "¿Qué son los fondos y las salsas madre, y dónde se profundiza su técnica según el Compendio?",
+      "opciones": [
+        "Son las elaboraciones base de la cocina clásica; su técnica y práctica se desarrollan en el Bloque 3",
+        "Son elaboraciones exclusivas de repostería; se practican en el Bloque 2",
+        "Son un tipo de guarnición; se estudian junto con los cortes de verduras del subtema 1.3",
+        "Son sinónimo de fichas técnicas; se documentan en el Anexo B"
+      ], "correcta": 0,
+      "explicacion": "Aunque el subtema las presenta como puente conceptual hacia el resto del curso, la técnica y práctica real de fondos y salsas madre se reservan para el Bloque 3, donde se aplican con manos en la cocina." },
+
+    { "id": "1-050", "subtema": "1.5", "tipo": "relacionar",
+      "pregunta": "Relaciona cada salsa madre con su base y una derivada conocida.",
+      "pares": [
+        { "izquierda": "Béchamel", "derecha": "Leche + roux blanco → Mornay (con queso)" },
+        { "izquierda": "Velouté", "derecha": "Fondo claro + roux rubio → Suprema (con crema)" },
+        { "izquierda": "Española", "derecha": "Fondo oscuro + roux oscuro → Demi-glace" },
+        { "izquierda": "Holandesa", "derecha": "Yema + mantequilla clarificada → Bearnesa (con estragón)" }
+      ],
+      "explicacion": "Cada salsa madre tiene su base propia y al menos una derivada reconocible; confundir la base —por ejemplo, usar fondo oscuro en una béchamel— rompe la lógica de toda la familia." }
 
   ]
 }
