@@ -5,239 +5,844 @@
       "id": "1.1-a",
       "subtema": "1.1",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué es un género culinario?",
+      "pregunta": "¿A qué figura histórica se atribuye la sistematización y codificación de la cocina a finales del siglo XIX?",
       "opciones": [
-        "Una categoría amplia de preparaciones que comparten técnica, estructura o función en el menú",
-        "El nombre comercial de un platillo",
-        "Un tipo de utensilio de cocina",
-        "La nacionalidad de una receta"
+        "Georges Auguste Escoffier",
+        "Wilbur Scoville",
+        "Julia Child",
+        "Ferran Adrià"
       ],
       "correcta": 0,
-      "explicacion": "El género agrupa preparaciones por su técnica o función (sopas, salsas, guarniciones), no por su nombre comercial ni su origen. Reconocerlo ayuda a anticipar la técnica antes de cocinar."
+      "explicacion": "Escoffier codificó la cocina a finales del siglo XIX: clasificó preparaciones por género, estableció la brigada de cocina y fijó procedimientos estandarizados."
     },
     {
       "id": "1.1-b",
       "subtema": "1.1",
-      "tipo": "verdadero_falso",
-      "pregunta": "Una elaboración culinaria sencilla siempre depende de otra preparación previa.",
-      "correcta": false,
-      "explicacion": "Es justo al revés: una elaboración sencilla (un caldo, una vinagreta, un puré simple) es la base que NO depende de nada anterior. Son los 'ladrillos' con los que después se construyen preparaciones compuestas."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué criterio define a un 'género culinario' en la cocina profesional?",
+      "opciones": [
+        "La técnica que emplean, la estructura que comparten o la función que cumplen dentro del menú",
+        "La nacionalidad de la receta",
+        "El ingrediente principal que llevan",
+        "El nombre comercial del platillo"
+      ],
+      "correcta": 0,
+      "explicacion": "El género se define por función y técnica, nunca por nacionalidad ni por ingrediente principal — un mole y una bechamel son ambos 'salsas' aunque vengan de tradiciones distintas."
     },
     {
       "id": "1.1-c",
       "subtema": "1.1",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Cuál de estas opciones es un ejemplo de elaboración culinaria sencilla?",
+      "pregunta": "¿Cuáles son los dos errores más comunes al clasificar preparaciones por género?",
       "opciones": [
-        "Un caldo base",
-        "Un plato montado con salsa derivada y guarnición",
-        "El menú completo de un banquete",
-        "Una carta de vinos"
+        "Clasificar por ingrediente principal, o confundir género con origen geográfico",
+        "Usar nombres franceses y no usar nombres en español",
+        "Cocinar demasiado rápido y no dejar reposar la carne",
+        "Medir por volumen en vez de por peso"
       ],
       "correcta": 0,
-      "explicacion": "El caldo base no depende de ninguna otra preparación: es un 'ladrillo'. Un plato montado, en cambio, ya es una preparación compuesta que combina varias elaboraciones sencillas."
+      "explicacion": "Agrupar 'todo lo de pollo' en una sola categoría, o asumir que 'cocina mexicana' es un género, son los dos errores frecuentes que confunden función con ingrediente u origen."
     },
     {
       "id": "1.1-d",
       "subtema": "1.1",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Para qué le sirve a un cocinero reconocer el género de un platillo antes de cocinarlo?",
+      "pregunta": "¿Qué distingue a una elaboración culinaria sencilla de una compuesta?",
       "opciones": [
-        "Para anticipar su técnica de cocción, tiempo aproximado y función en el menú",
-        "Para decidir el precio de venta",
-        "Para elegir el nombre del platillo en el menú",
-        "No tiene ninguna utilidad práctica"
+        "La sencilla no depende de otra preparación previa; la compuesta se construye a partir de elementos sencillos",
+        "La sencilla siempre lleva más ingredientes que la compuesta",
+        "La compuesta se prepara antes del servicio; la sencilla se prepara al momento",
+        "No existe ninguna diferencia real entre ambas"
       ],
       "correcta": 0,
-      "explicacion": "Clasificar por género es una herramienta operativa: permite prever cómo se va a cocinar algo, cuánto va a tardar y qué lugar ocupa en el servicio, incluso ante platillos que a simple vista parecen distintos."
+      "explicacion": "Un caldo o una vinagreta son elaboraciones sencillas ('ladrillos'); una salsa derivada como la Mornay es compuesta porque parte de una salsa madre ya lista."
+    },
+    {
+      "id": "1.1-e",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué función cumplen los 'Entremeses' (hors d'œuvre) dentro de un menú?",
+      "opciones": [
+        "Son preparaciones frías o calientes en porciones pequeñas que abren el apetito al inicio de la comida",
+        "Son el plato fuerte del menú",
+        "Son preparaciones dulces que cierran la comida",
+        "Son guarniciones que acompañan al plato principal"
+      ],
+      "correcta": 0,
+      "explicacion": "Los entremeses abren el apetito al inicio de la comida y se subdividen en simples (una sola pieza) y variados (varias piezas)."
+    },
+    {
+      "id": "1.1-f",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué carnes, aves, caza y pescados conforman un solo género culinario?",
+      "opciones": [
+        "Porque todos cumplen exactamente la misma función dentro del menú: ser el plato fuerte",
+        "Porque todos requieren la misma temperatura de cocción",
+        "Porque todos se sirven siempre fríos",
+        "Porque históricamente se cazaban de la misma forma"
+      ],
+      "correcta": 0,
+      "explicacion": "Lo que cambia entre ellos es la técnica de manejo por tipo de proteína, pero la función dentro del menú —ser el plato fuerte— es la misma, y eso es lo que define el género."
+    },
+    {
+      "id": "1.1-g",
+      "subtema": "1.1",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada salsa madre con una de sus derivadas conocidas.",
+      "pares": [
+        { "izquierda": "Béchamel", "derecha": "Mornay (con queso)" },
+        { "izquierda": "Velouté", "derecha": "Suprema (con crema)" },
+        { "izquierda": "Española", "derecha": "Demi-glace" },
+        { "izquierda": "Holandesa", "derecha": "Bearnesa (con estragón)" },
+        { "izquierda": "Tomate", "derecha": "Salsa boloñesa" }
+      ],
+      "explicacion": "Las cinco salsas madre (béchamel, velouté, española, holandesa y tomate) son la base de la que derivan decenas de salsas compuestas de la cocina occidental."
+    },
+    {
+      "id": "1.1-h",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué etapa ocupaba el 'Sorbet' en el orden del menú clásico de 13 tiempos y cuál era su propósito?",
+      "opciones": [
+        "Ocupaba la etapa 7, para limpiar el paladar antes del plato fuerte principal",
+        "Ocupaba la etapa 12, como postre final",
+        "Ocupaba la etapa 1, para abrir el apetito",
+        "No formaba parte del menú clásico"
+      ],
+      "correcta": 0,
+      "explicacion": "El sorbet se servía entre el pescado (etapa 5) y el plato fuerte principal (Relevé, etapa 8), como una pausa que limpiaba el paladar."
+    },
+    {
+      "id": "1.1-i",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "En la cocina mexicana contemporánea, ¿a qué género culinario pertenece un caldo de res?",
+      "opciones": [
+        "Al género de sopas y potajes, como una 'sopa clara'",
+        "Al género de guarniciones",
+        "Al género de entremeses",
+        "No pertenece a ningún género clásico reconocible"
+      ],
+      "correcta": 0,
+      "explicacion": "La clasificación por géneros se aplica sin dificultad a la gastronomía mexicana porque clasifica por función, no por origen: un caldo de res es una sopa clara."
+    },
+    {
+      "id": "1.1-j",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué diferencia operativa existía entre el antiguo 'service à la française' y el 'service à la russe'?",
+      "opciones": [
+        "En el francés todos los platillos se servían simultáneamente; en el ruso se estableció una secuencia estándar por etapas",
+        "El francés se usaba solo en banquetes; el ruso solo en restaurantes",
+        "El ruso eliminó por completo el uso de salsas",
+        "No existe ninguna diferencia real entre ambos"
+      ],
+      "correcta": 0,
+      "explicacion": "El service à la russe sustituyó al service à la française, estableciendo el orden del menú por etapas que hoy sigue siendo la referencia histórica del servicio moderno."
+    },
+    {
+      "id": "1.1-k",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son las dos subdivisiones clásicas dentro del género 'Sopas y potajes'?",
+      "opciones": [
+        "Claras (consomés, caldos) y ligadas o espesas (cremas, veloutés, potajes)",
+        "Frías y calientes",
+        "Dulces y saladas",
+        "Simples y variadas"
+      ],
+      "correcta": 0,
+      "explicacion": "Las sopas se dividen en claras —consomés y caldos— y ligadas o espesas —cremas, veloutés y potajes—."
+    },
+    {
+      "id": "1.1-l",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál de estos tríos corresponde a técnicas de cocción del género clásico de los 'Huevos'?",
+      "opciones": [
+        "Poché, mollet y en cocotte",
+        "Hervido, escalfado y al vapor",
+        "Sellado, asado y frito",
+        "Blanqueado, gratinado y flameado"
+      ],
+      "correcta": 0,
+      "explicacion": "El huevo es un género propio dentro de la cocina clásica, con múltiples técnicas de cocción (poché, mollet, en cocotte, revueltos, tortillas) estudiadas de forma independiente."
+    },
+    {
+      "id": "1.1-m",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué tipo de preparaciones engloba el género de los 'Farináceos'?",
+      "opciones": [
+        "Pastas, arroces y otros granos preparados como plato o guarnición",
+        "Solo pan y repostería",
+        "Guarniciones de origen vegetal exclusivamente",
+        "Bebidas y digestivos"
+      ],
+      "correcta": 0,
+      "explicacion": "Los farináceos van desde un arroz simple hasta preparaciones más elaboradas como el risotto."
+    },
+    {
+      "id": "1.1-n",
+      "subtema": "1.1",
+      "tipo": "verdadero_falso",
+      "pregunta": "Auguste Escoffier creó la brigada de cocina clásica a finales del siglo XIX para organizar el trabajo de cocinas de hotel de gran volumen.",
+      "correcta": true,
+      "explicacion": "Correcto. La brigada dividió el trabajo en roles y responsabilidades claras, principio que sigue vigente aunque hoy se simplifique en cocinas pequeñas."
+    },
+    {
+      "id": "1.1-o",
+      "subtema": "1.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué distingue la función del Chef Ejecutivo de la del Sous Chef dentro de la brigada?",
+      "opciones": [
+        "El Chef Ejecutivo dirige el menú, los costos, el personal y el estándar de calidad; el Sous Chef supervisa la operación diaria y lo sustituye en su ausencia",
+        "El Sous Chef dirige el menú y el Chef Ejecutivo solo cocina",
+        "Ambos tienen exactamente las mismas funciones",
+        "El Chef Ejecutivo solo trabaja en banquetes"
+      ],
+      "correcta": 0,
+      "explicacion": "El Chef Ejecutivo es la máxima autoridad de la cocina; el Sous Chef es el segundo al mando y su reemplazo directo en su ausencia."
     },
     {
       "id": "1.2-a",
       "subtema": "1.2",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué significa 'mise en place'?",
+      "pregunta": "¿Cómo se le llama al sistema que dividió el trabajo en secciones especializadas a cargo de un chef de partie?",
       "opciones": [
-        "Emplatado final de la preparación",
-        "Tener cada ingrediente pesado, cortado y disponible antes de cocinar",
-        "El menú del día",
-        "Limpieza de la cocina al terminar el servicio"
+        "Brigada de cocina (brigade de cuisine)",
+        "Ficha técnica de producción",
+        "Servicio à la russe",
+        "Mise en place"
       ],
-      "correcta": 1,
-      "explicacion": "'Mise en place' es la preparación previa completa de todos los insumos, antes de encender el fuego — es la base de una cocina organizada."
+      "correcta": 0,
+      "explicacion": "La brigada de cocina dividió el trabajo en secciones especializadas —salsas, pescados, asados, repostería—, cada una bajo un chef de partie."
     },
     {
       "id": "1.2-b",
       "subtema": "1.2",
-      "tipo": "verdadero_falso",
-      "pregunta": "El orden correcto de una elaboración básica es: cocción → limpieza de insumos → montaje → rectificación de sabor.",
-      "correcta": false,
-      "explicacion": "El orden real es: limpieza y preparación de insumos → técnica de cocción → rectificación de sabor → presentación/montaje. Rectificar antes de montar es lo que asegura que el sabor llegue correcto al plato final."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son las cuatro etapas de la secuencia de una elaboración culinaria básica, en orden?",
+      "opciones": [
+        "Selección y mise en place → técnica de cocción → rectificación de sabor → presentación",
+        "Técnica de cocción → mise en place → presentación → rectificación de sabor",
+        "Presentación → mise en place → cocción → rectificación",
+        "Mise en place → presentación → rectificación → cocción"
+      ],
+      "correcta": 0,
+      "explicacion": "Esta secuencia se repite, con variantes, en prácticamente cualquier platillo: primero se prepara todo, luego se cocina, se rectifica el sabor y al final se presenta."
     },
     {
       "id": "1.2-c",
       "subtema": "1.2",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué distingue a una cocina organizada de una improvisada, según el concepto de mise en place?",
+      "pregunta": "¿Cuál es la traducción y el significado práctico del concepto 'mise en place'?",
       "opciones": [
-        "Que en la organizada todo el mise en place está listo antes de empezar a cocinar",
-        "Que la organizada usa más ingredientes",
-        "Que la improvisada es más rápida siempre",
-        "No hay ninguna diferencia real"
+        "'Puesto en su lugar': tener cada ingrediente pesado, cortado, medido y dispuesto, y el equipo listo, antes de encender el fuego",
+        "'Al punto': verificar la temperatura interna con termómetro",
+        "'Servicio completo': el menú de 13 etapas",
+        "'Limpieza final': el aseo de la cocina tras el servicio"
       ],
       "correcta": 0,
-      "explicacion": "Tener todo pesado, cortado y a la mano antes de encender el fuego es exactamente lo que separa una cocina organizada de una que va improvisando sobre la marcha, con el riesgo de errores y tiempos muertos que eso implica."
+      "explicacion": "Mise en place no termina cuando se enciende el fuego: si durante la cocción hay que detenerse a buscar o preparar algo, el mise en place estuvo incompleto."
     },
     {
       "id": "1.2-d",
       "subtema": "1.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la razón práctica y cognitiva para exigir un mise en place estricto?",
+      "opciones": [
+        "Reducir la carga mental y de toma de decisiones durante la cocción activa, minimizando el margen de error",
+        "Ahorrar ingredientes",
+        "Cumplir una tradición sin ningún efecto real en el resultado",
+        "Acelerar el tiempo total de preparación del menú completo"
+      ],
+      "correcta": 0,
+      "explicacion": "Durante la cocción activa el cocinero ya toma muchas decisiones rápidas; sumarle la tarea de buscar o medir algo aumenta considerablemente la probabilidad de error."
+    },
+    {
+      "id": "1.2-e",
+      "subtema": "1.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo se aplica el mise en place en el contexto de banquetes y eventos?",
+      "opciones": [
+        "Es un mise en place casi total: la mayor parte de la elaboración se completa antes del evento, dejando solo el montaje final",
+        "Es un mise en place parcial idéntico al de un restaurante a la carta",
+        "No se aplica mise en place en banquetes por el volumen de comensales",
+        "Se aplica solo a los postres, nunca a los platos fuertes"
+      ],
+      "correcta": 0,
+      "explicacion": "Como el menú y el número de comensales se conocen con anticipación, en banquetes se completa casi toda la elaboración antes, dejando solo el montaje final para el evento."
+    },
+    {
+      "id": "1.2-f",
+      "subtema": "1.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son dos errores recurrentes de los cocineros en formación durante la elaboración básica?",
+      "opciones": [
+        "Cocinar sin haber leído la receta completa, y cortar ingredientes de tamaños desiguales",
+        "Usar demasiados condimentos y servir el platillo muy caliente",
+        "Cocinar con anticipación y usar báscula digital",
+        "Lavarse las manos con demasiada frecuencia"
+      ],
+      "correcta": 0,
+      "explicacion": "Además de estos dos, otros errores frecuentes son omitir la rectificación de sabor y descuidar la presentación como si fuera un paso secundario."
+    },
+    {
+      "id": "1.2-g",
+      "subtema": "1.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo difiere la aplicación del mise en place entre un restaurante a la carta y un servicio de banquetes?",
+      "opciones": [
+        "En el restaurante a la carta es parcial, ensamblando al momento; en banquetes es casi total, dejando solo el montaje final",
+        "Son exactamente iguales en ambos contextos",
+        "En banquetes es parcial y en restaurante a la carta es total",
+        "El mise en place no aplica en restaurantes a la carta"
+      ],
+      "correcta": 0,
+      "explicacion": "En el restaurante a la carta, los elementos base se preparan con anticipación pero el ensamblaje final ocurre al momento de cada orden."
+    },
+    {
+      "id": "1.2-h",
+      "subtema": "1.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "Además de al iniciar el turno, ¿cuándo más debe un cocinero lavarse las manos?",
+      "opciones": [
+        "Después de tocar alimentos crudos distintos, después de ir al baño y cada vez que cambia de tarea",
+        "Solo una vez por turno es suficiente",
+        "Únicamente antes de tocar postres",
+        "Solo si se ve suciedad visible en las manos"
+      ],
+      "correcta": 0,
+      "explicacion": "El lavado de manos frecuente es un mínimo no negociable de higiene personal, no un trámite ocasional."
+    },
+    {
+      "id": "1.2-i",
+      "subtema": "1.2",
       "tipo": "verdadero_falso",
-      "pregunta": "La secuencia de una elaboración básica se repite, con variantes, en prácticamente cualquier platillo.",
+      "pregunta": "Las tablas de picar se separan por color o función para evitar la contaminación cruzada entre alimentos crudos y alimentos listos para consumo.",
       "correcta": true,
-      "explicacion": "Correcto: limpieza/preparación → cocción → rectificación → presentación es un patrón que se repite una y otra vez, aunque cambien la técnica y los ingredientes de cada platillo."
+      "explicacion": "Correcto. Separar tablas por tipo de alimento es un hábito básico de higiene del área de trabajo, tan importante como la higiene personal."
+    },
+    {
+      "id": "1.2-j",
+      "subtema": "1.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué se debe hacer con una cuchara de degustación antes de volver a probar la misma preparación?",
+      "opciones": [
+        "Lavarla o cambiarla; nunca reutilizarla sin lavar",
+        "Secarla con un trapo de cocina y reutilizarla directamente",
+        "Enjuagarla solo con agua fría rápidamente",
+        "No es necesario hacer nada especial"
+      ],
+      "correcta": 0,
+      "explicacion": "Reutilizar la misma cuchara de degustación sin lavarla es una de las prácticas de higiene personal que el curso marca como no negociables."
     },
     {
       "id": "1.3-a",
       "subtema": "1.3",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué instrumento se usa para verificar la temperatura interna de una proteína durante la cocción?",
+      "pregunta": "¿Por qué la cocina profesional prioriza medir los ingredientes sólidos por peso en lugar de por volumen?",
       "opciones": [
-        "Termómetro de sonda",
-        "Jarra graduada",
-        "Cuchara medidora",
-        "Báscula de precisión"
+        "Porque el volumen de ingredientes de densidad variable (como la harina) cambia según su compactación, con variaciones de hasta 20%",
+        "Porque las básculas son más baratas que las tazas medidoras",
+        "Porque el volumen no puede medirse en cocina profesional",
+        "No hay ninguna razón técnica real, es solo costumbre"
       ],
       "correcta": 0,
-      "explicacion": "El termómetro de sonda mide temperatura interna, algo crítico tanto para verificar cocción segura en carnes como para procesos de repostería como el punto del caramelo."
+      "explicacion": "Una taza de harina puede pesar distinto según qué tan compacta esté o si se cernió antes, lo que hace del peso una medida mucho más confiable."
     },
     {
       "id": "1.3-b",
       "subtema": "1.3",
-      "tipo": "verdadero_falso",
-      "pregunta": "En cocina profesional es preferible medir la harina por volumen (tazas) que por peso (gramos).",
-      "correcta": false,
-      "explicacion": "Es al revés: medir por volumen ingredientes como la harina es un error común de principiante, porque genera inconsistencia entre una preparación y otra. La cocina profesional prioriza el peso sobre el volumen siempre que sea posible."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es el instrumento adecuado para medir la concentración de azúcares en grados Brix?",
+      "opciones": [
+        "El refractómetro",
+        "El termómetro de sonda",
+        "La báscula de precisión",
+        "El tamiz fino"
+      ],
+      "correcta": 0,
+      "explicacion": "El refractómetro se usa en mermeladas, almíbares y control de calidad en repostería avanzada."
     },
     {
       "id": "1.3-c",
       "subtema": "1.3",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué mide una báscula de cocina?",
+      "pregunta": "¿Qué instrumento se utiliza para verificar la temperatura de planchas y freidoras sin contacto físico?",
       "opciones": [
-        "Masa (gramos, kilogramos)",
-        "Volumen (mililitros, litros)",
-        "Temperatura interna",
-        "Tiempo de cocción"
+        "El termómetro láser o infrarrojo",
+        "El termómetro de sonda",
+        "La jarra graduada",
+        "El refractómetro"
       ],
       "correcta": 0,
-      "explicacion": "La báscula mide masa. Cada instrumento tiene un propósito distinto: la jarra graduada mide volumen y el termómetro de sonda mide temperatura — confundirlos es la raíz de muchos errores de principiante."
+      "explicacion": "El termómetro láser mide temperatura de superficie sin contacto, útil en planchas, freidoras y cámaras."
     },
     {
       "id": "1.3-d",
       "subtema": "1.3",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué mide específicamente una jarra graduada?",
+      "pregunta": "¿Cómo se verifica la calibración básica de un termómetro de sonda en cocina?",
       "opciones": [
-        "Volumen (mililitros, litros)",
-        "Masa (gramos, kilogramos)",
-        "Temperatura",
-        "Densidad"
+        "Sumergiéndolo en agua con hielo (debe marcar 0°C) y en agua hirviendo a nivel del mar (debe marcar 100°C)",
+        "Comparándolo visualmente con otro termómetro sin verificar valores",
+        "Solo se calibra en fábrica, nunca en cocina",
+        "Sumergiéndolo en aceite caliente únicamente"
       ],
       "correcta": 0,
-      "explicacion": "La jarra graduada es un instrumento de volumen, útil para líquidos. No sustituye a una báscula cuando el ingrediente (como la harina) debería medirse por peso para mayor precisión."
+      "explicacion": "Si el termómetro se aleja de estas dos referencias (0°C y 100°C), requiere calibración o reemplazo."
+    },
+    {
+      "id": "1.3-e",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué significan las siglas AP ('As Purchased') en el pesaje de alimentos?",
+      "opciones": [
+        "El peso del producto tal como se compra, entero",
+        "El peso de la porción comestible después de limpiar",
+        "El peso aproximado sin verificar en báscula",
+        "El precio por kilogramo del producto"
+      ],
+      "correcta": 0,
+      "explicacion": "AP es el peso del producto entero, antes de pelarlo, deshuesarlo o limpiarlo — se contrasta con EP (Edible Portion)."
+    },
+    {
+      "id": "1.3-f",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué significan las siglas EP ('Edible Portion')?",
+      "opciones": [
+        "El peso de la porción comestible después de limpiar, pelar o deshuesar",
+        "El peso del producto tal como se compra, entero",
+        "El peso estimado sin pesar realmente",
+        "El peso exacto solo para carnes, nunca para verduras"
+      ],
+      "correcta": 0,
+      "explicacion": "Un kilogramo de zanahoria AP no rinde un kilogramo de zanahoria EP, porque en el proceso se pierde el peso de la cáscara y las puntas."
+    },
+    {
+      "id": "1.3-g",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son tres elementos mínimos que debe contener una Ficha Técnica de Producción?",
+      "opciones": [
+        "Lista de ingredientes con cantidad exacta, procedimiento paso a paso, y rendimiento (número de porciones)",
+        "Solo el nombre del platillo y su precio de venta",
+        "Solo la fotografía final del platillo",
+        "El nombre del proveedor y su número de contacto"
+      ],
+      "correcta": 0,
+      "explicacion": "Una ficha técnica también incluye género culinario, temperatura y tiempo de cocción, costo por porción y notas de presentación."
+    },
+    {
+      "id": "1.3-h",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "En una receta estándar, ¿qué significa el 'Rendimiento'?",
+      "opciones": [
+        "El número total de porciones que produce una receta con las cantidades indicadas",
+        "El costo total de los ingredientes",
+        "El tiempo total de cocción",
+        "El porcentaje de merma de un ingrediente"
+      ],
+      "correcta": 0,
+      "explicacion": "El rendimiento es clave para calcular el factor de conversión cuando se necesita ajustar una receta a más o menos porciones."
+    },
+    {
+      "id": "1.3-i",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué es la 'Merma' en la administración de materia prima?",
+      "opciones": [
+        "El porcentaje de un ingrediente que se pierde durante su preparación (pelado, deshuesado, recorte)",
+        "El porcentaje de ganancia sobre el costo de un platillo",
+        "El tiempo que tarda un ingrediente en llegar del proveedor",
+        "La cantidad de sal que se agrega a una preparación"
+      ],
+      "correcta": 0,
+      "explicacion": "La merma se calcula para ajustar la compra real necesaria: hay que pedir más cantidad AP de la que finalmente se usará EP."
+    },
+    {
+      "id": "1.3-j",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Para qué ingredientes resulta indispensable usar una báscula de precisión en lugar de una báscula de cocina normal?",
+      "opciones": [
+        "Para medir masas en cantidades muy pequeñas, como especias, levaduras, aditivos y gelificantes",
+        "Para pesar piezas grandes de carne",
+        "Para medir el volumen de líquidos",
+        "No existe diferencia entre ambos tipos de báscula"
+      ],
+      "correcta": 0,
+      "explicacion": "La báscula de precisión mide en gramos y miligramos, indispensable cuando la cantidad requerida es muy pequeña para una báscula estándar."
+    },
+    {
+      "id": "1.3-k",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué función técnica cumple el tamiz o colador fino en la estandarización?",
+      "opciones": [
+        "Estandariza la textura y granulometría, por ejemplo al cernir harinas o colar salsas y fondos",
+        "Mide el peso exacto de ingredientes secos",
+        "Verifica la temperatura interna de una preparación",
+        "Mide la concentración de azúcares en un almíbar"
+      ],
+      "correcta": 0,
+      "explicacion": "Aunque no es un instrumento de medida numérica, el tamiz estandariza la consistencia de harinas, salsas y fondos."
+    },
+    {
+      "id": "1.3-l",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "Dentro de una receta estándar profesional, ¿qué identifican las siglas PHF/APP?",
+      "opciones": [
+        "A los Alimentos Potencialmente Peligrosos que requieren control estricto de tiempo y temperatura",
+        "A los ingredientes de origen vegetal exclusivamente",
+        "Al peso de la porción comestible después de limpiar",
+        "A los alimentos que pueden almacenarse sin refrigeración"
+      ],
+      "correcta": 0,
+      "explicacion": "PHF/APP marca los ingredientes que requieren control de tiempo y temperatura (CTT) por su riesgo sanitario."
+    },
+    {
+      "id": "1.3-m",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué importa que los cortes de verdura sean parejos en tamaño desde el punto de vista de la medición?",
+      "opciones": [
+        "Porque dos piezas del mismo alimento con tamaños distintos se cocinan a velocidades distintas",
+        "Porque así se ve más profesional en redes sociales",
+        "Porque ahorra tiempo de picado, sin relación con la cocción",
+        "No tiene ninguna relación con el resultado de cocción"
+      ],
+      "correcta": 0,
+      "explicacion": "Un corte disparejo produce, casi siempre, un resultado disparejo: una pieza cruda junto a otra sobrecocida en el mismo plato."
+    },
+    {
+      "id": "1.3-n",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué corte estandarizado produce cubos de 2 a 3 mm por lado, usado en guarniciones finas y mirepoix muy fino?",
+      "opciones": [
+        "Brunoise",
+        "Bastón",
+        "Paisana",
+        "Chiffonade"
+      ],
+      "correcta": 0,
+      "explicacion": "El brunoise es el corte más pequeño de la familia de cubos, reservado para guarniciones delicadas y rellenos."
+    },
+    {
+      "id": "1.3-o",
+      "subtema": "1.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué corte estandarizado se usa específicamente para hojas (como lechuga o albahaca), enrollándolas antes de cortarlas en tiras finas?",
+      "opciones": [
+        "Chiffonade",
+        "Brunoise",
+        "Paisana",
+        "Julianne"
+      ],
+      "correcta": 0,
+      "explicacion": "El chiffonade se aplica a hojas y hierbas para terminar un platillo con tiras finas y uniformes."
     },
     {
       "id": "1.4-a",
       "subtema": "1.4",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Entre qué rango aproximado de temperatura se ubica la 'zona de peligro' bacteriano?",
+      "pregunta": "¿Cuál es el rango exacto de la 'zona de peligro' de temperatura bacteriana?",
       "opciones": [
-        "Entre 6°C y 65°C",
+        "Entre 6°C y 65°C aproximadamente",
         "Entre -18°C y 0°C",
         "Entre 65°C y 100°C",
-        "Entre 0°C y 6°C"
+        "Entre 0°C y 4°C"
       ],
       "correcta": 0,
-      "explicacion": "La zona de peligro (aprox. 6°C–65°C) es el rango donde las bacterias se multiplican más rápido. Las tablas de temperatura existen precisamente para mantener los alimentos fuera de ese rango el menor tiempo posible."
+      "explicacion": "La zona de peligro es el rango en el que las bacterias se multiplican con mayor facilidad, llegando a duplicar su población cada 20 minutos."
     },
     {
       "id": "1.4-b",
       "subtema": "1.4",
-      "tipo": "verdadero_falso",
-      "pregunta": "Leer el manual de un equipo nuevo (horno, marmita, freidora) antes de usarlo ayuda a evitar accidentes y resultados inconsistentes.",
-      "correcta": true,
-      "explicacion": "Correcto. Los manuales documentan rangos de temperatura, tiempos de precalentado y capacidad de carga de cada aparato — ignorarlos es una causa común de accidentes y de resultados que no se repiten igual dos veces."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es el tiempo máximo acumulado que un alimento perecedero puede permanecer en la zona de peligro?",
+      "opciones": [
+        "No más de dos horas acumuladas",
+        "No más de 30 minutos",
+        "No más de 8 horas",
+        "No hay límite mientras esté tapado"
+      ],
+      "correcta": 0,
+      "explicacion": "La regla de las dos horas suma todo el tiempo que el alimento pasó fuera de refrigeración o de cocción activa, no solo un momento aislado."
     },
     {
       "id": "1.4-c",
       "subtema": "1.4",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Para qué sirven las tablas de temperatura críticas en repostería, como los puntos del caramelo?",
+      "pregunta": "¿Cuál es la temperatura interna mínima segura para cocinar aves y aves molidas?",
       "opciones": [
-        "Para ligar la temperatura exacta con el resultado de textura y sabor que se busca",
-        "Solo son una tradición decorativa sin efecto real",
-        "Para decidir el precio del postre",
-        "Para calcular el tiempo de entrega al cliente"
+        "74°C",
+        "63°C",
+        "71°C",
+        "65°C"
       ],
       "correcta": 0,
-      "explicacion": "Conocer estas tablas no es memorización arbitraria: cada punto de temperatura en repostería (hilo, bola, quebradizo, etc.) corresponde a una textura y un resultado de sabor específicos."
+      "explicacion": "74°C es la temperatura interna mínima segura para aves enteras o molidas, y también para sobras y recalentado."
     },
     {
       "id": "1.4-d",
       "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué temperatura interna mínima debe alcanzar la carne molida de res, cerdo o cordero?",
+      "opciones": [
+        "71°C",
+        "63°C",
+        "74°C",
+        "60°C"
+      ],
+      "correcta": 0,
+      "explicacion": "La carne molida requiere una temperatura más alta que los cortes enteros porque el proceso de molido distribuye posibles bacterias por toda la pieza, no solo en la superficie."
+    },
+    {
+      "id": "1.4-e",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la temperatura de conservación estándar para la refrigeración de alimentos perecederos?",
+      "opciones": [
+        "De 0°C a 4°C",
+        "De 6°C a 10°C",
+        "De -18°C a 0°C",
+        "De 4°C a 8°C"
+      ],
+      "correcta": 0,
+      "explicacion": "Este rango está justo debajo del límite inferior de la zona de peligro (6°C), lo que mantiene el crecimiento bacteriano al mínimo."
+    },
+    {
+      "id": "1.4-f",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "En el mantenimiento en caliente (buffet), ¿qué temperatura mínima se debe mantener?",
+      "opciones": [
+        "65°C o mayor",
+        "50°C o mayor",
+        "74°C exactamente",
+        "60°C como máximo"
+      ],
+      "correcta": 0,
+      "explicacion": "65°C es justo el límite superior de la zona de peligro: mantener el alimento por encima de ese punto evita que entre en el rango bacteriano riesgoso."
+    },
+    {
+      "id": "1.4-g",
+      "subtema": "1.4",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada punto de cocción del azúcar con su rango de temperatura aproximado.",
+      "pares": [
+        { "izquierda": "Hilo", "derecha": "110–112°C" },
+        { "izquierda": "Bola blanda", "derecha": "112–116°C" },
+        { "izquierda": "Bola dura", "derecha": "121–130°C" },
+        { "izquierda": "Quebradizo (caramelo)", "derecha": "150–160°C" },
+        { "izquierda": "Caramelo oscuro", "derecha": "165–180°C" }
+      ],
+      "explicacion": "Cada rango de temperatura del azúcar produce una textura completamente distinta al enfriarse: es la temperatura, y no el tiempo, lo que determina el punto."
+    },
+    {
+      "id": "1.4-h",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿En qué consiste la Reacción de Maillard?",
+      "opciones": [
+        "La reacción entre aminoácidos y azúcares reductores (140–165°C) responsable del color dorado y sabor tostado",
+        "La descomposición térmica directa de los azúcares sin intervención de proteínas",
+        "La absorción de agua por los gránulos de almidón",
+        "La coagulación de las proteínas del huevo"
+      ],
+      "correcta": 0,
+      "explicacion": "La Maillard es responsable del color dorado y sabor tostado de carnes selladas, pan horneado y café tostado, y requiere una superficie relativamente seca."
+    },
+    {
+      "id": "1.4-i",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué una carne húmeda no se sella correctamente en una sartén caliente?",
+      "opciones": [
+        "Porque el exceso de humedad en la superficie enfría la sartén e impide alcanzar la temperatura de Maillard",
+        "Porque el agua reacciona químicamente con la sal",
+        "Porque la humedad hace que la carne se pegue al termómetro",
+        "No hay relación real entre humedad y sellado"
+      ],
+      "correcta": 0,
+      "explicacion": "El agua debe evaporarse primero antes de que la superficie alcance la temperatura necesaria para que ocurra la reacción de Maillard."
+    },
+    {
+      "id": "1.4-j",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿A qué temperatura ocurre la gelatinización del almidón y qué efecto produce?",
+      "opciones": [
+        "Entre 60–70°C; los gránulos absorben agua y se hinchan irreversiblemente, espesando los líquidos",
+        "Entre 140–165°C; produce color dorado en la superficie",
+        "Entre 100–110°C; produce evaporación total del líquido",
+        "Entre 0–4°C; conserva la textura del almidón crudo"
+      ],
+      "correcta": 0,
+      "explicacion": "Es lo que espesa una salsa ligada con harina o fécula, y lo que da textura a un arroz o una pasta bien cocidos."
+    },
+    {
+      "id": "1.4-k",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "A nivel bacteriológico, ¿a qué ritmo se multiplican los microorganismos si se mantienen dentro de la zona de peligro en condiciones óptimas?",
+      "opciones": [
+        "Llegan a duplicar su población cada 20 minutos",
+        "Se duplican cada 24 horas",
+        "No se multiplican si el alimento está tapado",
+        "Se duplican solo si el alimento está fuera de refrigeración más de un día"
+      ],
+      "correcta": 0,
+      "explicacion": "Esta velocidad de multiplicación es la razón detrás de la regla de las dos horas para alimentos en la zona de peligro."
+    },
+    {
+      "id": "1.4-l",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es el rango de temperatura y el límite de tiempo exigido para el enfriamiento rápido de un alimento tras su cocción?",
+      "opciones": [
+        "Debe pasar de 65°C a 21°C en un tiempo máximo de 2 horas",
+        "Debe pasar de 100°C a 0°C en 30 minutos",
+        "Debe pasar de 74°C a 4°C en 10 minutos",
+        "No existe un límite de tiempo definido para el enfriamiento"
+      ],
+      "correcta": 0,
+      "explicacion": "Un enfriamiento lento mantiene el alimento demasiado tiempo dentro de la zona de peligro, aunque ya se haya cocinado correctamente."
+    },
+    {
+      "id": "1.4-m",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "En el manejo del azúcar, ¿qué textura produce el punto 'Hilo' y a qué temperatura ocurre?",
+      "opciones": [
+        "Forma un hilo fino entre los dedos, usado en almíbares ligeros; ocurre entre 110–112°C",
+        "Se endurece por completo, usado en piezas decorativas; ocurre entre 150–160°C",
+        "Forma una bola maleable en agua fría; ocurre entre 112–116°C",
+        "Produce color ámbar oscuro; ocurre entre 165–180°C"
+      ],
+      "correcta": 0,
+      "explicacion": "El punto de hilo es el primero de la escala de puntos del caramelo, usado en almíbares ligeros."
+    },
+    {
+      "id": "1.4-n",
+      "subtema": "1.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la diferencia química fundamental entre la Caramelización y la Reacción de Maillard?",
+      "opciones": [
+        "La caramelización es descomposición térmica directa de azúcares sin proteínas; la Maillard requiere aminoácidos y azúcares reductores",
+        "Son exactamente el mismo fenómeno con distinto nombre",
+        "La caramelización ocurre solo en carnes; la Maillard solo en azúcares",
+        "La Maillard ocurre a temperaturas más bajas que la caramelización"
+      ],
+      "correcta": 0,
+      "explicacion": "La caramelización no necesita proteínas; la Maillard sí requiere la interacción entre aminoácidos y azúcares reductores."
+    },
+    {
+      "id": "1.4-o",
+      "subtema": "1.4",
       "tipo": "verdadero_falso",
       "pregunta": "Las tablas de temperatura son solo una formalidad, sin relación real con la seguridad alimentaria.",
       "correcta": false,
-      "explicacion": "Falso: están directamente ligadas a la seguridad alimentaria (evitar la zona de peligro bacteriano) y también a los resultados de textura y sabor — no son un trámite decorativo."
+      "explicacion": "Falso: están directamente ligadas a la seguridad alimentaria y también a los resultados de textura y sabor — no son un trámite decorativo."
     },
     {
       "id": "1.5-a",
       "subtema": "1.5",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué sistema de unidades usa principalmente la cocina profesional?",
+      "pregunta": "¿A cuántos gramos equivale aproximadamente una onza (oz) en conversiones culinarias?",
       "opciones": [
-        "El sistema métrico decimal (gramos, kilogramos, mililitros, litros)",
-        "El sistema anglosajón (onzas, libras, tazas)",
-        "Un sistema propio sin relación con ningún estándar",
-        "El sistema imperial exclusivamente"
+        "28 gramos",
+        "454 gramos",
+        "100 gramos",
+        "16 gramos"
       ],
       "correcta": 0,
-      "explicacion": "La cocina profesional trabaja principalmente con el sistema métrico decimal, aunque en textos y recetarios de origen anglosajón es común encontrar onzas, libras y tazas — de ahí la importancia de saber convertir entre sistemas."
+      "explicacion": "1 onza equivale a 28 gramos, útil para ingredientes secos y porciones pequeñas en recetarios anglosajones."
     },
     {
       "id": "1.5-b",
       "subtema": "1.5",
-      "tipo": "verdadero_falso",
-      "pregunta": "Unidades como 'una pizca' o 'al gusto' son recomendables para procesos que requieren precisión exacta.",
-      "correcta": false,
-      "explicacion": "Estas unidades propias del oficio dependen de la experiencia del cocinero, no de una medida exacta. Son útiles en ajustes finales, pero no para procesos donde la precisión es indispensable (como una ficha técnica de producción)."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿A cuántos gramos equivale una libra (lb)?",
+      "opciones": [
+        "454 gramos (= 16 oz)",
+        "28 gramos",
+        "1000 gramos",
+        "500 gramos"
+      ],
+      "correcta": 0,
+      "explicacion": "Una libra equivale a 454 gramos, es decir, 16 onzas — común en recetarios de carnes, harinas y azúcar de origen estadounidense."
     },
     {
       "id": "1.5-c",
       "subtema": "1.5",
-      "tipo": "opcion_multiple",
-      "pregunta": "¿Por qué es importante estandarizar las unidades en un recetario interno o ficha técnica?",
-      "opciones": [
-        "Porque permite que un platillo salga igual sin importar quién lo prepare",
-        "Porque lo exige la ley de etiquetado",
-        "Porque así se reduce el número de ingredientes",
-        "No tiene relación con la consistencia del platillo"
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada unidad con su equivalencia métrica aproximada.",
+      "pares": [
+        { "izquierda": "1 onza líquida (fl oz)", "derecha": "30 ml" },
+        { "izquierda": "1 litro (l)", "derecha": "33.8 fl oz" },
+        { "izquierda": "1 galón (gal)", "derecha": "3.8 l" },
+        { "izquierda": "1 cuarto de galón (qt)", "derecha": "0.95 l" }
       ],
-      "correcta": 0,
-      "explicacion": "Estandarizar unidades es lo que permite que un platillo salga igual sin importar quién lo prepare — esto es central en cocina de producción y en cualquier operación con más de un cocinero."
+      "explicacion": "Estas equivalencias, documentadas en la Guía de Técnicas Culinarias, permiten convertir entre recetarios de origen anglosajón y el sistema métrico decimal."
     },
     {
       "id": "1.5-d",
       "subtema": "1.5",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué tipo de unidades son comunes en recetarios de origen anglosajón?",
+      "pregunta": "¿Cuál es la fórmula del Factor de Conversión (FC) para ajustar el rendimiento de una receta?",
       "opciones": [
-        "Onzas, libras y tazas",
-        "Gramos y mililitros exclusivamente",
-        "Solo unidades del oficio como 'pizca' o 'al gusto'",
-        "El sistema métrico decimal"
+        "FC = (porciones deseadas × peso de porción deseada) ÷ (porciones de la receta estándar × peso de porción estándar)",
+        "FC = porciones deseadas ÷ porciones estándar únicamente",
+        "FC = peso total de la receta ÷ número de ingredientes",
+        "FC = costo total ÷ número de porciones"
       ],
       "correcta": 0,
-      "explicacion": "Los recetarios de origen anglosajón suelen usar onzas, libras y tazas, por eso conviene saber convertir entre ese sistema y el métrico decimal que se usa en la cocina profesional de referencia."
+      "explicacion": "Ese factor se multiplica después por cada ingrediente de la receta original para obtener las cantidades ajustadas al nuevo rendimiento."
+    },
+    {
+      "id": "1.5-e",
+      "subtema": "1.5",
+      "tipo": "verdadero_falso",
+      "pregunta": "Las unidades 'al gusto' son aceptables en pastelería y panadería porque en esas disciplinas la precisión no es tan importante.",
+      "correcta": false,
+      "explicacion": "Es al revés: pastelería y panadería requieren precisión absoluta, y una variación mínima en las proporciones altera notablemente el resultado final."
+    },
+    {
+      "id": "1.5-f",
+      "subtema": "1.5",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la equivalencia en litros de un galón (gal) y de un cuarto de galón (qt)?",
+      "opciones": [
+        "Un galón equivale a 3.8 litros y un cuarto de galón a 0.95 litros",
+        "Un galón equivale a 1 litro exacto",
+        "Un galón equivale a 10 litros y un cuarto de galón a 2.5 litros",
+        "Un cuarto de galón equivale a 4 litros"
+      ],
+      "correcta": 0,
+      "explicacion": "Estas conversiones son aproximadas por convención de la industria, útiles para compras de líquidos a granel en recetarios de origen estadounidense."
+    },
+    {
+      "id": "1.5-g",
+      "subtema": "1.5",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la fórmula exacta para convertir grados Fahrenheit (°F) a Celsius (°C)?",
+      "opciones": [
+        "(°F − 32) ÷ 1.8",
+        "(°F + 32) × 1.8",
+        "°F ÷ 2",
+        "(°F − 32) × 2"
+      ],
+      "correcta": 0,
+      "explicacion": "Esta fórmula es indispensable para trabajar con recetarios y hornos de origen estadounidense, que suelen indicar temperatura en Fahrenheit."
     }
   ]
 }
