@@ -99,13 +99,17 @@ async function cargarGruposEnSelect() {
 // Carga UNA sola vez todos los datos del alumno y los deja en datosCache.
 async function cargarDatos() {
   const base = ['grupos', sesion.grupoId, 'alumnos', sesion.alumnoId];
-  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, intSnap] = await Promise.all([
+  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, intSnap, preguntasSnap] = await Promise.all([
     getDocs(collection(db, ...base, 'actividades')).catch(() => null),
     getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
     getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
     getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
     getDocs(collection(db, ...base, 'examenes')).catch(() => null),
     getDocs(collection(db, ...base, 'intentos')).catch(() => null),
+    // Preguntas del micro-ensayo: viven a nivel de grupo (las captura el
+    // docente en el panel), no por alumno — todos los alumnos del grupo
+    // ven las mismas preguntas de la semana que esté activa.
+    getDocs(collection(db, 'grupos', sesion.grupoId, 'ensayos_preguntas')).catch(() => null),
   ]);
 
   const ensayos = {};
@@ -114,10 +118,13 @@ async function cargarDatos() {
   if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
   const intentos = {};
   if (intSnap) intSnap.docs.forEach(d => { intentos[d.id] = d.data(); });
+  const ensayosPreguntas = {};
+  if (preguntasSnap) preguntasSnap.docs.forEach(d => { ensayosPreguntas[d.id] = d.data(); });
 
   datosCache = {
     idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
     ensayos,
+    ensayosPreguntas,
     practicas: evalSnap ? evalSnap.docs.map(d => d.data()) : [],
     asistencias: asisSnap ? asisSnap.docs.map(d => d.data()) : [],
     examenes,
@@ -154,7 +161,7 @@ function renderPracticas(bloques) {
       : x.practicas.lista
           .sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''))
           .map(p => {
-            const pts = (Number(p.calificacion) || 0) / 10 * 4;
+            const pts = (Number(p.calificacion) || 0) / 10 * 2;
             return `
               <div class="prog-ensayo-row">
                 <span class="prog-ensayo-tema">${p.fecha || 'sin fecha'}</span>
@@ -168,6 +175,10 @@ function renderPracticas(bloques) {
   `).join('');
 }
 
+// Ensayos: cada semana va en su propio desplegable (<details>) para que la
+// lista no crezca sin control conforme avanza el cuatrimestre. Las preguntas
+// solo se muestran si el docente las activó desde el panel — son de solo
+// lectura, el alumno las responde a mano en su libreta.
 function renderEnsayos(bloques) {
   const cont = document.getElementById('prog-ensayos');
   const empty = document.getElementById('prog-ensayos-empty');
@@ -187,12 +198,22 @@ function renderEnsayos(bloques) {
         const derecha = pts !== null
           ? `${pts.toFixed(1)} / ${PTS_POR_ENSAYO} pts`
           : (entregado ? 'Entregada' : 'Pendiente');
+
+        const pInfo = datosCache.ensayosPreguntas[String(n)];
+        const preguntasActivas = pInfo && pInfo.activo && Array.isArray(pInfo.preguntas) && pInfo.preguntas.length > 0
+          ? pInfo.preguntas
+          : null;
+
         return `
-          <div class="prog-ensayo-row">
-            <span class="prog-ensayo-icon ${entregado ? 'ok' : 'pendiente'}">${entregado ? '✓' : '○'}</span>
-            <span class="prog-ensayo-tema">Sem. ${n} — ${escaparHTML(TEMAS_SEMANA[n] || '')}</span>
-            <span class="prog-ensayo-calif">${derecha}</span>
-          </div>`;
+          <details class="prog-detalle-bloque">
+            <summary>${entregado ? '✓' : '○'} Sem. ${n} — ${escaparHTML(TEMAS_SEMANA[n] || '')} — ${derecha}</summary>
+            <div class="prog-ens-preguntas-body">
+              ${preguntasActivas
+                ? `<p class="field-hint">Preguntas de esta semana — respóndelas a mano en tu libreta:</p>
+                   <ol>${preguntasActivas.map(p => `<li>${escaparHTML(p)}</li>`).join('')}</ol>`
+                : '<p class="empty-inline">Tu docente todavía no publica las preguntas de esta semana.</p>'}
+            </div>
+          </details>`;
       }).join('')}
       <div class="prog-ens-subtotal">
         <span>Subtotal Bloque ${x.bloque}</span>
@@ -202,22 +223,22 @@ function renderEnsayos(bloques) {
   }).join('') + renderAcumuladoEnsayos(bloques);
 }
 
-// Los 60 pts de bitácoras del cuatrimestre alimentan el 35% de la Evaluación
-// Final (60 pts = 35%). El docente puede ajustar puntos al cierre por la
-// presentación del compendio digitalizado.
+// Los 90 pts de bitácoras del cuatrimestre (15 semanas × 6 pts) alimentan el
+// 35% de la Evaluación Final. El docente puede ajustar puntos al cierre por
+// la presentación del compendio digitalizado.
 function renderAcumuladoEnsayos(bloques) {
   const acumulado = bloques.reduce((s, x) => s + x.ensayos.pts, 0);
-  const pctFinal = acumulado / 60 * 35;
+  const pctFinal = acumulado / 90 * 35;
   return `
     <div class="prog-ens-total">
       <span>Acumulado del cuatrimestre</span>
-      <strong>${acumulado.toFixed(1)} / 60 pts</strong>
+      <strong>${acumulado.toFixed(1)} / 90 pts</strong>
     </div>
     <div class="prog-ens-subtotal" style="margin-top:8px;">
       <span>Equivale hoy en tu Evaluación Final</span>
       <strong>${pctFinal.toFixed(1)}% de 35%</strong>
     </div>
-    <p class="field-hint">Tus 15 bitácoras suman 60 puntos, que se convierten en el 35% de "entrega de ensayos" de tu Evaluación Final. Tu docente puede ajustar puntos al cierre según la presentación del compendio final.</p>
+    <p class="field-hint">Tus 15 bitácoras suman 90 puntos, que se convierten en el 35% de "entrega de ensayos" de tu Evaluación Final. Tu docente puede ajustar puntos al cierre según la presentación del compendio final.</p>
   `;
 }
 
