@@ -5,239 +5,760 @@
       "id": "2.1-a",
       "subtema": "2.1",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué es el aprovisionamiento de materias primas?",
+      "pregunta": "¿Qué regla fundamental de la cocina profesional establece el límite de la técnica frente al insumo?",
       "opciones": [
-        "El proceso de seleccionar, solicitar y recibir los insumos que una cocina necesita",
-        "El emplatado final de un platillo",
-        "El menú de temporada de un restaurante",
-        "La limpieza del área de trabajo al cierre"
+        "La técnica no puede compensar un ingrediente de mala calidad; la calidad del insumo pone un techo real al resultado final",
+        "La técnica siempre puede corregir cualquier defecto del ingrediente",
+        "El precio del ingrediente determina su calidad automáticamente",
+        "La presentación final compensa cualquier defecto de sabor"
       ],
       "correcta": 0,
-      "explicacion": "El aprovisionamiento incluye decidir proveedores, calcular cantidades según la producción esperada, y verificar que lo recibido cumpla con lo pedido en calidad y cantidad."
+      "explicacion": "Ninguna cantidad de habilidad, reducción o emplatado convierte una materia prima deficiente en un platillo de excelencia — ese techo solo se puede acercar, no superar."
     },
     {
       "id": "2.1-b",
       "subtema": "2.1",
-      "tipo": "verdadero_falso",
-      "pregunta": "Un buen aprovisionamiento solo importa para reducir costos, no tiene relación con las mermas ni con las rupturas de stock.",
-      "correcta": false,
-      "explicacion": "Un buen aprovisionamiento reduce mermas (desperdicio) y evita rupturas de stock a mitad de servicio — no es solo un tema de costo."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué diferencia existe entre el ganado de engorda mínima y las razas de carne premium como Wagyu o Angus?",
+      "opciones": [
+        "Las razas premium se crían cuidando el marmoleado (grasa intramuscular en vetas), que se derrite al cocinar y humedece la fibra",
+        "El ganado de engorda mínima siempre produce carne más jugosa",
+        "No existe ninguna diferencia real en la calidad final",
+        "Las razas premium solo se diferencian por su color de piel"
+      ],
+      "correcta": 0,
+      "explicacion": "El marmoleado no es un detalle estético: determina la jugosidad y suavidad de la carne al cocinarse, sin que la técnica de cocción tenga responsabilidad en esa diferencia."
     },
     {
       "id": "2.1-c",
       "subtema": "2.1",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué se debe verificar al recibir mercancía en la cocina?",
+      "pregunta": "¿Por qué un establecimiento gastronómico serio debería diseñar su menú alrededor de la temporada en lugar de exigirla en abstracto?",
       "opciones": [
-        "Temperatura de llegada, integridad del empaque, fecha de caducidad y documentación sanitaria",
-        "Solo el precio pagado por el producto",
-        "Únicamente el color del empaque",
-        "Nada, la recepción no requiere verificación"
+        "Porque aprovechar los productos en su punto óptimo de abundancia, frescura y precio mejora el resultado sin alterar la técnica",
+        "Porque la ley obliga a usar solo productos de temporada",
+        "Porque los productos fuera de temporada siempre son más caros sin excepción",
+        "Porque no existen productos disponibles fuera de temporada"
       ],
       "correcta": 0,
-      "explicacion": "La recepción de mercancía es un punto crítico de control, especialmente en cárnicos, lácteos y pescados, donde la temperatura de llegada es determinante."
+      "explicacion": "Construir el menú aprovechando las ventanas de temporada —camarón o pulpo en Campeche, por ejemplo— mejora la calidad y suele reducir el costo, sin cambiar nada de la técnica."
     },
     {
       "id": "2.1-d",
       "subtema": "2.1",
-      "tipo": "relacionar",
-      "pregunta": "Relaciona cada herramienta de aprovisionamiento con su función.",
-      "pares": [
-        { "izquierda": "Lista de pedido estandarizada", "derecha": "Evita variaciones en las cantidades pedidas" },
-        { "izquierda": "Ficha de especificación por producto", "derecha": "Define variedad, calibre y origen esperado" },
-        { "izquierda": "Control de fechas de recepción", "derecha": "Evita que lleguen productos caducados" }
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué actitud diferencia a un cocinero comprometido con la calidad al momento de adquirir su materia prima?",
+      "opciones": [
+        "Acudir personalmente a elegir la materia prima, y buscar otro proveedor si el producto no cumple",
+        "Aceptar siempre lo que el proveedor entrega sin revisarlo",
+        "Comprar únicamente por el precio más bajo disponible",
+        "Delegar siempre la compra sin verificar el resultado"
       ],
-      "explicacion": "Estas tres herramientas son simples pero efectivas: cada una controla un riesgo distinto del aprovisionamiento (cantidad, especificación del producto, y vigencia)."
+      "correcta": 0,
+      "explicacion": "'Comprar' en sentido activo implica revisar con los propios ojos y manos, y cambiar de proveedor cuando el producto del día no cumple el estándar buscado."
     },
     {
       "id": "2.1-e",
       "subtema": "2.1",
+      "tipo": "verdadero_falso",
+      "pregunta": "Una interrupción breve de la cadena de frío no tiene ningún efecto real en la calidad de un ingrediente perecedero.",
+      "correcta": false,
+      "explicacion": "Falso: una interrupción de la cadena de frío, aunque sea breve, puede acelerar el deterioro de forma irreversible, incluso si el producto se refrigera de nuevo después."
+    },
+    {
+      "id": "2.1-f",
+      "subtema": "2.1",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Por qué la recepción de mercancía es un punto crítico de control?",
+      "pregunta": "¿Cómo varía el requerimiento de transporte entre carnes/pescados, verduras de hoja y frutas climatéricas?",
       "opciones": [
-        "Porque ahí se detectan a tiempo problemas de temperatura, empaque o caducidad antes de usar el insumo",
-        "Porque ahí se decide el precio de venta del platillo",
-        "Porque no tiene ningún impacto en la seguridad alimentaria",
-        "Porque solo afecta la presentación del insumo"
+        "Carnes y pescados requieren temperatura constante (con hielo el pescado); verduras de hoja necesitan ventilación y humedad controlada; frutas climatéricas maduran tras la cosecha",
+        "Todos requieren exactamente el mismo tipo de transporte refrigerado",
+        "Solo las carnes requieren cuidado especial en el transporte",
+        "Las frutas climatéricas nunca deben refrigerarse bajo ninguna circunstancia"
       ],
       "correcta": 0,
-      "explicacion": "Detectar un problema en la recepción evita que un insumo comprometido (por ejemplo, fuera de temperatura o caducado) entre a la producción."
+      "explicacion": "Cada tipo de materia prima exige condiciones de transporte distintas según su naturaleza, y confundirlas puede arruinar el producto antes de llegar a la cocina."
+    },
+    {
+      "id": "2.1-g",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué la carne de animales sometidos a estrés extremo antes del sacrificio pierde calidad técnica (carnes DFD)?",
+      "opciones": [
+        "Porque el estrés agota el glucógeno muscular, alterando la acidificación natural y resultando en carnes oscuras, firmes y secas",
+        "Porque el estrés hace que el animal pierda peso antes del sacrificio",
+        "Porque el estrés no tiene ningún efecto medible en la carne",
+        "Porque el estrés mejora el marmoleado de la carne"
+      ],
+      "correcta": 0,
+      "explicacion": "DFD significa 'dark, firm, dry' (oscura, firme, seca) — un resultado directo de la alteración del glucógeno muscular por estrés previo al sacrificio."
+    },
+    {
+      "id": "2.1-h",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué diferencia culinaria existe entre un ave de corral joven y una de desecho?",
+      "opciones": [
+        "El ave joven tiene tejido conectivo blando apto para métodos rápidos; la de desecho es dura y fibrosa, exigiendo cocciones largas por expansión",
+        "No existe ninguna diferencia real entre ambas",
+        "El ave de desecho siempre es más cara que la joven",
+        "El ave joven requiere siempre cocción larga y la de desecho cocción rápida"
+      ],
+      "correcta": 0,
+      "explicacion": "Elegir la técnica correcta según la edad del ave sigue el mismo principio visto en el Bloque 3: cortes tiernos piden concentración rápida, cortes duros piden cocción mixta lenta."
+    },
+    {
+      "id": "2.1-i",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son las cinco etapas del ciclo de compras en una cocina profesional?",
+      "opciones": [
+        "Especificación, cotización y selección, orden de compra, recepción y almacenamiento",
+        "Compra, cocción, montaje, servicio y limpieza",
+        "Selección, pago, transporte, refrigeración y venta",
+        "Pedido, entrega, factura, pago y archivo"
+      ],
+      "correcta": 0,
+      "explicacion": "Este ciclo se repite constantemente en cualquier cocina de producción, no es un evento aislado de 'ir de compras'."
+    },
+    {
+      "id": "2.1-j",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Bajo qué cuatro dimensiones se evalúa y selecciona a un proveedor de alimentos?",
+      "opciones": [
+        "Calidad consistente, cumplimiento de tiempos de entrega, condiciones sanitarias verificables y disposición a dar trazabilidad",
+        "Solo el precio más bajo disponible en el mercado",
+        "Cercanía geográfica y rapidez de respuesta telefónica únicamente",
+        "Antigüedad del negocio y número de sucursales"
+      ],
+      "correcta": 0,
+      "explicacion": "Un precio bajo que sacrifica cualquiera de estas cuatro dimensiones termina costando más caro en mermas, retrabajos o riesgo sanitario."
+    },
+    {
+      "id": "2.1-k",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué parámetros mínimos se deben verificar al recibir carnes y aves en la cocina?",
+      "opciones": [
+        "Temperatura ≤4°C o congelado, color característico, ausencia de olores extraños, empaque íntegro y fecha de caducidad",
+        "Solo el precio de factura contra lo cotizado",
+        "Únicamente el peso total del pedido",
+        "Solo la firma del repartidor en la remisión"
+      ],
+      "correcta": 0,
+      "explicacion": "La recepción es el último punto de control real antes de que el insumo entre a producción, por eso revisa varios criterios a la vez, no solo uno."
+    },
+    {
+      "id": "2.1-l",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué indicadores confirman la recepción correcta de pescados y mariscos enteros?",
+      "opciones": [
+        "Ojos brillantes y abombados, carne firme al tacto, olor a mar fresco (nunca amoniacal) y hielo suficiente",
+        "Ojos hundidos y olor amoniacal intenso",
+        "Escamas que se desprenden con facilidad",
+        "Carne que queda marcada permanentemente al presionar"
+      ],
+      "correcta": 0,
+      "explicacion": "Estos son los criterios de aceptación; sus opuestos (ojos hundidos, olor amoniacal, escamas sueltas, carne marcada) son señales de rechazo."
+    },
+    {
+      "id": "2.1-m",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la diferencia operativa entre FIFO y FEFO en el almacenamiento?",
+      "opciones": [
+        "FIFO organiza por orden de llegada; FEFO prioriza la fecha de caducidad real del producto",
+        "FIFO y FEFO son exactamente el mismo sistema con distinto nombre",
+        "FEFO organiza por precio y FIFO por proveedor",
+        "FIFO se usa solo para líquidos y FEFO solo para sólidos"
+      ],
+      "correcta": 0,
+      "explicacion": "FEFO es más preciso que FIFO cuando dos lotes del mismo producto tienen fechas de caducidad distintas — lo que importa es qué caduca primero."
+    },
+    {
+      "id": "2.1-n",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué protocolo correcto se debe seguir al recibir un pedido cárnico o marino con hallazgos parciales de descomposición?",
+      "opciones": [
+        "Documentar con fotografía, separar y rechazar solo las unidades defectuosas (firmando la remisión), y aceptar el resto si cumple",
+        "Rechazar todo el pedido completo sin excepción",
+        "Aceptar todo el pedido sin documentar nada",
+        "Aceptar el pedido y descartar las piezas defectuosas sin avisar al proveedor"
+      ],
+      "correcta": 0,
+      "explicacion": "El protocolo correcto no es todo-o-nada: se documenta, se separan físicamente las piezas comprometidas y se acepta el resto verificando los criterios de recepción."
+    },
+    {
+      "id": "2.1-o",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué es la trazabilidad en la cadena de suministro y para qué sirve ante una alerta sanitaria?",
+      "opciones": [
+        "Es reconstruir el recorrido completo de un ingrediente desde su origen hasta el plato, permitiendo retirar con precisión solo el producto afectado",
+        "Es el precio final que paga el cliente por un platillo",
+        "Es la lista de ingredientes que aparece en el menú",
+        "Es un trámite sin ninguna utilidad práctica real"
+      ],
+      "correcta": 0,
+      "explicacion": "Sin trazabilidad, ante una alerta sanitaria una cocina no tiene más opción que desechar todo su inventario de ese ingrediente, con el costo y riesgo que eso implica."
+    },
+    {
+      "id": "2.1-p",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué los cefalópodos como el pulpo requieren un tratamiento físico previo (golpeado o congelación) antes de cocinarse?",
+      "opciones": [
+        "Porque sus fibras musculares son densas y elásticas, y romper esa estructura ayuda a desnaturalizar el colágeno para acelerar su ablandamiento",
+        "Porque de lo contrario cambian de color al cocinarse",
+        "Porque así se elimina cualquier riesgo de contaminación",
+        "Porque sin ese tratamiento no se pueden congelar"
+      ],
+      "correcta": 0,
+      "explicacion": "El golpeado o la congelación previa rompen la estructura física densa del pulpo, facilitando su ablandamiento durante la cocción."
+    },
+    {
+      "id": "2.1-q",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué parámetros exige la recepción de abarrotes y productos secos en el almacén?",
+      "opciones": [
+        "Empaque sellado sin roturas, ausencia de humedad o plagas, fecha de caducidad vigente y cantidad exacta contra remisión",
+        "Solo verificar que el empaque tenga buen diseño visual",
+        "Únicamente el precio de factura",
+        "Solo la fecha de fabricación, sin importar la de caducidad"
+      ],
+      "correcta": 0,
+      "explicacion": "Los abarrotes tienen sus propios criterios de recepción, distintos a los de carnes o pescados, pero igualmente rigurosos."
+    },
+    {
+      "id": "2.1-r",
+      "subtema": "2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la fórmula para calcular la cantidad bruta (AP) a partir de la cantidad neta (EP) y el porcentaje de merma?",
+      "opciones": [
+        "Cantidad AP = Cantidad EP ÷ (1 − % de merma en decimal)",
+        "Cantidad AP = Cantidad EP × % de merma",
+        "Cantidad AP = Cantidad EP + % de merma en gramos",
+        "Cantidad AP = Cantidad EP − % de merma en decimal"
+      ],
+      "correcta": 0,
+      "explicacion": "Por ejemplo, con 5 kg EP y 12% de merma: 5 ÷ 0.88 = 5.68 kg AP que hay que pedir al proveedor para terminar con los 5 kg netos necesarios."
     },
     {
       "id": "2.2-a",
       "subtema": "2.2",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Cómo se agrupan las materias primas de uso común en una cocina?",
+      "pregunta": "¿Cuáles son los tres grandes orígenes en que se divide cualquier materia prima?",
       "opciones": [
-        "En grandes familias: cárnicos, pescados y mariscos, lácteos y huevo, cereales y leguminosas, hortalizas y frutas, grasas y aceites",
-        "Solo por su precio de compra",
-        "Solo por su país de origen",
-        "No existe ninguna agrupación estándar"
+        "Animal, vegetal y mineral",
+        "Fresco, congelado y seco",
+        "Nacional, importado y local",
+        "Sólido, líquido y en polvo"
       ],
       "correcta": 0,
-      "explicacion": "Cada familia tiene su propia lógica de manejo, temporada y conservación — agruparlas así ayuda a anticipar cómo tratarlas."
+      "explicacion": "Esta clasificación no es solo taxonómica: cada origen impone reglas distintas de manejo, conservación y riesgo sanitario."
     },
     {
       "id": "2.2-b",
       "subtema": "2.2",
-      "tipo": "verdadero_falso",
-      "pregunta": "Familiarizarse con las familias de materias primas es solo memorizar una lista, sin relación con las sustituciones posibles.",
-      "correcta": false,
-      "explicacion": "Al contrario: entender las familias ayuda a reconocer qué combinaciones son naturales dentro de una tradición culinaria y qué sustituciones son razonables cuando falta un ingrediente."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son los grupos principales de materias primas de uso cotidiano en la cocina profesional?",
+      "opciones": [
+        "Cereales, leguminosas, lácteos, huevo, carnes y aves, pescados y mariscos, frutas y verduras, grasas y aceites, condimentos y especias",
+        "Solo carnes, verduras y postres",
+        "Solo proteínas y carbohidratos",
+        "Solo ingredientes importados y locales"
+      ],
+      "correcta": 0,
+      "explicacion": "Dentro de los tres orígenes (animal, vegetal, mineral), la formación culinaria reconoce estos grupos de uso cotidiano que todo cocinero debe conocer con profundidad."
     },
     {
       "id": "2.2-c",
       "subtema": "2.2",
-      "tipo": "relacionar",
-      "pregunta": "Relaciona cada familia de materia prima con su cuidado higiénico principal.",
-      "pares": [
-        { "izquierda": "Cárnicos y pescados", "derecha": "Cadena de frío estricta y áreas de trabajo separadas" },
-        { "izquierda": "Hortalizas", "derecha": "Lavado y desinfección" },
-        { "izquierda": "Lácteos", "derecha": "Control estricto de temperatura de refrigeración" }
+      "tipo": "opcion_multiple",
+      "pregunta": "¿A qué se debe históricamente el alto valor percibido de especias como la pimienta y la canela?",
+      "opciones": [
+        "A la herencia de rutas comerciales centenarias que atravesaban Asia y el Mediterráneo, encareciéndose en cada tramo",
+        "A que son extremadamente difíciles de cultivar hoy en día",
+        "A que solo crecen en un único país del mundo",
+        "A que su producción está prohibida en la mayoría de países"
       ],
-      "explicacion": "El manejo higiénico varía por familia: cárnicos y pescados necesitan separación para evitar contaminación cruzada; las hortalizas requieren lavado; los lácteos requieren control de frío constante."
+      "correcta": 0,
+      "explicacion": "El precio histórico de una especia no siempre refleja su dificultad de cultivo actual — buena parte de ese valor es herencia de rutas comerciales que hoy ya no existen."
     },
     {
       "id": "2.2-d",
       "subtema": "2.2",
-      "tipo": "opcion_multiple",
-      "pregunta": "¿Por qué cárnicos y pescados requieren áreas de trabajo separadas de otros alimentos?",
-      "opciones": [
-        "Para evitar contaminación cruzada",
-        "Porque ocupan más espacio físico",
-        "Porque así lo exige el menú del día",
-        "No hay ninguna razón higiénica para separarlos"
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada grado de calidad del huevo con su característica principal.",
+      "pares": [
+        { "izquierda": "Grado AA", "derecha": "Clara firme y yema alta, ideal para poché" },
+        { "izquierda": "Grado A", "derecha": "Clara razonable y yema definida, uso general" },
+        { "izquierda": "Grado B", "derecha": "Clara líquida y yema aplanada, repostería o revueltos" }
       ],
-      "correcta": 0,
-      "explicacion": "La contaminación cruzada entre cárnicos/pescados crudos y otros alimentos es uno de los riesgos de seguridad alimentaria más comunes en una cocina."
+      "explicacion": "La clasificación evalúa la firmeza de la clara, la altura de la yema y el estado de la cámara de aire dentro del cascarón."
     },
     {
       "id": "2.2-e",
       "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué diferencia térmica y de vida de anaquel existe entre la leche pasteurizada y la ultrapasteurizada (UHT)?",
+      "opciones": [
+        "La pasteurizada requiere refrigeración y dura poco; la UHT se calienta a temperaturas más altas y dura meses sin abrir sin refrigeración",
+        "Ambas duran exactamente el mismo tiempo sin refrigeración",
+        "La UHT siempre requiere más refrigeración que la pasteurizada",
+        "No existe ninguna diferencia real entre ambas"
+      ],
+      "correcta": 0,
+      "explicacion": "La UHT se calienta a 135–150°C por segundos, dándole una vida de anaquel prolongada a cambio de un ligero cambio de sabor."
+    },
+    {
+      "id": "2.2-f",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿En qué consiste el proceso mecánico de homogeneización de la leche?",
+      "opciones": [
+        "Romper los glóbulos de grasa mediante un proceso mecánico para evitar que se separen o floten, logrando textura uniforme",
+        "Calentar la leche a temperaturas extremas para eliminar toda la grasa",
+        "Agregar conservadores químicos para prolongar su vida útil",
+        "Filtrar la leche para eliminar la lactosa por completo"
+      ],
+      "correcta": 0,
+      "explicacion": "A diferencia de la pasteurización (proceso térmico), la homogeneización es un proceso mecánico, no de calor."
+    },
+    {
+      "id": "2.2-g",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son las seis funciones técnicas que cumple el huevo en la cocina, más allá de ser fuente de proteína?",
+      "opciones": [
+        "Ligante, emulsionante, aireante, espesante, clarificante y glaseado (dorado)",
+        "Colorante, saborizante, texturizante, conservante, endulzante y espumante",
+        "Solo ligante y espesante",
+        "Solo emulsionante y aireante"
+      ],
+      "correcta": 0,
+      "explicacion": "Comprender estas seis funciones permite saber cuándo el huevo puede sustituirse por otro ingrediente y cuándo no existe un sustituto sencillo (como en el aireado de un merengue)."
+    },
+    {
+      "id": "2.2-h",
+      "subtema": "2.2",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada parte del huevo con su rango de temperatura de coagulación.",
+      "pares": [
+        { "izquierda": "Clara", "derecha": "65°C a 70°C" },
+        { "izquierda": "Yema", "derecha": "75°C a 80°C" }
+      ],
+      "explicacion": "Ese margen de unos 10°C es la ventana que un cocinero aprovecha para lograr una clara firme con una yema todavía líquida o cremosa."
+    },
+    {
+      "id": "2.2-i",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son las equivalencias estándar para cálculos de producción con huevo (peso promedio 50 g sin cáscara)?",
+      "opciones": [
+        "20 huevos completos equivalen a 1 kg; 48 yemas equivalen a 1 litro; 32 claras equivalen a 1 litro",
+        "10 huevos completos equivalen a 1 kg; 20 yemas equivalen a 1 litro",
+        "Un huevo entero pesa exactamente 100 g",
+        "No existen equivalencias estandarizadas para el huevo"
+      ],
+      "correcta": 0,
+      "explicacion": "Estas equivalencias permiten convertir una receta que pide huevo 'por pieza' a una receta de producción que pide huevo por peso o volumen."
+    },
+    {
+      "id": "2.2-j",
+      "subtema": "2.2",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada tipo de harina con su contenido aproximado de proteína.",
+      "pares": [
+        { "izquierda": "Harina para pastel (baja)", "derecha": "7–9%" },
+        { "izquierda": "Harina todo uso", "derecha": "9–11%" },
+        { "izquierda": "Harina de pan (alta)", "derecha": "11–13%" }
+      ],
+      "explicacion": "El contenido de proteína determina qué tan elástica y fuerte puede volverse una masa hecha con esa harina."
+    },
+    {
+      "id": "2.2-k",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué consecuencia culinaria se obtiene al utilizar harina de pan (alta en proteína) para elaborar un pastel?",
+      "opciones": [
+        "Se desarrolla demasiado gluten y la miga resulta dura y correosa en lugar de tierna",
+        "El pastel queda más esponjoso de lo normal",
+        "No hay ninguna diferencia perceptible en el resultado",
+        "El pastel no logra hornearse por completo"
+      ],
+      "correcta": 0,
+      "explicacion": "Usar la harina equivocada para un uso específico produce resultados tan distintos como elegir la papa equivocada para un puré."
+    },
+    {
+      "id": "2.2-l",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué diferencia composicional existe entre la harina de trigo y los almidones puros como la maicena?",
+      "opciones": [
+        "La harina combina almidón con proteína; la maicena es almidón puro sin proteína, produciendo texturas translúcidas y brillantes",
+        "Ambas tienen exactamente la misma composición química",
+        "La maicena contiene más proteína que la harina de trigo",
+        "La harina de trigo no contiene almidón en absoluto"
+      ],
+      "correcta": 0,
+      "explicacion": "Por eso las salsas donde se busca apariencia brillante y transparente se espesan con maicena disuelta en agua fría, no con harina."
+    },
+    {
+      "id": "2.2-m",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo se dividen anatómicamente los productos del mar agrupados como moluscos?",
+      "opciones": [
+        "Bivalvos (dos valvas), gasterópodos (un pie muscular) y cefalópodos (sin concha externa)",
+        "Solo en crustáceos y peces",
+        "Solo en moluscos de agua dulce y salada",
+        "Solo en comestibles y no comestibles"
+      ],
+      "correcta": 0,
+      "explicacion": "Ostión y almeja son bivalvos; caracol y abulón son gasterópodos; pulpo y calamar son cefalópodos — cada familia exige un manejo distinto."
+    },
+    {
+      "id": "2.2-n",
+      "subtema": "2.2",
       "tipo": "verdadero_falso",
-      "pregunta": "Las hortalizas requieren exactamente el mismo manejo de cadena de frío estricta que los cárnicos y pescados.",
-      "correcta": false,
-      "explicacion": "Cada familia tiene su propio manejo higiénico: las hortalizas requieren lavado y desinfección, mientras que cárnicos y pescados requieren cadena de frío estricta y áreas separadas."
+      "pregunta": "Un molusco bivalvo vivo que está abierto sin responder al tacto, o que suena hueco al golpearlo, debe descartarse antes de cocinarse.",
+      "correcta": true,
+      "explicacion": "Correcto. Eso indica que ya no está vivo, y no hay forma segura de 'salvarlo' cocinándolo más tiempo."
+    },
+    {
+      "id": "2.2-o",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo se comportan térmicamente los aceites para fritura profunda frente al aceite de oliva?",
+      "opciones": [
+        "Los aceites neutros tienen punto de humeo alto, ideal para fritura; el aceite de oliva tiene punto de humeo más bajo y sabor pronunciado",
+        "El aceite de oliva siempre tiene mayor punto de humeo que cualquier aceite neutro",
+        "Ambos se comportan exactamente igual a altas temperaturas",
+        "Los aceites neutros no pueden usarse para freír"
+      ],
+      "correcta": 0,
+      "explicacion": "Por eso el aceite de oliva es mejor en usos donde su sabor es protagonista (aderezos, terminados) que en fritura a alta temperatura."
+    },
+    {
+      "id": "2.2-p",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la diferencia fundamental entre una grasa natural y una grasa hidrogenada procesada industrialmente?",
+      "opciones": [
+        "Las naturales existen en ese estado por su composición química original; las hidrogenadas son aceites procesados para solidificarse, generando grasas trans",
+        "No existe ninguna diferencia química real entre ambas",
+        "Las grasas hidrogenadas siempre tienen mejor sabor que las naturales",
+        "Las grasas naturales son siempre líquidas y las hidrogenadas siempre sólidas"
+      ],
+      "correcta": 0,
+      "explicacion": "Las grasas trans están asociadas por la evidencia científica con mayor riesgo cardiovascular cuando se consumen de forma habitual."
+    },
+    {
+      "id": "2.2-q",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué función cumplen el germen y el salvado en un cereal integral respecto al desarrollo de gluten?",
+      "opciones": [
+        "El salvado aporta fibra y el germen aceites, pero sus aristas físicas cortan las hebras de gluten generando masas más densas",
+        "El germen y el salvado aumentan siempre la elasticidad de la masa",
+        "No tienen ningún efecto sobre la textura final",
+        "Solo aportan color, sin efecto en la textura"
+      ],
+      "correcta": 0,
+      "explicacion": "Por esto la harina integral produce una miga más densa que la harina refinada, aunque aporte más fibra y sabor."
+    },
+    {
+      "id": "2.2-r",
+      "subtema": "2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la diferencia química en el comportamiento de las grasas saturadas frente a las insaturadas al someterse al calor?",
+      "opciones": [
+        "Las saturadas tienen enlaces simples más estables al calor; las insaturadas tienen dobles enlaces que se rompen con facilidad, volviéndolas propensas a la rancidez",
+        "Ambas se comportan exactamente igual frente al calor",
+        "Las insaturadas son siempre más estables que las saturadas",
+        "Las grasas saturadas se enrancian más rápido que las insaturadas"
+      ],
+      "correcta": 0,
+      "explicacion": "Esta diferencia en la estructura molecular explica por qué ciertos aceites se conservan mejor que otros con el paso del tiempo y el calor."
     },
     {
       "id": "2.3-a",
       "subtema": "2.3",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué determina el uso ideal de una variedad dentro de una misma materia prima?",
+      "pregunta": "¿Qué atributos físicos universales evalúa un cocinero para determinar la calidad de un insumo fresco?",
       "opciones": [
-        "Sus características físicas: textura, contenido de agua, almidón, firmeza, grasa intramuscular",
-        "Únicamente su precio en el mercado",
-        "Solo el color del empaque en que se vende",
-        "El nombre comercial que le da el proveedor"
+        "Firmeza, color, humedad superficial, tamaño o calibre y aroma",
+        "Solo el precio y la marca del proveedor",
+        "Solo el color, sin considerar otros factores",
+        "Solo el tamaño de la pieza"
       ],
       "correcta": 0,
-      "explicacion": "Reconocer estas características permite elegir la variedad correcta para el resultado buscado, en vez de forzar una técnica sobre un ingrediente que no la soporta."
+      "explicacion": "Estos atributos son universales: aplican a cualquier ingrediente, independientemente de su variedad específica."
     },
     {
       "id": "2.3-b",
       "subtema": "2.3",
-      "tipo": "verdadero_falso",
-      "pregunta": "Todas las papas sirven igual de bien para cualquier técnica de cocción.",
-      "correcta": false,
-      "explicacion": "No todas las papas sirven para freír, igual que no todos los tomates sirven para salsa ni todos los cortes de carne sirven para asar a la parrilla — cada variedad tiene un uso ideal."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son las señales de aceptación de la carne de res fresca frente a las de rechazo?",
+      "opciones": [
+        "Aceptación: color rojo cereza brillante, olor neutro, textura elástica; Rechazo: color rojo-café apagado o verdoso, olor agrio o amoniacal",
+        "Aceptación: color grisáceo uniforme; Rechazo: color rojo brillante",
+        "Aceptación: superficie completamente seca; Rechazo: cualquier humedad",
+        "No existen señales organolépticas confiables para la carne de res"
+      ],
+      "correcta": 0,
+      "explicacion": "Estos criterios organolépticos aplican tanto en la recepción del pedido como en revisiones rutinarias del inventario."
     },
     {
       "id": "2.3-c",
       "subtema": "2.3",
       "tipo": "opcion_multiple",
-      "pregunta": "¿En qué se apoya un cocinero para identificar las características físicas de una variedad?",
+      "pregunta": "¿Qué distingue a una carne de cerdo en óptimas condiciones de una en descomposición?",
       "opciones": [
-        "En sus sentidos entrenados (color, aroma, firmeza al tacto) y en criterios objetivos como calibre, peso y maduración",
-        "Únicamente en el nombre que trae la etiqueta",
-        "Solo en la opinión del proveedor",
-        "No hay forma de identificarlas antes de cocinar"
+        "Aceptación: rosa pálido uniforme, grasa blanca y firme; Rechazo: color grisáceo o manchas oscuras, grasa amarillenta o blanda",
+        "Aceptación: color grisáceo; Rechazo: color rosa pálido",
+        "No hay diferencia visual perceptible entre ambos estados",
+        "La única señal confiable es el precio del producto"
       ],
       "correcta": 0,
-      "explicacion": "La identificación combina experiencia sensorial entrenada con criterios objetivos y medibles — ninguno de los dos basta por sí solo."
+      "explicacion": "El olor rancio o agrio, junto con el cambio de color y textura de la grasa, son señales claras de deterioro en la carne de cerdo."
     },
     {
       "id": "2.3-d",
       "subtema": "2.3",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Cuál de estas es una característica física relevante para elegir la variedad correcta de un ingrediente?",
+      "pregunta": "¿Cuáles son los indicios visuales y táctiles para aceptar un pescado entero fresco?",
       "opciones": [
-        "Firmeza al tacto",
-        "El nombre del restaurante donde se sirve",
-        "El día de la semana",
-        "El color del plato donde se presenta"
+        "Ojos brillantes, transparentes y abombados, agallas rojo intenso, escamas firmemente adheridas y carne que recupera su forma al presionar",
+        "Ojos hundidos y opacos, agallas grisáceas",
+        "Escamas que se desprenden con facilidad al tocarlas",
+        "Carne que queda marcada permanentemente al presionar"
       ],
       "correcta": 0,
-      "explicacion": "La firmeza al tacto es uno de los indicadores sensoriales que ayuda a anticipar cómo se va a comportar el ingrediente al cocinarlo."
+      "explicacion": "Estos son los criterios de aceptación; cualquiera de sus opuestos es señal de que el pescado ya no está fresco."
     },
     {
       "id": "2.3-e",
       "subtema": "2.3",
-      "tipo": "verdadero_falso",
-      "pregunta": "El calibre y el grado de maduración son criterios objetivos útiles, junto con los sentidos entrenados del cocinero.",
-      "correcta": true,
-      "explicacion": "Correcto: la identificación de variedades combina criterios objetivos (calibre, peso, maduración) con la experiencia sensorial (color, aroma, firmeza)."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué diferencia culinaria fundamental existe entre una papa cerosa y una papa harinosa?",
+      "opciones": [
+        "La cerosa tiene bajo almidón y mantiene su forma (ensaladas); la harinosa tiene alto almidón y se deshace al cocer (purés, horneados)",
+        "La cerosa siempre es más grande que la harinosa",
+        "Ambas producen exactamente el mismo resultado en cualquier preparación",
+        "La harinosa mantiene mejor su forma que la cerosa"
+      ],
+      "correcta": 0,
+      "explicacion": "Usar la variedad equivocada produce un resultado gomoso (papa cerosa en puré) o deshecho (papa harinosa en ensalada), sin importar la técnica."
+    },
+    {
+      "id": "2.3-f",
+      "subtema": "2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué mide exactamente la unidad SHU de la escala Scoville en los chiles?",
+      "opciones": [
+        "La concentración química de capsaicina, determinando de forma objetiva el nivel de picor",
+        "El contenido de agua del chile",
+        "El tamaño promedio del fruto",
+        "El tiempo de maduración del chile en la planta"
+      ],
+      "correcta": 0,
+      "explicacion": "La escala Scoville, creada en 1912, sigue siendo la referencia estándar para clasificar el picor de forma objetiva, no solo subjetiva."
+    },
+    {
+      "id": "2.3-g",
+      "subtema": "2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué pautas incluye un protocolo de evaluación sensorial sistemática para comparar variedades de un ingrediente?",
+      "opciones": [
+        "Presentar muestras bajo las mismas condiciones, codificarlas anónimamente, evaluar en orden aleatorio, limpiar el paladar entre muestras y registrar por escrito de inmediato",
+        "Solo probar las muestras una vez, sin registrar nada",
+        "Evaluar siempre en el mismo orden para todos los catadores",
+        "Confiar en la memoria del catador al final del ejercicio"
+      ],
+      "correcta": 0,
+      "explicacion": "Sin estos controles, la percepción se sesga fácilmente sin que el catador se dé cuenta, invalidando la comparación."
     },
     {
       "id": "2.4-a",
       "subtema": "2.4",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Cuáles son las cualidades gastronómicas que aporta una materia prima, más allá de su clasificación física?",
+      "pregunta": "¿Cuáles son los cinco sabores básicos reconocidos en la percepción gustativa humana?",
       "opciones": [
-        "Sabor, aroma, textura en boca y color",
-        "Solo su precio de compra",
-        "Únicamente su país de origen",
-        "Solo su nombre comercial"
+        "Dulce, salado, ácido, amargo y umami",
+        "Dulce, salado, picante, ácido y amargo",
+        "Dulce, salado, ácido, graso y umami",
+        "Solo dulce, salado y amargo"
       ],
       "correcta": 0,
-      "explicacion": "Estas cualidades son factores que un cocinero combina deliberadamente al diseñar un platillo, más allá de a qué familia pertenezca el ingrediente."
+      "explicacion": "El umami fue identificado y nombrado formalmente por un investigador japonés a principios del siglo XX, mucho después que los otros cuatro."
     },
     {
       "id": "2.4-b",
       "subtema": "2.4",
-      "tipo": "verdadero_falso",
-      "pregunta": "El equilibrio de sabores solo se puede corregir al probar el platillo ya terminado, nunca se puede anticipar antes de cocinar.",
-      "correcta": false,
-      "explicacion": "Entender la cualidad gastronómica de cada ingrediente es justo lo que permite anticipar el equilibrio de sabores antes de cocinar, no solo corregirlo al final."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué compuesto químico genera la percepción del sabor umami y cómo se concentra de forma natural?",
+      "opciones": [
+        "Se percibe mediante receptores sensibles al glutamato libre, que se concentra por maduración prolongada, fermentación o cocción lenta",
+        "Se percibe mediante receptores sensibles al azúcar",
+        "Se genera exclusivamente por la sal de mesa",
+        "No tiene relación con ningún compuesto químico identificable"
+      ],
+      "correcta": 0,
+      "explicacion": "Esto explica por qué un caldo de huesos reducido, un queso curado o una salsa de soya fermentada desarrollan más profundidad de sabor que sus ingredientes originales."
     },
     {
       "id": "2.4-c",
       "subtema": "2.4",
       "tipo": "relacionar",
-      "pregunta": "Relaciona cada tipo de elemento puente con su función al integrar sabores.",
+      "pregunta": "Relaciona cada propiedad funcional con un ingrediente típico que la aporta.",
       "pares": [
-        { "izquierda": "Una grasa", "derecha": "Suaviza y liga los sabores entre sí" },
-        { "izquierda": "Un ácido", "derecha": "Equilibra y corta lo pesado de un platillo" },
-        { "izquierda": "Una especia", "derecha": "Aromatiza y realza el conjunto" }
+        { "izquierda": "Espesante", "derecha": "Almidones (maicena, harina)" },
+        { "izquierda": "Emulsionante", "derecha": "Yema de huevo (lecitina)" },
+        { "izquierda": "Gelificante", "derecha": "Grenetina o agar-agar" },
+        { "izquierda": "Aireante", "derecha": "Claras de huevo batidas" },
+        { "izquierda": "Leudante", "derecha": "Levadura o polvo para hornear" }
       ],
-      "explicacion": "Cuando dos ingredientes no combinan naturalmente, un elemento puente (grasa, ácido o especia) ayuda a integrarlos en un mismo platillo."
+      "explicacion": "Reconocer estas cinco propiedades funcionales permite a un cocinero sustituir o combinar ingredientes con criterio, no al azar."
     },
     {
       "id": "2.4-d",
       "subtema": "2.4",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Qué es la afinidad de sabores?",
+      "pregunta": "¿Qué diferencia funcional existe entre un agente gelificante animal (grenetina) y uno algal (agar-agar)?",
       "opciones": [
-        "Qué ingredientes combinan naturalmente entre sí sin necesitar un elemento puente",
-        "El costo de dos ingredientes combinados",
-        "La temporada en que se consiguen dos ingredientes",
-        "El tiempo de cocción combinado de dos ingredientes"
+        "La grenetina forma una red que solidifica al enfriarse; el agar-agar puede gelificar incluso a temperaturas elevadas",
+        "Ambos gelifican exactamente en las mismas condiciones",
+        "El agar-agar solo funciona con líquidos fríos",
+        "La grenetina gelifica sin necesidad de enfriarse"
       ],
       "correcta": 0,
-      "explicacion": "Las cualidades gastronómicas determinan qué ingredientes combinan naturalmente entre sí (afinidad) y cuáles requieren un elemento puente para integrarse bien."
+      "explicacion": "Esta diferencia hace que el agar-agar sea preferible en preparaciones que deben mantenerse gelificadas en ambientes cálidos."
     },
     {
       "id": "2.4-e",
       "subtema": "2.4",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Para qué sirve un elemento puente (grasa, ácido o especia) entre dos ingredientes?",
+      "pregunta": "¿En qué consiste la teoría moderna del Food Pairing en la gastronomía?",
       "opciones": [
-        "Para integrarlos bien en un mismo platillo cuando no tienen afinidad natural",
-        "Para hacer el platillo más caro",
-        "Para que el platillo tarde más en cocinarse",
-        "No tiene ninguna función real"
+        "Propone que dos ingredientes que comparten compuestos aromáticos volátiles tienden a combinar bien entre sí",
+        "Propone combinar siempre ingredientes de un mismo país de origen",
+        "Propone que solo ingredientes del mismo color combinan bien",
+        "Es una técnica de cocción, no una teoría de combinación de sabores"
       ],
       "correcta": 0,
-      "explicacion": "El elemento puente resuelve la falta de afinidad natural entre dos ingredientes, integrándolos en el mismo platillo."
+      "explicacion": "El ejemplo más citado es el chocolate con queso azul: poco intuitivo por tradición, pero que comparte perfiles aromáticos que el análisis químico sí explica."
+    },
+    {
+      "id": "2.4-f",
+      "subtema": "2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son los tres principios básicos que rigen el maridaje intencional de sabores?",
+      "opciones": [
+        "El contraste, la afinidad aromática y la intensidad relativa",
+        "El color, la temperatura y el precio",
+        "La textura, el tamaño de porción y el tiempo de cocción",
+        "Solo el contraste de sabores"
+      ],
+      "correcta": 0,
+      "explicacion": "Combinar ingredientes de forma intencional —no solo por tradición— sigue estos tres principios reconocibles."
+    },
+    {
+      "id": "2.4-g",
+      "subtema": "2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo influye el grado de madurez de una fruta climatérica en su contenido de almidón y azúcares libres?",
+      "opciones": [
+        "En verde predominan almidones complejos; al madurar por emisión de etileno, las enzimas convierten los almidones en azúcares libres",
+        "El contenido de azúcar no cambia nunca durante la maduración",
+        "Los almidones aumentan a medida que la fruta madura",
+        "La maduración no tiene relación con procesos enzimáticos"
+      ],
+      "correcta": 0,
+      "explicacion": "Esto explica por qué un plátano verde es almidonoso y poco dulce, mientras que uno maduro es notablemente más dulce y suave."
+    },
+    {
+      "id": "2.4-h",
+      "subtema": "2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué las verduras de hoja verde pierden su brillo y se tornan verde oliva opaco en medios ácidos prolongados?",
+      "opciones": [
+        "Porque el ácido desplaza los iones de magnesio del centro de la clorofila, transformándola en feofitina",
+        "Porque el ácido elimina toda la clorofila de la hoja",
+        "Porque el calor, no el ácido, es responsable de ese cambio",
+        "No existe ninguna reacción química real detrás de ese cambio de color"
+      ],
+      "correcta": 0,
+      "explicacion": "La feofitina es un compuesto de color pardo-verdoso opaco que resulta de esa pérdida de magnesio en la molécula de clorofila."
+    },
+    {
+      "id": "2.4-i",
+      "subtema": "2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué función física cumple la adición de sal en el agua de cocción de vegetales verdes robustos?",
+      "opciones": [
+        "Eleva ligeramente el punto de ebullición y ayuda a mantener la turgencia celular por presión osmótica, preservando la textura firme",
+        "Solo aporta sabor, sin ningún efecto físico en la cocción",
+        "Reduce el punto de ebullición del agua",
+        "Elimina por completo el color verde de los vegetales"
+      ],
+      "correcta": 0,
+      "explicacion": "Este efecto físico complementa la función de sazón que normalmente se le atribuye a la sal."
+    },
+    {
+      "id": "2.4-j",
+      "subtema": "2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es el propósito físico de nacarizar un grano de arroz antes de añadir el líquido de cocción?",
+      "opciones": [
+        "Sofreír brevemente el arroz en grasa para cubrir cada grano con una película lipídica que evita que los almidones se liberen de golpe",
+        "Ablandar el grano antes de cocerlo en agua",
+        "Eliminar por completo el almidón del arroz",
+        "Colorear el grano antes de servirlo"
+      ],
+      "correcta": 0,
+      "explicacion": "Este paso logra un grano más suelto y separado, en vez de una textura pegajosa por liberación descontrolada de almidón."
+    },
+    {
+      "id": "2.4-k",
+      "subtema": "2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué el ajo o la cebolla finamente picados cambian su intensidad aromática si se dejan reposar en crudo antes de cocinarse?",
+      "opciones": [
+        "Porque al romper las células se liberan enzimas que generan compuestos sulfurados, y un corto reposo permite que la reacción desarrolle todo su perfil aromático",
+        "Porque el aire oxida completamente su sabor, eliminándolo",
+        "No existe ninguna diferencia real por el tiempo de reposo",
+        "Porque el reposo elimina la humedad natural del ingrediente"
+      ],
+      "correcta": 0,
+      "explicacion": "Esta reacción enzimática explica por qué el ajo recién picado y el que reposó unos minutos tienen intensidades aromáticas distintas."
+    },
+    {
+      "id": "2.4-l",
+      "subtema": "2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué diferencia existe en el almacenamiento de frutas productoras de etileno frente a verduras sensibles a este gas?",
+      "opciones": [
+        "Las frutas productoras de etileno aceleran la maduración de productos cercanos, por lo que las verduras sensibles deben almacenarse separadas",
+        "El etileno no tiene ningún efecto sobre otros productos almacenados cerca",
+        "Las verduras sensibles al etileno deben almacenarse siempre junto a las frutas",
+        "El etileno solo afecta a productos de origen animal"
+      ],
+      "correcta": 0,
+      "explicacion": "Separar estos productos evita marchitamiento o manchas prematuras en verduras sensibles al gas etileno."
+    },
+    {
+      "id": "2.4-m",
+      "subtema": "2.4",
+      "tipo": "verdadero_falso",
+      "pregunta": "La carne de cerdo requiere una temperatura interna mínima de cocción superior a la de la res por razones sanitarias relacionadas con parásitos como la triquinosis.",
+      "correcta": true,
+      "explicacion": "Correcto. La temperatura mínima más alta (71°C) asegura la inocuidad total del tejido porcino frente a este riesgo específico."
     }
   ]
 }
