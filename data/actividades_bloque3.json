@@ -5,241 +5,748 @@
       "id": "3.1-a",
       "subtema": "3.1",
       "tipo": "opcion_multiple",
-      "pregunta": "¿En qué se diferencian las tres familias de técnicas de cocción (concentración, expansión, mixta)?",
+      "pregunta": "¿Cuáles son las tres grandes familias en que se divide toda técnica de cocción según la transmisión del calor?",
       "opciones": [
-        "En cómo se transmite el calor al alimento: sellando la superficie, intercambiando con el medio, o combinando ambas cosas",
-        "En el tipo de sartén que se utiliza",
-        "Únicamente en el tiempo total de cocción",
-        "No hay ninguna diferencia real entre ellas"
+        "Por concentración, por expansión y mixta",
+        "Por horno, por sartén y por vapor",
+        "Rápida, lenta y media",
+        "Húmeda, seca y mixta con aceite"
       ],
       "correcta": 0,
-      "explicacion": "Cada familia se define por cómo se transmite el calor: concentración sella y retiene, expansión permite el intercambio gradual con el medio, y mixta combina ambas etapas."
+      "explicacion": "Sin importar cuántos nombres distintos reciba en cada tradición culinaria, toda técnica pertenece a una de estas tres familias según cómo se transmite el calor al alimento."
     },
     {
       "id": "3.1-b",
       "subtema": "3.1",
-      "tipo": "verdadero_falso",
-      "pregunta": "La cocción por concentración busca que el calor penetre gradualmente desde el inicio de la cocción.",
-      "correcta": false,
-      "explicacion": "Es al revés: la concentración sella rápidamente la superficie a temperaturas altas. La penetración gradual del calor es característica de la cocción por expansión."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿En qué consiste una técnica de cocción por concentración?",
+      "opciones": [
+        "Usa temperaturas altas y tiempos cortos para sellar rápidamente la superficie mediante la reacción de Maillard, concentrando jugos en el interior",
+        "Sumerge el alimento en un medio desde el inicio para un intercambio gradual",
+        "Combina un sellado inicial con una cocción larga en líquido",
+        "Solo se usa para vegetales, nunca para proteínas"
+      ],
+      "correcta": 0,
+      "explicacion": "El sellado, asado, horneado y fritura pertenecen a esta familia, que busca una costra dorada mientras el interior conserva su jugosidad."
     },
     {
       "id": "3.1-c",
       "subtema": "3.1",
-      "tipo": "relacionar",
-      "pregunta": "Relaciona cada familia de técnica de cocción con su principio.",
-      "pares": [
-        { "izquierda": "Por concentración", "derecha": "Sella rápido la superficie y retiene jugos en el interior" },
-        { "izquierda": "Por expansión", "derecha": "Permite el intercambio gradual con el medio de cocción" },
-        { "izquierda": "Mixta", "derecha": "Combina un sellado inicial con cocción lenta en líquido" }
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué caracteriza a las técnicas de cocción por expansión respecto al intercambio de componentes?",
+      "opciones": [
+        "El alimento se sumerge o expone a un medio líquido o vapor desde el inicio, permitiendo un intercambio gradual",
+        "Sellan la superficie rápidamente sin ningún intercambio",
+        "Requieren siempre aceite caliente a alta temperatura",
+        "Solo se aplican a carnes rojas"
       ],
-      "explicacion": "Cada familia responde a un principio físico distinto de transmisión de calor, y elegir la correcta depende del resultado que se busca, no de la costumbre."
+      "correcta": 0,
+      "explicacion": "Aquí el objetivo no es sellar sino permitir que el calor —y a veces los sabores del medio— penetren de forma uniforme y gradual."
     },
     {
       "id": "3.1-d",
       "subtema": "3.1",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Por qué un corte tierno como el filete se arruina si se cocina por horas con una técnica mixta?",
+      "pregunta": "¿Cómo se define una técnica de cocción mixta?",
       "opciones": [
-        "Porque pierde humedad y su textura se vuelve fibrosa sin necesitar ese tiempo prolongado",
-        "Porque el filete siempre debe cocinarse mixto sin excepción",
-        "Porque las técnicas mixtas nunca deben usarse en carnes",
-        "No hay ninguna razón, cualquier corte se beneficia de horas de cocción"
+        "Combina ambas familias: primero se sella por concentración, y luego se termina de cocinar por expansión en un líquido durante tiempo prolongado",
+        "Es una técnica exclusiva de repostería",
+        "Solo usa temperaturas bajas todo el tiempo",
+        "Es sinónimo exacto de la técnica por concentración"
       ],
       "correcta": 0,
-      "explicacion": "Las técnicas mixtas premian la paciencia justamente en cortes duros con tejido conectivo, que necesitan tiempo para volverse gelatina. Un corte ya tierno no necesita ni se beneficia de ese tiempo."
+      "explicacion": "El estofado, guisado y braseado son ejemplos de técnicas mixtas: premian la paciencia porque el tiempo prolongado transforma cortes duros en piezas suaves."
+    },
+    {
+      "id": "3.1-e",
+      "subtema": "3.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son los métodos específicos que engloba la familia de técnicas por concentración?",
+      "opciones": [
+        "Sellado/salteado, asado/grillado, horneado/rostizado y fritura",
+        "Hervido, escalfado, blanqueado y al vapor",
+        "Estofado, guisado y braseado",
+        "Solo la fritura"
+      ],
+      "correcta": 0,
+      "explicacion": "Todos estos métodos buscan una reacción rápida en la superficie del alimento mediante la reacción de Maillard."
+    },
+    {
+      "id": "3.1-f",
+      "subtema": "3.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué métodos específicos integran la familia de técnicas por expansión?",
+      "opciones": [
+        "Hervido, escalfado, blanqueado y al vapor",
+        "Sellado, asado, horneado y fritura",
+        "Estofado, guisado y braseado",
+        "Solo el hervido"
+      ],
+      "correcta": 0,
+      "explicacion": "Estas técnicas permiten que el calor penetre de forma uniforme y gradual, sin buscar sellar la superficie."
+    },
+    {
+      "id": "3.1-g",
+      "subtema": "3.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué métodos específicos componen las llamadas técnicas mixtas?",
+      "opciones": [
+        "El estofado, el guisado y el braseado",
+        "El hervido y el escalfado",
+        "El sellado y el asado",
+        "Solo el braseado"
+      ],
+      "correcta": 0,
+      "explicacion": "Todos combinan un sellado inicial por concentración con una cocción larga y lenta en líquido, por expansión."
+    },
+    {
+      "id": "3.1-h",
+      "subtema": "3.1",
+      "tipo": "verdadero_falso",
+      "pregunta": "El calor lento y prolongado en medio líquido transforma gradualmente el colágeno duro de un corte en gelatina suave, ablandando la pieza.",
+      "correcta": true,
+      "explicacion": "Correcto. Esta es la razón por la que las técnicas mixtas se usan para cortes duros y económicos con mucho tejido conectivo."
+    },
+    {
+      "id": "3.1-i",
+      "subtema": "3.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué un corte tierno como el filete o el rib eye se arruina si se somete a una cocción mixta o prolongada?",
+      "opciones": [
+        "Porque pierde humedad, se reseca y su textura se vuelve fibrosa innecesariamente, ya que no tiene el tejido conectivo que requiere ese proceso",
+        "Porque desarrolla demasiado sabor",
+        "Porque cambia de color permanentemente",
+        "No hay ningún problema real en cocinarlo así"
+      ],
+      "correcta": 0,
+      "explicacion": "Elegir la técnica según el corte —no al revés— es una de las decisiones más importantes que toma un cocinero antes de encender el fuego."
+    },
+    {
+      "id": "3.1-j",
+      "subtema": "3.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son los dos hábitos motrices básicos que deben automatizarse desde el inicio para el manejo seguro del cuchillo?",
+      "opciones": [
+        "Empuñadura firme con índice y pulgar en la base de la hoja, y curvar los dedos de la mano guía hacia dentro ('garra')",
+        "Sostener el cuchillo con toda la mano cerrada y la mano guía extendida",
+        "Usar siempre guantes de metal y cortar sin mirar",
+        "Afilar el cuchillo antes de cada corte únicamente"
+      ],
+      "correcta": 0,
+      "explicacion": "De estos dos hábitos depende tanto la seguridad como la precisión de todo lo que viene después en el manejo del cuchillo."
     },
     {
       "id": "3.2.1-a",
       "subtema": "3.2.1",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Por qué es importante cortar la carne en contra de la fibra al momento de servir?",
+      "pregunta": "¿Qué ventaja práctica aporta realizar el deshuesado a favor de la estructura natural del músculo?",
       "opciones": [
-        "Porque hace que la misma pieza, cocinada igual, se perciba más suave al morderla",
-        "Porque cambia el punto de cocción de la carne",
-        "Porque acelera el tiempo de cocción",
-        "No tiene ningún efecto real en la textura"
+        "Se aprovecha mayor cantidad de carne y se deja menos desperdicio que un corte hecho a la fuerza contra la fibra",
+        "Se cocina más rápido la pieza",
+        "Cambia el sabor de la carne",
+        "No aporta ninguna ventaja real"
       ],
       "correcta": 0,
-      "explicacion": "Cortar contra la fibra acorta las fibras musculares que el diente tiene que romper al masticar, haciendo que la misma pieza se perciba notablemente más tierna."
+      "explicacion": "Un deshuesado hecho contra la estructura natural desperdicia carne innecesariamente."
     },
     {
       "id": "3.2.1-b",
       "subtema": "3.2.1",
-      "tipo": "verdadero_falso",
-      "pregunta": "El desvenado del camarón se realiza antes de pelarlo.",
-      "correcta": false,
-      "explicacion": "El desvenado se hace después de pelar el camarón, retirando el conducto digestivo visible a través del caparazón ya expuesto."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué es fundamental realizar un porcionado con tamaño estrictamente consistente?",
+      "opciones": [
+        "Porque las piezas de tamaño irregular se cuecen a ritmos distintos dentro de la misma tanda, resultando en cocciones inconsistentes",
+        "Porque así se ve más estético en el plato únicamente",
+        "Porque ahorra tiempo de corte, sin relación con la cocción",
+        "No tiene ninguna relación con el resultado final"
+      ],
+      "correcta": 0,
+      "explicacion": "Algunas porciones quedan listas mientras otras están crudas o sobrecocidas, aunque todas hayan estado el mismo tiempo al fuego."
     },
     {
       "id": "3.2.1-c",
       "subtema": "3.2.1",
-      "tipo": "relacionar",
-      "pregunta": "Relaciona cada punto de cocción de carnes rojas con su rango de temperatura interna aproximado.",
-      "pares": [
-        { "izquierda": "A la inglesa / rojo inglés", "derecha": "Aproximadamente 50-55°C" },
-        { "izquierda": "A punto / término medio", "derecha": "Aproximadamente 60-65°C" },
-        { "izquierda": "Bien cocida", "derecha": "Aproximadamente 70-80°C" }
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué impacto físico tiene cortar la carne en contra de la dirección de la fibra muscular al servir?",
+      "opciones": [
+        "Acorta las fibras en cada rebanada, haciendo que la carne se perciba considerablemente más suave al masticarla",
+        "No tiene ningún efecto en la percepción de terneza",
+        "Hace que la carne se vea más roja",
+        "Acelera la cocción de la pieza"
       ],
-      "explicacion": "La escala de puntos de cocción describe un rango de temperatura interna y textura, distinto de la temperatura mínima segura estudiada en el Bloque 1."
+      "correcta": 0,
+      "explicacion": "Cortar a favor de la fibra deja fibras largas e intactas que se perciben correosas, sin importar qué tan bien cocida esté la pieza."
     },
     {
       "id": "3.2.1-d",
       "subtema": "3.2.1",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Por qué es importante el porcionado consistente al dividir una pieza de carne?",
+      "pregunta": "¿Cuáles son las etapas del proceso de faenamiento de una canal antes del desposte?",
       "opciones": [
-        "Porque piezas de tamaño irregular se cuecen a ritmos distintos dentro de la misma tanda",
-        "Porque solo afecta la presentación visual del plato",
-        "Porque así lo exige el nombre comercial del corte",
-        "No tiene ningún efecto en el resultado de la cocción"
+        "Transporte y reposo, insensibilización, sangrado, separación de extremidades, desollado, evisceración e inspección/clasificación",
+        "Solo transporte y sacrificio directo",
+        "Solo desollado y venta inmediata",
+        "Congelación inmediata sin ningún proceso previo"
       ],
       "correcta": 0,
-      "explicacion": "Un porcionado inconsistente produce resultados de cocción inconsistentes: unas piezas quedan crudas y otras sobrecocidas dentro de la misma tanda."
+      "explicacion": "El transporte y reposo del animal buscan reducir el estrés, que afecta directamente la calidad final de la carne."
+    },
+    {
+      "id": "3.2.1-e",
+      "subtema": "3.2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué finalidad técnica tiene la maduración inicial en cámara fría de la canal antes del desposte?",
+      "opciones": [
+        "El tiempo bajo temperatura controlada transforma la estructura muscular de forma favorable, mejorando terneza y sabor",
+        "Solo sirve para reducir el peso de la canal",
+        "No tiene ningún efecto real en la calidad de la carne",
+        "Sirve únicamente para facilitar el transporte"
+      ],
+      "correcta": 0,
+      "explicacion": "Esta maduración inicial (24-48 horas) es distinta de la maduración prolongada (dry aging) que algunos establecimientos aplican después, por semanas."
+    },
+    {
+      "id": "3.2.1-f",
+      "subtema": "3.2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son los tres criterios combinados que usa un cocinero experimentado para determinar el punto de cocción?",
+      "opciones": [
+        "Color interno y externo, consistencia al tacto/presión, y temperatura al núcleo con termómetro de sonda",
+        "Solo el color visible de la pieza",
+        "Solo el tiempo total de cocción",
+        "Solo el olor de la carne"
+      ],
+      "correcta": 0,
+      "explicacion": "Cada criterio por separado puede engañar; por eso nunca se depende de un solo indicador para determinar el punto."
+    },
+    {
+      "id": "3.2.1-g",
+      "subtema": "3.2.1",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada punto de cocción clásico con su rango de temperatura al núcleo.",
+      "pares": [
+        { "izquierda": "A la inglesa", "derecha": "40–50°C" },
+        { "izquierda": "Sangrante", "derecha": "50–55°C" },
+        { "izquierda": "A punto", "derecha": "60–65°C" },
+        { "izquierda": "Bien cocida", "derecha": "70–80°C" }
+      ],
+      "explicacion": "Esta es la nomenclatura clásica de puntos de cocción de carnes rojas, distinta de la escala anglosajona (bleu, rare, medium rare, etc.)."
+    },
+    {
+      "id": "3.2.1-h",
+      "subtema": "3.2.1",
+      "tipo": "relacionar",
+      "pregunta": "Relaciona cada punto de cocción en nomenclatura anglosajona con su rango de temperatura aproximado.",
+      "pares": [
+        { "izquierda": "Azul (bleu)", "derecha": "46–49°C" },
+        { "izquierda": "Rojo inglés (rare)", "derecha": "52–55°C" },
+        { "izquierda": "Término medio (medium rare)", "derecha": "57–60°C" },
+        { "izquierda": "Bien cocido (well done)", "derecha": "71°C o más" }
+      ],
+      "explicacion": "Esta nomenclatura, más fina en sus gradaciones, es frecuente en textos y cocinas de influencia estadounidense."
+    },
+    {
+      "id": "3.2.1-i",
+      "subtema": "3.2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué los puntos de cocción poco hechos están permitidos en cortes enteros de res pero no en carne molida?",
+      "opciones": [
+        "Porque los cortes enteros tienen el riesgo microbiano concentrado en la superficie, que ya se eliminó con el sellado",
+        "Porque la carne molida siempre sabe mejor bien cocida",
+        "Porque los cortes enteros no tienen ningún riesgo microbiano",
+        "No existe ninguna diferencia real de riesgo entre ambos"
+      ],
+      "correcta": 0,
+      "explicacion": "En la carne molida, el proceso de molido distribuye posibles bacterias por toda la pieza, no solo en la superficie, por eso requiere mayor temperatura interna."
+    },
+    {
+      "id": "3.2.1-j",
+      "subtema": "3.2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es el procedimiento correcto para el desvenado de un camarón?",
+      "opciones": [
+        "Después de pelar, hacer un corte superficial poco profundo a lo largo del dorso con cuchillo o palillo para retirar el conducto digestivo sin partir la carne",
+        "Se hace antes de pelar el camarón, cortando por el centro completo",
+        "Se hace sumergiendo el camarón en agua hirviendo primero",
+        "No es necesario desvenar el camarón antes de cocinarlo"
+      ],
+      "correcta": 0,
+      "explicacion": "El corte debe ser superficial y poco profundo para no partir la carne del camarón en dos."
+    },
+    {
+      "id": "3.2.1-k",
+      "subtema": "3.2.1",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué pasos se siguen para la apertura segura de un molusco bivalvo como el ostión o la almeja?",
+      "opciones": [
+        "Insertar un cuchillo especial por la unión de las valvas, hacer palanca firme para separar la concha superior, y cortar el músculo aductor protegiendo la mano con un paño",
+        "Golpear la concha con un martillo hasta romperla",
+        "Hervir el molusco completo antes de abrirlo",
+        "Congelar el molusco para que se abra solo"
+      ],
+      "correcta": 0,
+      "explicacion": "Proteger la mano que sostiene el molusco con un guante o paño grueso es esencial durante esta técnica."
     },
     {
       "id": "3.2.2-a",
       "subtema": "3.2.2",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Cuál es la diferencia entre el agarre de pivote y el de caída libre al cortar?",
+      "pregunta": "¿Cuáles son las dos formas básicas en que un cocinero mueve el cuchillo al cortar vegetales?",
       "opciones": [
-        "El pivote mantiene la punta apoyada en la tabla para mayor control; la caída libre deja caer el cuchillo aprovechando su propio peso",
-        "Son exactamente la misma técnica con distinto nombre",
-        "El pivote solo se usa en frutas, nunca en vegetales",
-        "La caída libre nunca se usa en cocina profesional"
+        "El pivote (con la punta fija en la tabla) y la caída libre (dejando caer el cuchillo aprovechando su propio peso)",
+        "El corte horizontal y el corte vertical",
+        "El corte rápido y el corte lento",
+        "Solo existe una forma correcta de mover el cuchillo"
       ],
       "correcta": 0,
-      "explicacion": "Ambas técnicas se aplican tanto a vegetales como a carnes y frutas; el pivote da mayor control y precisión, mientras la caída libre aprovecha el peso del cuchillo con un movimiento rítmico."
+      "explicacion": "El pivote da mayor control y precisión; la caída libre es más veloz una vez dominada, aunque exige más práctica para mantenerla segura."
     },
     {
       "id": "3.2.2-b",
       "subtema": "3.2.2",
-      "tipo": "relacionar",
-      "pregunta": "Relaciona cada corte clásico con su descripción.",
-      "pares": [
-        { "izquierda": "Brunoise", "derecha": "Cubos muy pequeños, de 3 a 5 mm por lado" },
-        { "izquierda": "Juliana", "derecha": "Tiras finas de unos 4 cm de largo por 0.5 cm de grosor" },
-        { "izquierda": "Chiffonade", "derecha": "Corte fino usado en hojas, enrolladas antes de cortarse" }
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué dimensiones exactas define el corte clásico Brunoise?",
+      "opciones": [
+        "Cubos muy pequeños de 3 a 5 milímetros por lado",
+        "Cubos de aproximadamente 1 cm por lado",
+        "Tiras finas de 4 cm de largo",
+        "Rodajas de 3 a 5 mm de grosor"
       ],
-      "explicacion": "El vocabulario de cortes clásicos comunica un tamaño exacto sin necesidad de medir con regla — cualquier cocinero entrenado sabe qué esperar al escuchar cada nombre."
+      "correcta": 0,
+      "explicacion": "El brunoise es el más pequeño de la familia de cortes en cubos, usado en guarniciones delicadas y mirepoix muy fino."
     },
     {
       "id": "3.2.2-c",
       "subtema": "3.2.2",
-      "tipo": "verdadero_falso",
-      "pregunta": "La oxidación enzimática de frutas y vegetales cortados se puede prevenir con ácido, como limón o vinagre.",
-      "correcta": true,
-      "explicacion": "Correcto: el ácido, el contacto directo con plástico, o cortar cerca del momento de servir son formas de prevenir el pardeamiento enzimático que ocurre al exponer el corte al oxígeno."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo se diferencia el corte Juliana del corte Fósforo o Paja?",
+      "opciones": [
+        "La Juliana mide unos 4 cm de largo por 0.5 cm de grosor; el Fósforo y la Paja son tiras considerablemente más delgadas",
+        "Son exactamente el mismo corte con distinto nombre regional",
+        "El Fósforo es más grueso que la Juliana",
+        "La Paja se usa exclusivamente en carnes, nunca en vegetales"
+      ],
+      "correcta": 0,
+      "explicacion": "Aunque ambos son cortes en tiras finas, el Fósforo y la Paja son notablemente más delgados que la Juliana."
     },
     {
       "id": "3.2.2-d",
       "subtema": "3.2.2",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Por qué es importante que las piezas cortadas tengan un tamaño uniforme?",
+      "pregunta": "¿Qué dimensiones caracterizan a los cortes Parmentier y Paisano (paisana)?",
       "opciones": [
-        "Porque garantiza que todo el vegetal se cocine al mismo ritmo, sin trozos crudos ni sobrecocidos",
-        "Porque solo afecta cuánto tiempo tarda el cocinero en cortar",
-        "Porque es una tradición sin ninguna razón práctica",
-        "Porque cambia el sabor del ingrediente"
+        "El Parmentier son cubos de ~1 cm por lado; el Paisano son rectángulos de 1 cm de largo por 0.5 cm de grosor",
+        "Ambos son cortes exclusivos para hierbas y hojas",
+        "El Parmentier es más pequeño que el Brunoise",
+        "El Paisano se usa solo para tornear papas"
       ],
       "correcta": 0,
-      "explicacion": "La razón detrás de la estandarización de cortes no es solo estética: piezas de tamaño uniforme garantizan una cocción pareja para toda la porción."
+      "explicacion": "El Paisano es característico de sopas y guisos rústicos; el Parmentier se usa tanto en verduras como en papa."
+    },
+    {
+      "id": "3.2.2-e",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué define al corte Mirepoix y cuál es su uso habitual?",
+      "opciones": [
+        "Es un corte grueso e irregular aplicado a verduras que se cocinan por tiempos largos solo para aportar sabor en caldos o fondos",
+        "Es un corte muy fino usado exclusivamente para decoración",
+        "Es un corte exclusivo de la papa",
+        "Se usa solo en preparaciones frías"
+      ],
+      "correcta": 0,
+      "explicacion": "Las verduras cortadas en mirepoix generalmente se retiran o se cuelan al terminar la cocción del fondo o caldo."
+    },
+    {
+      "id": "3.2.2-f",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿A qué vegetal se aplica de forma exclusiva el corte Concassé y en qué consiste?",
+      "opciones": [
+        "Al jitomate pelado y sin semilla, picado en trozos pequeños",
+        "A la cebolla, siguiendo el sentido de sus capas",
+        "A la papa, en forma de bastones gruesos",
+        "A las hojas verdes, enrolladas antes de cortar"
+      ],
+      "correcta": 0,
+      "explicacion": "El concassé es un corte irregular reservado casi exclusivamente para el jitomate ya pelado y sin semilla."
+    },
+    {
+      "id": "3.2.2-g",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué formas físicas tienen los cortes Rondelle y Émincé?",
+      "opciones": [
+        "El Rondelle son discos de 3 a 5 mm en vegetales alargados; el Émincé son tiras gruesas de ~4 cm de largo por 1 cm de grosor",
+        "Ambos son cubos pequeños idénticos al Brunoise",
+        "El Rondelle es exclusivo para hojas verdes",
+        "El Émincé se usa solo para tornear papas"
+      ],
+      "correcta": 0,
+      "explicacion": "El Rondelle se aplica a vegetales alargados como zanahoria o pepino; el Émincé es más grueso que la Juliana."
+    },
+    {
+      "id": "3.2.2-h",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué técnica de corte se aplica específicamente en hojas como lechuga, col o albahaca?",
+      "opciones": [
+        "El Chiffonade, que consiste en enrollar las hojas antes de cortarlas en tiras alargadas y finas",
+        "El Mirepoix",
+        "El Concassé",
+        "El Parmentier"
+      ],
+      "correcta": 0,
+      "explicacion": "El chiffonade produce tiras finas y uniformes, ideales para terminar un platillo con hierbas u hojas verdes."
+    },
+    {
+      "id": "3.2.2-i",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué es el corte Pluma y a qué ingrediente se aplica de forma exclusiva?",
+      "opciones": [
+        "Es un corte similar a la juliana adaptado exclusivamente a la cebolla, siguiendo el sentido natural de sus capas",
+        "Es un corte exclusivo del jitomate",
+        "Es un corte que se aplica solo a la papa",
+        "Es sinónimo exacto del corte Brunoise"
+      ],
+      "correcta": 0,
+      "explicacion": "El corte Pluma respeta la estructura natural en capas de la cebolla, a diferencia de otros cortes que la ignoran."
+    },
+    {
+      "id": "3.2.2-j",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué diferencias culinarias existen entre las papas cerosas y las harinosas?",
+      "opciones": [
+        "Las cerosas tienen bajo almidón y mantienen su forma (ensaladas); las harinosas tienen alto almidón y se deshacen al cocer (purés, horneados)",
+        "Las cerosas siempre son más grandes que las harinosas",
+        "Ambas producen el mismo resultado en cualquier preparación",
+        "Las harinosas mantienen mejor su forma que las cerosas"
+      ],
+      "correcta": 0,
+      "explicacion": "Elegir la variedad correcta de papa ocurre antes de encender el fuego, no durante la cocción."
+    },
+    {
+      "id": "3.2.2-k",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué nombre recibe el corte de papa en cubos de aproximadamente 1 cm para saltear o guisar?",
+      "opciones": [
+        "Parmentier",
+        "Pont-neuf",
+        "Noisette",
+        "Soufflée"
+      ],
+      "correcta": 0,
+      "explicacion": "El Parmentier de papa comparte nombre con el corte general de cubos de 1 cm aplicado a otros vegetales."
+    },
+    {
+      "id": "3.2.2-l",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué son los cortes Pont-neuf y Mignonnette en el tratamiento de la papa?",
+      "opciones": [
+        "El Pont-neuf son bastones gruesos clásicos para papa frita a la francesa; el Mignonnette son bastones más finos para fritura",
+        "Ambos son técnicas de torneado, no de corte en bastón",
+        "El Mignonnette es más grueso que el Pont-neuf",
+        "Son sinónimos exactos del mismo corte"
+      ],
+      "correcta": 0,
+      "explicacion": "Ambos son cortes de papa pensados para fritura, pero de distinto grosor."
+    },
+    {
+      "id": "3.2.2-m",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo se obtienen las papas Noisette y Parisienne y cuál es su diferencia principal?",
+      "opciones": [
+        "Se obtienen con sacabocados o cuchara boleadora; la Noisette es más pequeña (tamaño de avellana) y la Parisienne es ligeramente más grande",
+        "Se obtienen con mandolina, no con sacabocados",
+        "La Parisienne es siempre más pequeña que la Noisette",
+        "Ambas se obtienen exclusivamente con torneado a cuchillo"
+      ],
+      "correcta": 0,
+      "explicacion": "Ambas se doran típicamente en mantequilla después de formarse con el sacabocados."
+    },
+    {
+      "id": "3.2.2-n",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué caracteriza a las preparaciones de papa Fondant, Risolée y Maxime?",
+      "opciones": [
+        "Fondant: torneada en cilindro, cocida en horno con caldo y mantequilla; Risolée: papas pequeñas salteadas en mantequilla; Maxime: rodajas finas superpuestas y horneadas",
+        "Las tres son exactamente la misma preparación con nombres regionales distintos",
+        "Todas requieren fritura profunda, sin excepción",
+        "Ninguna involucra el uso de mantequilla"
+      ],
+      "correcta": 0,
+      "explicacion": "Cada una de estas preparaciones clásicas de papa está asociada a una técnica de cocción distinta."
+    },
+    {
+      "id": "3.2.2-o",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué diferencia hay entre la papa Duquesa, la Dauphine y la Berny?",
+      "opciones": [
+        "Duquesa: puré con yema horneado con manga; Dauphine: puré duquesa con masa choux, frita; Berny: variante de la dauphine con almendra fileteada",
+        "Las tres son idénticas, solo cambia el nombre según la región",
+        "La Duquesa siempre se fríe, nunca se hornea",
+        "La Berny no lleva puré de papa en su preparación"
+      ],
+      "correcta": 0,
+      "explicacion": "Aprender la base (papa duquesa + masa choux) es más eficiente que memorizar cada variante por separado, ya que Dauphine, Berny y Lorette parten de la misma combinación."
+    },
+    {
+      "id": "3.2.2-p",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué es el corte Soufflée de papa y qué principio requiere para inflarse?",
+      "opciones": [
+        "Son rodajas muy finas fritas dos veces a temperaturas distintas, lo que hace que el vapor interno las infle como un pequeño cojín hueco",
+        "Es una papa horneada entera rellena de aire",
+        "Es un puré de papa batido con clara de huevo",
+        "Es una fritura única a temperatura muy alta"
+      ],
+      "correcta": 0,
+      "explicacion": "La doble fritura a temperaturas distintas es la clave técnica detrás de este resultado inflado y hueco."
+    },
+    {
+      "id": "3.2.2-q",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué reacción provoca el oscurecimiento de frutas y vegetales al cortarse y cómo se previene?",
+      "opciones": [
+        "Es el pardeamiento enzimático por exposición al oxígeno; se previene con ácido (limón o vinagre) o cubriendo con plástico en contacto directo",
+        "Es una reacción bacteriana que requiere refrigeración inmediata",
+        "Es la reacción de Maillard, igual que en las carnes selladas",
+        "No existe forma de prevenir este oscurecimiento"
+      ],
+      "correcta": 0,
+      "explicacion": "Este oscurecimiento afecta la presentación pero no representa un riesgo de seguridad alimentaria."
+    },
+    {
+      "id": "3.2.2-r",
+      "subtema": "3.2.2",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué función cumple el blanqueado con choque térmico en agua con hielo sobre los vegetales verdes?",
+      "opciones": [
+        "Detiene las reacciones del calor y fija la clorofila, manteniendo un color verde intenso y brillante",
+        "Cocina completamente el vegetal sin necesidad de más pasos",
+        "Elimina por completo el color natural del vegetal",
+        "No tiene ningún efecto sobre el color"
+      ],
+      "correcta": 0,
+      "explicacion": "El choque térmico inmediato después de la cocción breve en agua hirviendo es lo que fija el color verde vibrante."
     },
     {
       "id": "3.2.3-a",
       "subtema": "3.2.3",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Cómo se verifica correctamente el punto de cocción de un grano?",
+      "pregunta": "¿Qué relación grano-líquido y tiempo requiere la cocción del arroz blanco?",
       "opciones": [
-        "Probando directamente: debe estar suave por completo, sin núcleo duro y crudo en el centro",
-        "Con un termómetro de sonda, igual que una proteína",
-        "Solo por el tiempo transcurrido, sin necesidad de probarlo",
-        "No hay forma de verificarlo antes de servir"
+        "Proporción 1:2 y tiempo de 15 a 18 minutos tapado a fuego bajo",
+        "Proporción 1:1 y tiempo de 5 minutos",
+        "Proporción 1:2.5 y tiempo de 35 a 40 minutos",
+        "Proporción 2:1 y tiempo de 10 minutos"
       ],
       "correcta": 0,
-      "explicacion": "A diferencia de una proteína, un grano se verifica probándolo directamente — debe estar suave por completo, sin un núcleo duro y crudo en el centro."
+      "explicacion": "Esta proporción es la que determina si el grano queda seco y duro, o suelto y en su punto."
     },
     {
       "id": "3.2.3-b",
       "subtema": "3.2.3",
-      "tipo": "verdadero_falso",
-      "pregunta": "La proporción grano:líquido es solo una sugerencia aproximada que no afecta mucho el resultado final.",
-      "correcta": false,
-      "explicacion": "Al contrario: la proporción grano:líquido determina directamente si el grano queda seco y duro, o suelto y en su punto — no es una sugerencia menor."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué proporción grano-líquido y tiempo de cocción exige el arroz integral frente al blanco?",
+      "opciones": [
+        "Proporción 1:2.5 y tiempo de 35 a 40 minutos, debido a la resistencia del salvado",
+        "Proporción 1:1 y tiempo de 5 minutos, igual que el cuscús",
+        "La misma proporción y tiempo que el arroz blanco",
+        "Proporción 1:1.5 y tiempo de 20 minutos"
+      ],
+      "correcta": 0,
+      "explicacion": "El salvado que conserva el arroz integral hace más lenta la absorción del líquido, por eso requiere más tiempo y más proporción de líquido."
     },
     {
       "id": "3.2.3-c",
       "subtema": "3.2.3",
       "tipo": "relacionar",
-      "pregunta": "Relaciona cada grano con su proporción aproximada de grano:líquido.",
+      "pregunta": "Relaciona cada grano con su proporción grano:líquido de cocción.",
       "pares": [
-        { "izquierda": "Arroz blanco", "derecha": "1 : 2" },
-        { "izquierda": "Arroz integral", "derecha": "1 : 2.5" },
-        { "izquierda": "Cuscús", "derecha": "1 : 1" }
+        { "izquierda": "Arroz blanco", "derecha": "1:2" },
+        { "izquierda": "Arroz integral", "derecha": "1:2.5" },
+        { "izquierda": "Quinoa", "derecha": "1:2" },
+        { "izquierda": "Cuscús", "derecha": "1:1" }
       ],
-      "explicacion": "Cada grano absorbe una cantidad distinta de líquido según su estructura — el salvado del arroz integral, por ejemplo, hace más lenta la absorción y necesita más líquido."
+      "explicacion": "Conocer estas proporciones de memoria es una de las habilidades prácticas más útiles para cualquier cocinero."
     },
     {
       "id": "3.2.3-d",
       "subtema": "3.2.3",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Por qué no se debe destapar la olla mientras se cocina arroz?",
+      "pregunta": "¿Cómo se prepara y cocina el cuscús en términos de líquido y calor?",
       "opciones": [
-        "Porque cada vez que se destapa se escapa vapor necesario para la cocción uniforme",
-        "Porque el arroz cambia de color al destaparlo",
-        "Porque destapar acelera la cocción sin ningún problema",
-        "No hay ninguna razón real para mantenerla tapada"
+        "Proporción 1:1, cocinado en 5 minutos de reposo con líquido hirviendo, sin requerir fuego directo",
+        "Proporción 1:2, hervido durante 20 minutos con fuego directo constante",
+        "No requiere líquido, se cocina solo al vapor",
+        "Requiere remojo de toda la noche antes de cocinarse"
       ],
       "correcta": 0,
-      "explicacion": "El vapor atrapado dentro de la olla es lo que termina de cocinar el grano de forma uniforme; destapar libera ese vapor y afecta el resultado."
+      "explicacion": "El cuscús es de los pocos granos que se 'cocina' solo con el calor residual del líquido hirviendo, sin fuego directo."
+    },
+    {
+      "id": "3.2.3-e",
+      "subtema": "3.2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué beneficios aporta el remojo previo de las leguminosas secas antes de cocinarlas?",
+      "opciones": [
+        "Hidrata parcialmente la semilla, reduce notablemente su tiempo de cocción y ayuda a disolver compuestos asociados a la flatulencia",
+        "Elimina por completo el sabor de la leguminosa",
+        "No tiene ningún efecto real en el tiempo de cocción",
+        "Aumenta el tiempo de cocción posterior"
+      ],
+      "correcta": 0,
+      "explicacion": "El remojo puede ir de varias horas hasta toda la noche, según la leguminosa."
+    },
+    {
+      "id": "3.2.3-f",
+      "subtema": "3.2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué leguminosa representa una excepción frecuente al poder cocinarse sin remojo previo?",
+      "opciones": [
+        "Las lentejas, debido a su tamaño pequeño y cáscara delgada",
+        "El garbanzo, por su tamaño grande",
+        "El frijol negro, por su color oscuro",
+        "Ninguna leguminosa puede cocinarse sin remojo"
+      ],
+      "correcta": 0,
+      "explicacion": "Aunque las lentejas pueden cocinarse sin remojo, el remojo sigue reduciendo su tiempo de cocción si se dispone de tiempo."
+    },
+    {
+      "id": "3.2.3-g",
+      "subtema": "3.2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cómo se verifica correctamente el punto de cocción de un grano o leguminosa?",
+      "opciones": [
+        "Mordiendo directamente un grano para comprobar que esté suave por completo, sin un núcleo duro y crudo en el centro",
+        "Con un termómetro de sonda, igual que en las carnes",
+        "Únicamente observando el color del grano",
+        "Contando el tiempo exacto sin necesidad de probar"
+      ],
+      "correcta": 0,
+      "explicacion": "A diferencia de una proteína, un grano no se verifica con termómetro sino con los sentidos."
+    },
+    {
+      "id": "3.2.3-h",
+      "subtema": "3.2.3",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuáles son los pasos clave para obtener un arroz blanco suelto y separado?",
+      "opciones": [
+        "Enjuagar en agua fría, sofreír brevemente en grasa (nacarizar), añadir líquido 1:2 a fuego bajo tapado sin remover, y reposar 5 minutos antes de esponjar",
+        "Cocinar directamente sin enjuagar, removiendo constantemente",
+        "Hervir a fuego alto destapado todo el tiempo",
+        "Freír el arroz completamente antes de agregar cualquier líquido"
+      ],
+      "correcta": 0,
+      "explicacion": "No destapar ni remover durante la cocción es clave: cada vez que se destapa se escapa el vapor necesario para una cocción uniforme."
     },
     {
       "id": "3.2.4-a",
       "subtema": "3.2.4",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Cuál es la regla general de equivalencia entre hierba fresca y hierba seca?",
+      "pregunta": "¿Por qué el uso de hierbas y especias conecta de manera tan directa con la memoria y la emoción humana?",
       "opciones": [
-        "Aproximadamente tres a uno en volumen: tres partes de hierba fresca por una de hierba seca",
-        "Se usan siempre en la misma cantidad exacta",
-        "La hierba seca siempre se usa en mayor cantidad que la fresca",
-        "No existe ninguna relación entre ambas"
+        "Porque el centro olfativo del cerebro está conectado de forma muy directa con las áreas encargadas de la memoria y la emoción",
+        "Porque las especias siempre han sido caras y eso genera un vínculo emocional",
+        "No existe ninguna conexión real entre olfato y memoria",
+        "Porque las especias se asocian solo con festividades"
       ],
       "correcta": 0,
-      "explicacion": "El secado concentra los compuestos aromáticos, por eso una cucharada de hierba fresca picada equivale aproximadamente a una cucharadita de hierba seca — una relación de tres a uno en volumen."
+      "explicacion": "El aroma de una especia puede transportar a alguien, de forma casi instantánea, a la cocina de su infancia o a un lugar querido."
     },
     {
       "id": "3.2.4-b",
       "subtema": "3.2.4",
-      "tipo": "verdadero_falso",
-      "pregunta": "Las hierbas frescas delicadas, como la albahaca o el cilantro, deben agregarse al inicio de una cocción larga.",
-      "correcta": false,
-      "explicacion": "Justo al revés: agregarlas al inicio de una cocción larga es desperdiciarlas, porque su aroma se evapora mucho antes de que el platillo esté listo. Se agregan casi al final."
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la regla orientativa de equivalencia al sustituir una hierba fresca por su versión seca?",
+      "opciones": [
+        "Proporción de tres a uno en volumen: 1 cucharada de hierba fresca picada equivale a 1 cucharadita de hierba seca",
+        "Proporción uno a uno, sin ningún ajuste",
+        "Proporción de diez a uno en volumen",
+        "No existe ninguna equivalencia estándar"
+      ],
+      "correcta": 0,
+      "explicacion": "Esta es una guía de partida; conviene siempre probar y ajustar según qué tan reciente sea la hierba seca."
     },
     {
       "id": "3.2.4-c",
       "subtema": "3.2.4",
       "tipo": "opcion_multiple",
-      "pregunta": "¿Para qué sirve tostar especias enteras en seco antes de molerlas?",
+      "pregunta": "¿Por qué una hierba fresca y su equivalente seco no se pueden sustituir en proporción directa uno a uno?",
       "opciones": [
-        "Para liberar y realzar sus compuestos aromáticos mediante el calor",
-        "Para que se conserven más tiempo sin refrigeración",
-        "Para cambiar su color permanentemente",
-        "No tiene ningún efecto real en el sabor"
+        "Porque el proceso de secado concentra los compuestos aromáticos por pérdida de agua y altera el perfil de sabor, eliminando notas volátiles",
+        "Porque las hierbas secas siempre tienen menos sabor que las frescas",
+        "Porque el secado no cambia nada en la composición de la hierba",
+        "Porque las hierbas frescas nunca deben usarse en cocina profesional"
       ],
       "correcta": 0,
-      "explicacion": "Muchas especias enteras tienen sus compuestos aromáticos encapsulados dentro de la semilla o corteza; el tostado en seco los libera y realza antes de molerlas."
+      "explicacion": "El secado concentra compuestos aromáticos pero también pierde las notas más volátiles y delicadas, conservando solo las más robustas."
     },
     {
       "id": "3.2.4-d",
       "subtema": "3.2.4",
-      "tipo": "relacionar",
-      "pregunta": "Relaciona cada tipo de hierba o especia con el momento en que se debe agregar durante la cocción.",
-      "pares": [
-        { "izquierda": "Especias secas robustas (romero, tomillo, laurel)", "derecha": "Al inicio de la cocción" },
-        { "izquierda": "Hierbas frescas delicadas (albahaca, cilantro)", "derecha": "Casi al final o después de retirar del fuego" },
-        { "izquierda": "Especias enteras que se van a moler", "derecha": "Se tuestan en seco antes de molerse" }
+      "tipo": "opcion_multiple",
+      "pregunta": "¿En qué momento de la cocción deben incorporarse las especias secas enteras o molidas y las hierbas robustas?",
+      "opciones": [
+        "Al inicio de la cocción, ya que su liberación de aroma es lenta y se benefician del contacto prolongado con el calor",
+        "Siempre al final, justo antes de servir",
+        "Nunca deben cocinarse, solo agregarse crudas",
+        "A la mitad exacta del tiempo de cocción"
       ],
-      "explicacion": "El momento de incorporación importa tanto como la cantidad: cada tipo de hierba o especia libera su aroma a un ritmo distinto durante la cocción."
+      "correcta": 0,
+      "explicacion": "Romero, tomillo y laurel son ejemplos de hierbas secas robustas que se benefician de este tiempo prolongado de contacto con el calor."
+    },
+    {
+      "id": "3.2.4-e",
+      "subtema": "3.2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué las hierbas frescas delicadas deben agregarse casi al final de la cocción o tras retirar del fuego?",
+      "opciones": [
+        "Porque el calor prolongado destruye rápidamente sus aceites esenciales más volátiles y degrada su color",
+        "Porque de lo contrario cambian de sabor a algo desagradable de inmediato",
+        "Porque necesitan más tiempo de cocción que las especias secas",
+        "No importa en qué momento se agreguen, el resultado es igual"
+      ],
+      "correcta": 0,
+      "explicacion": "Albahaca, cilantro y perejil son ejemplos de hierbas frescas delicadas que se desperdician si se agregan al inicio de una cocción larga."
+    },
+    {
+      "id": "3.2.4-f",
+      "subtema": "3.2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué técnica preliminar se aplica a especias enteras como comino o cilantro en semilla para intensificar su aroma?",
+      "opciones": [
+        "Se tuestan brevemente en sartén seca sin aceite a fuego medio durante uno o dos minutos hasta percibir su aroma",
+        "Se remojan en agua fría durante toda la noche",
+        "Se congelan antes de usarse",
+        "Se muelen directamente sin ningún tratamiento previo"
+      ],
+      "correcta": 0,
+      "explicacion": "Este tostado libera y realza los aceites aromáticos encapsulados dentro de la semilla, mucho más que usar la especia sin tostar."
+    },
+    {
+      "id": "3.2.4-g",
+      "subtema": "3.2.4",
+      "tipo": "opcion_multiple",
+      "pregunta": "¿Qué secuencia se recomienda seguir al diseñar una mezcla propia de especias?",
+      "opciones": [
+        "Elegir una especia dominante, sumar una o dos de apoyo, añadir una nota de calor opcional, y ajustar con sal al final probando siempre",
+        "Mezclar todas las especias disponibles en cantidades iguales",
+        "Usar siempre una mezcla comercial prefabricada sin modificarla",
+        "Agregar la sal primero, antes que cualquier otra especia"
+      ],
+      "correcta": 0,
+      "explicacion": "Tostar las especias enteras antes de molerlas, siguiendo esta secuencia, potencia considerablemente el resultado final de cualquier mezcla propia."
     }
   ]
 }
