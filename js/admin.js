@@ -66,7 +66,8 @@ onAuthStateChanged(auth, async user => {
     const select = document.getElementById('grupo-select');
     if (select.value) {
       grupoActivo = select.value;
-      cargarAlumnos();
+      await cargarAlumnos();
+      cargarTabActiva();
     }
   } else {
     document.getElementById('login-screen').hidden = false;
@@ -104,10 +105,14 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 on('btn-nuevo-grupo', 'click', crearGrupo);
-on('grupo-select', 'change', (e) => {
+on('grupo-select', 'change', async (e) => {
   grupoActivo = e.target.value || null;
   if (grupoActivo) {
-    cargarAlumnos();
+    await cargarAlumnos();
+    // Si ya estábamos parados en otra pestaña (Ensayos, Práctica de cocina,
+    // etc.), cargarAlumnos() por sí solo NO la refresca — hay que forzarlo,
+    // o se queda pegada mostrando "Elige un grupo primero" aunque ya elegiste uno.
+    cargarTabActiva();
   } else {
     renderAlumnos([]);
   }
@@ -150,6 +155,17 @@ renderChecklist();
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`));
+  cargarTabActiva();
+}
+
+// Vuelve a cargar los datos de la pestaña que esté visible en este momento.
+// Se usa al cambiar de pestaña Y al cambiar de grupo (para no quedarnos con
+// datos del grupo anterior, o con el mensaje "Elige un grupo primero" pegado
+// aunque ya se haya elegido uno).
+function cargarTabActiva() {
+  const btnActivo = document.querySelector('.tab-btn.active');
+  if (!btnActivo) return;
+  const tab = btnActivo.dataset.tab;
   if (tab === 'evaluar') renderListaEvaluar();
   if (tab === 'historial') { renderBloquesReporte(); cargarHistorial(); }
   if (tab === 'participacion') { cargarBloquesActivos(); cargarParticipacion(); }
@@ -1067,6 +1083,7 @@ var DEFAULT_PREGUNTAS_SEMANA = {
 
 var semanaSeleccionada = null;
 var preguntasSemanaActual = [];
+var cargandoPreguntas = false;
 
 function poblarSelectSemanas() {
   const select = document.getElementById('ens-semana-select');
@@ -1096,21 +1113,29 @@ async function cargarPreguntasSemana() {
 
   const semana = document.getElementById('ens-semana-select').value || SEMANAS_ENSAYO[0].n;
   const chk = document.getElementById('ens-preguntas-activa');
+  const defaults = DEFAULT_PREGUNTAS_SEMANA[semana] ? [...DEFAULT_PREGUNTAS_SEMANA[semana]] : [''];
 
+  cargandoPreguntas = true;
   try {
     const snap = await getDoc(doc(db, 'grupos', grupoActivo, 'ensayos_preguntas', String(semana)));
     if (snap.exists()) {
       const d = snap.data();
-      preguntasSemanaActual = Array.isArray(d.preguntas) ? [...d.preguntas] : [];
+      const guardadas = Array.isArray(d.preguntas) ? d.preguntas : [];
+      // Si lo guardado quedó vacío (ej. por un guardado accidental antes de
+      // que cargaran las precargadas), no dejamos al docente con la pantalla
+      // vacía: recuperamos las preguntas oficiales del documento como respaldo.
+      preguntasSemanaActual = guardadas.length > 0 ? [...guardadas] : defaults;
       if (chk) chk.checked = !!d.activo;
     } else {
-      preguntasSemanaActual = DEFAULT_PREGUNTAS_SEMANA[semana] ? [...DEFAULT_PREGUNTAS_SEMANA[semana]] : [''];
+      preguntasSemanaActual = defaults;
       if (chk) chk.checked = false;
     }
   } catch (err) {
     console.warn('No se pudieron cargar las preguntas de esta semana:', err);
-    preguntasSemanaActual = DEFAULT_PREGUNTAS_SEMANA[semana] ? [...DEFAULT_PREGUNTAS_SEMANA[semana]] : [''];
+    preguntasSemanaActual = defaults;
     if (chk) chk.checked = false;
+  } finally {
+    cargandoPreguntas = false;
   }
 
   renderPreguntasSemana();
@@ -1157,6 +1182,7 @@ function sincronizarPreguntasDesdeDOM() {
 
 async function guardarPreguntasSemana() {
   if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  if (cargandoPreguntas) { alert('Espera un momento a que terminen de cargar las preguntas de esta semana e inténtalo de nuevo.'); return; }
   const semana = document.getElementById('ens-semana-select').value;
   if (!semana) return;
 
