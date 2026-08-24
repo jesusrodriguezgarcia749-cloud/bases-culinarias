@@ -13,7 +13,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import { firebaseConfig } from "./firebase-config.js";
-import { calcularBloque } from "./calculo.js";
+import { calcularBloque, PTS_POR_ENSAYO } from "./calculo.js";
 import { reporteGrupo, reporteAlumno } from "./reporte.js";
 
 const app = initializeApp(firebaseConfig);
@@ -1244,8 +1244,8 @@ async function cargarEnsayos() {
         <input type="checkbox" class="ens-entregado" ${d.entregado ? 'checked' : ''}>
         <span class="student-name">${escaparHTML(a.nombre)}</span>
       </label>
-      <input type="number" min="0" max="6" step="0.1" class="ens-calif"
-        value="${d.calificacion !== '' && d.calificacion !== null && d.calificacion !== undefined ? d.calificacion : ''}" placeholder="0-6">
+      <input type="number" min="0" max="${PTS_POR_ENSAYO}" step="0.1" class="ens-calif"
+        value="${d.calificacion !== '' && d.calificacion !== null && d.calificacion !== undefined ? d.calificacion : PTS_POR_ENSAYO}" placeholder="0-${PTS_POR_ENSAYO}">
     `;
     cont.appendChild(row);
   });
