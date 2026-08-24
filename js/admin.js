@@ -125,8 +125,14 @@ const _hoy = new Date();
 on('asis-fecha', 'change', cargarAsistencia);
 on('asis-bloque', 'change', cargarAsistencia);
 on('btn-guardar-asistencia', 'click', guardarAsistencia);
-on('ens-semana-select', 'change', cargarEnsayos);
+on('ens-semana-select', 'change', () => { cargarPreguntasSemana(); cargarEnsayos(); });
 on('btn-guardar-ensayos', 'click', guardarEnsayos);
+on('btn-agregar-pregunta', 'click', () => {
+  sincronizarPreguntasDesdeDOM();
+  preguntasSemanaActual.push('');
+  renderPreguntasSemana();
+});
+on('btn-guardar-preguntas', 'click', guardarPreguntasSemana);
 on('btn-publicar-aviso', 'click', publicarAviso);
 on('exa-select', 'change', cargarExamenes);
 on('btn-guardar-examenes', 'click', guardarExamenes);
@@ -148,7 +154,7 @@ function switchTab(tab) {
   if (tab === 'historial') { renderBloquesReporte(); cargarHistorial(); }
   if (tab === 'participacion') { cargarBloquesActivos(); cargarParticipacion(); }
   if (tab === 'asistencia') cargarAsistencia();
-  if (tab === 'ensayos') { poblarSelectSemanas(); cargarEnsayos(); }
+  if (tab === 'ensayos') { poblarSelectSemanas(); cargarPreguntasSemana(); cargarEnsayos(); }
   if (tab === 'examenes') cargarExamenes();
   if (tab === 'enlinea') { cargarExamenesAbiertos(); cargarIntentos(); }
   if (tab === 'avisos') cargarAvisos();
@@ -214,7 +220,7 @@ async function eliminarGrupo() {
     await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoDoc.id));
   }
 
-  for (const sub of ['avisos', 'config']) {
+  for (const sub of ['avisos', 'config', 'ensayos_preguntas']) {
     const subSnap = await getDocs(collection(db, 'grupos', grupoActivo, sub)).catch(() => null);
     if (subSnap) {
       await Promise.all(subSnap.docs.map(d => deleteDoc(doc(db, 'grupos', grupoActivo, sub, d.id))));
@@ -359,7 +365,7 @@ async function exportarCalificaciones() {
   // Encabezados
   filas.push([
     'Alumno', 'Bloque',
-    'Participación (20)', 'Ensayos (20)', 'Prácticas (20)',
+    'Participación (20)', 'Ensayos (30)', 'Prácticas (10)',
     'Asistencia (10)', 'Presentes', 'Retardos', 'Justificados', 'Faltas',
     'Examen (30)', 'TOTAL (100)',
   ]);
@@ -988,7 +994,79 @@ var SEMANAS_ENSAYO = [
   { n: 15, bloque: 3, tema: 'Hierbas y Especias — Micro-Ensayo 3', cierre: true },
 ];
 
+// Preguntas oficiales por semana, tomadas de "Proyecto_Ensayos_Bases_Culinarias.docx"
+// (Cartografía y Deconstrucción Culinaria). Sirven como texto inicial editable
+// la primera vez que se abre cada semana en un grupo — no son fijas: el
+// docente puede modificarlas, agregar o quitar preguntas y guardar sus propios
+// cambios por grupo.
+var DEFAULT_PREGUNTAS_SEMANA = {
+  1: [
+    'Compara la función que cumple tu proteína principal en tus tres platillos de la región de Campeche. ¿Cómo cambia su género culinario dependiendo de la receta (ej. de guarnición a plato fuerte o sopa), y qué impacto tiene esto en el diseño del menú?',
+    'Si tuvieras que integrar tus tres platillos en el "menú clásico francés" de Escoffier, ¿en qué etapa colocarías cada uno y cuál es tu argumento técnico?',
+    '¿Qué rol de la brigada de cocina clásica asumirías tú al preparar cada uno de tus tres platillos, y cómo cambiaría su ejecución si tuvieras que producir 50 porciones en vez de una sola?',
+  ],
+  2: [
+    'De tus tres platillos campechanos, identifica cuál exige la organización previa más compleja. Describe paso a paso cómo ordenarías tu mise en place para anular el riesgo de contaminación cruzada.',
+    'Plantea un escenario de error en la línea (ej. saltarse la rectificación de sabor) y argumenta técnicamente cómo afectaría la textura final.',
+    'Describe un hábito de higiene personal o de área de trabajo que sea especialmente crítico al manipular tu proteína principal, y qué pasaría si se omitiera.',
+  ],
+  3: [
+    'Argumenta por qué replicar tus tres platillos a gran escala basándote en volumen y no en peso resultaría en un fracaso de consistencia.',
+    'Analiza la diferencia entre el peso de compra (AP) y la porción comestible (EP) de tu proteína. ¿Cuál de las tres recetas genera mayor merma física y qué estrategia de aprovechamiento integral propondrías?',
+    'Identifica qué corte de verdura estandarizado (juliana, brunoise, etc.) usarías en la guarnición de uno de tus platillos, y por qué ese corte específico y no otro.',
+  ],
+  4: [
+    'Contrasta las reacciones físico-químicas de tus platillos por acción del calor. Argumenta en qué momento exacto de la cocción ocurre la reacción de Maillard o la gelatinización de almidones.',
+    'Diseña un protocolo estricto de seguridad alimentaria para el platillo más riesgoso, identificando dónde la regla de las "dos horas acumuladas" (entre 6°C y 65°C) podría romperse en un servicio real.',
+  ],
+  5: [
+    'Si tuvieras que escalar la receta más compleja de tus platillos de 4 a 450 porciones usando la fórmula del Factor de Conversión, ¿qué retos operativos (equipo, tiempos, termodinámica) enfrentarías que la simple matemática no resuelve?',
+    '¿Alguno de tus tres platillos se basa en una salsa madre o un fondo? Si no es evidente, propón cómo una de las cinco salsas madre podría reinterpretar uno de tus platillos.',
+  ],
+  6: [
+    'Compara la cadena de suministro de los ingredientes clave de tus tres platillos en Campeche.',
+    'Si el proveedor rompe la cadena de frío del insumo principal, ¿cómo lo detectas mediante criterios organolépticos (vista, tacto, olfato) en la recepción? Describe tu protocolo de rechazo justificado.',
+  ],
+  7: [
+    'Analiza si tus recetas tradicionales emplean huevo, harinas, almidones o lácteos como agentes de unión o espesantes. Si la receta tradicional no los utiliza, explica científicamente qué estructura retiene los jugos del platillo.',
+    'Plantea cómo le integrarías un agente funcional (como un almidón puro o sustitutos de leche) para modificar drásticamente su textura sin destruir su esencia regional.',
+  ],
+  8: [
+    'Contrasta el tipo de grasa utilizada en tus tres platillos campechanos (ej. manteca de cerdo tradicional vs. aceites vegetales neutros).',
+    'Basado en el punto de humeo y su origen, justifica si es la opción más segura y adecuada para la técnica de cocción empleada, o si propondrías un cambio para mejorar el perfil de sabor.',
+  ],
+  9: [
+    'Analiza las variedades específicas de vegetales, chiles o tubérculos en tus recetas (ej. tipo de chile local, papa cerosa vs. harinosa).',
+    'Argumenta qué pasaría si intercambiaras las variedades entre los platillos (por ejemplo, alterando la escala Scoville con un chile más potente o usando un ingrediente inadecuado para cocciones largas).',
+  ],
+  10: [
+    'Desglosa los cinco sabores básicos en tus platillos regionales e identifica qué ingredientes aportan el glutamato necesario para el quinto sabor (umami).',
+    'Utilizando los principios de Food Pairing, explica si el maridaje de sabores tradicional es por contraste, afinidad aromática o intensidad relativa.',
+  ],
+  11: [
+    'Clasifica la técnica principal de tus tres platillos (Concentración, Expansión o Mixta).',
+    'Si alguno utiliza técnica mixta (como un guiso o braseado regional), explica científicamente por qué reducir el tiempo de cocción arruinaría la transformación del colágeno en gelatina suave.',
+  ],
+  12: [
+    'Analiza el manejo de tu proteína principal (sea carne, ave o marisco). ¿Cómo aplicas el principio de "cortar contra la fibra" al momento de servir y qué impacto directo tiene en la terneza?',
+    'Si trabajas con productos del mar de la región, ¿cuál es el criterio de frescura clave y cómo evitas la sobrecocción?',
+  ],
+  13: [
+    'Identifica los cortes tradicionales de las guarniciones en tus recetas y tradúcelos al catálogo clásico francés (ej. brunoise, juliana, château).',
+    'Argumenta por qué la uniformidad milimétrica de estos cortes no es solo estética, sino una exigencia termodinámica para garantizar una cocción pareja.',
+  ],
+  14: [
+    'Si tus platillos incluyen granos o leguminosas locales, justifica la proporción exacta de grano-líquido empleada.',
+    'Compara el método de cocción por expansión de un arroz tradicional contra la técnica de incorporación gradual y movimiento constante de un risotto. ¿Qué papel juega el almidón en cada caso?',
+  ],
+  15: [
+    'Analiza el perfil aromático final de tus platillos y detalla qué especias de la región deben tostarse en seco para despertar sus aceites esenciales antes de la molienda.',
+    'Argumenta en qué momento exacto de la secuencia operativa integras las hierbas frescas y por qué hacerlo al inicio arruinaría su aporte.',
+  ],
+};
+
 var semanaSeleccionada = null;
+var preguntasSemanaActual = [];
 
 function poblarSelectSemanas() {
   const select = document.getElementById('ens-semana-select');
@@ -1000,6 +1078,111 @@ function poblarSelectSemanas() {
     select.appendChild(opt);
   });
   semanaSeleccionada = SEMANAS_ENSAYO[0].n;
+}
+
+// ---------- PREGUNTAS DEL MICRO-ENSAYO (editor del docente) ----------
+// Se guardan en grupos/{id}/ensayos_preguntas/{semana} como
+// { preguntas: [...], activo: bool }. mi-progreso.js lee este mismo
+// documento y, si activo === true, muestra las preguntas al alumno
+// (solo lectura, junto a su calificación) dentro de un desplegable.
+async function cargarPreguntasSemana() {
+  const cont = document.getElementById('ens-preguntas-lista');
+  if (!cont) return;
+
+  if (!grupoActivo) {
+    cont.innerHTML = '<p class="empty-inline">Elige un grupo primero.</p>';
+    return;
+  }
+
+  const semana = document.getElementById('ens-semana-select').value || SEMANAS_ENSAYO[0].n;
+  const chk = document.getElementById('ens-preguntas-activa');
+
+  try {
+    const snap = await getDoc(doc(db, 'grupos', grupoActivo, 'ensayos_preguntas', String(semana)));
+    if (snap.exists()) {
+      const d = snap.data();
+      preguntasSemanaActual = Array.isArray(d.preguntas) ? [...d.preguntas] : [];
+      if (chk) chk.checked = !!d.activo;
+    } else {
+      preguntasSemanaActual = DEFAULT_PREGUNTAS_SEMANA[semana] ? [...DEFAULT_PREGUNTAS_SEMANA[semana]] : [''];
+      if (chk) chk.checked = false;
+    }
+  } catch (err) {
+    console.warn('No se pudieron cargar las preguntas de esta semana:', err);
+    preguntasSemanaActual = DEFAULT_PREGUNTAS_SEMANA[semana] ? [...DEFAULT_PREGUNTAS_SEMANA[semana]] : [''];
+    if (chk) chk.checked = false;
+  }
+
+  renderPreguntasSemana();
+}
+
+function renderPreguntasSemana() {
+  const cont = document.getElementById('ens-preguntas-lista');
+  if (!cont) return;
+  cont.innerHTML = '';
+
+  if (preguntasSemanaActual.length === 0) {
+    cont.innerHTML = '<p class="empty-inline">Sin preguntas capturadas para esta semana. Usa "+ pregunta" para agregar.</p>';
+  }
+
+  preguntasSemanaActual.forEach((texto, i) => {
+    const row = document.createElement('div');
+    row.className = 'ens-pregunta-row';
+    row.style.cssText = 'display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;';
+    row.innerHTML = `
+      <textarea class="ens-pregunta-texto" data-idx="${i}" rows="3"
+        placeholder="Pregunta ${i + 1}" style="flex:1;">${escaparHTML(texto)}</textarea>
+      <button type="button" class="btn-icon btn-icon-peligro btn-quitar-pregunta" data-idx="${i}" title="Quitar pregunta">✕</button>
+    `;
+    cont.appendChild(row);
+  });
+
+  cont.querySelectorAll('.btn-quitar-pregunta').forEach(btn => {
+    btn.addEventListener('click', () => {
+      sincronizarPreguntasDesdeDOM();
+      const idx = parseInt(btn.dataset.idx, 10);
+      preguntasSemanaActual.splice(idx, 1);
+      renderPreguntasSemana();
+    });
+  });
+}
+
+// Lee lo que el docente haya escrito/editado en los textareas visibles y lo
+// vuelca a preguntasSemanaActual, para no perderlo al agregar o quitar filas.
+function sincronizarPreguntasDesdeDOM() {
+  const areas = document.querySelectorAll('#ens-preguntas-lista .ens-pregunta-texto');
+  if (areas.length === 0) return;
+  preguntasSemanaActual = [...areas].map(a => a.value);
+}
+
+async function guardarPreguntasSemana() {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  const semana = document.getElementById('ens-semana-select').value;
+  if (!semana) return;
+
+  sincronizarPreguntasDesdeDOM();
+  const preguntas = preguntasSemanaActual.map(t => t.trim()).filter(t => t !== '');
+  const activaEl = document.getElementById('ens-preguntas-activa');
+  const activo = activaEl ? activaEl.checked : false;
+
+  await setDoc(doc(db, 'grupos', grupoActivo, 'ensayos_preguntas', String(semana)), {
+    semana: parseInt(semana, 10),
+    preguntas,
+    activo,
+    actualizado: serverTimestamp(),
+  });
+
+  preguntasSemanaActual = preguntas;
+  renderPreguntasSemana();
+
+  const msg = document.getElementById('ens-preguntas-msg');
+  if (msg) {
+    msg.textContent = activo
+      ? '✓ Preguntas guardadas y activas para los alumnos.'
+      : '✓ Preguntas guardadas (todavía no activas para los alumnos).';
+    msg.hidden = false;
+    setTimeout(() => { msg.hidden = true; }, 4000);
+  }
 }
 
 async function cargarEnsayos() {
@@ -1035,8 +1218,8 @@ async function cargarEnsayos() {
         <input type="checkbox" class="ens-entregado" ${d.entregado ? 'checked' : ''}>
         <span class="student-name">${escaparHTML(a.nombre)}</span>
       </label>
-      <input type="number" min="0" max="4" step="0.1" class="ens-calif"
-        value="${d.calificacion !== '' && d.calificacion !== null && d.calificacion !== undefined ? d.calificacion : ''}" placeholder="0-4">
+      <input type="number" min="0" max="6" step="0.1" class="ens-calif"
+        value="${d.calificacion !== '' && d.calificacion !== null && d.calificacion !== undefined ? d.calificacion : ''}" placeholder="0-6">
     `;
     cont.appendChild(row);
   });
