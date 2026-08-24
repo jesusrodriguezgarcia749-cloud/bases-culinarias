@@ -4,22 +4,22 @@
 //
 // ESQUEMA POR BLOQUE (cada bloque = 100 puntos):
 //   Participación   20 pts → 20 actividades × 1 pt
-//   Ensayos         20 pts → 5 bitácoras × 4 pts
-//   Prácticas       20 pts → 5 prácticas × 4 pts
+//   Ensayos         30 pts → 5 bitácoras × 6 pts
+//   Prácticas       10 pts → 5 prácticas × 2 pts
 //   Asistencia      10 pts → 20 clases × 0.5 pts
 //   Examen          30 pts → calificación 0-10 × 3
 
 export const TOPES = {
   participacion: 20,
-  ensayos: 20,
-  practicas: 20,
+  ensayos: 30,
+  practicas: 10,
   asistencia: 10,
   examen: 30,
 };
 
 export const ACTIVIDADES_POR_BLOQUE = 20;   // 1 pt cada una
-export const PTS_POR_ENSAYO = 4;            // 5 bitácoras
-export const PTS_POR_PRACTICA = 4;          // 5 prácticas
+export const PTS_POR_ENSAYO = 6;            // 5 bitácoras
+export const PTS_POR_PRACTICA = 2;          // 5 prácticas
 export const PTS_POR_CLASE = 0.5;           // 20 clases
 
 export const PUNTOS_ASISTENCIA = {
@@ -53,7 +53,7 @@ export function calcularBloque(bloque, datos) {
   const hechas = (datos.idsActividades || []).filter(id => id.startsWith(`b${bloque}-`)).length;
   const ptsParticipacion = tope(hechas * 1, TOPES.participacion);
 
-  // --- Ensayos: suma directa de los puntos (0-4) de las 5 semanas del bloque ---
+  // --- Ensayos: suma directa de los puntos (0-6) de las 5 semanas del bloque ---
   const semanas = SEMANAS_DE_BLOQUE[bloque] || [];
   let ptsEnsayos = 0;
   let ensayosEntregados = 0;
@@ -67,7 +67,7 @@ export function calcularBloque(bloque, datos) {
   });
   ptsEnsayos = tope(ptsEnsayos, TOPES.ensayos);
 
-  // --- Prácticas: la rúbrica da 0-10; cada práctica vale 4 pts ---
+  // --- Prácticas: la rúbrica da 0-10; cada práctica vale 2 pts ---
   const practicasBloque = (datos.practicas || []).filter(p => Number(p.bloque) === bloque);
   let ptsPracticas = 0;
   practicasBloque.forEach(p => {
