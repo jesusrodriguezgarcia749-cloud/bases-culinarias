@@ -1,7 +1,7 @@
 {
   "bloque": 2,
   "titulo": "Examen del Bloque 2 — Conocimiento y manipulación de materias primas",
-  "config": { "preguntasPorExamen": 20, "minutos": 30 },
+  "config": { "preguntasPorExamen": 20, "minutos": 50 },
   "reactivos": [
 
     { "id": "2-001", "subtema": "2.1", "origen": "actividad", "tipo": "opcion_multiple",
