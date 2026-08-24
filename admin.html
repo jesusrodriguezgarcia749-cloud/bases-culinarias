@@ -81,7 +81,7 @@
   </div>
 
   <div id="tab-evaluar" class="tab-panel">
-    <p class="field-hint">Toca un alumno de la lista para calificar su práctica. Cada práctica vale <strong>4 puntos</strong> (5 prácticas = 20 pts del bloque).</p>
+    <p class="field-hint">Toca un alumno de la lista para calificar su práctica. Cada práctica vale <strong>2 puntos</strong> (5 prácticas = 10 pts del bloque).</p>
     <div id="eval-lista-alumnos" class="asis-list"></div>
     <p id="eval-alumnos-empty" class="empty-state" hidden>Elige un grupo primero.</p>
 
@@ -175,7 +175,21 @@
   <div id="tab-ensayos" class="tab-panel">
     <label for="ens-semana-select" class="field-label">Semana</label>
     <select id="ens-semana-select"></select>
-    <p class="field-hint">Cada bitácora vale <strong>4 puntos</strong> (5 bitácoras = 20 pts del bloque). Marca entregada y captura los puntos de 0 a 4.</p>
+
+    <div class="bloques-activos-card">
+      <h3 class="section-title" style="margin-top:0;">Preguntas del micro-ensayo — esta semana</h3>
+      <p class="field-hint">El alumno responde estas preguntas a mano en su libreta. Aquí solo las capturas para que le aparezcan como referencia en "Mi progreso", junto a su calificación y puntos obtenidos.</p>
+      <div id="ens-preguntas-lista"></div>
+      <button type="button" id="btn-agregar-pregunta" class="btn-icon">+ pregunta</button>
+      <label style="display:flex;align-items:center;gap:8px;margin:14px 0;">
+        <input type="checkbox" id="ens-preguntas-activa">
+        <span>Activa para los alumnos (la ven en su pestaña de Ensayos)</span>
+      </label>
+      <button id="btn-guardar-preguntas" class="btn btn-primary btn-block">Guardar preguntas</button>
+      <p id="ens-preguntas-msg" class="save-msg" hidden></p>
+    </div>
+
+    <p class="field-hint">Cada bitácora vale <strong>6 puntos</strong> (5 bitácoras = 30 pts del bloque). Marca entregada y captura los puntos de 0 a 6.</p>
     <div id="ensayos-lista" class="asis-list"></div>
     <p id="ensayos-empty" class="empty-state" hidden>Elige un grupo primero.</p>
     <button id="btn-guardar-ensayos" class="btn btn-primary btn-block">Guardar ensayos de esta semana</button>
