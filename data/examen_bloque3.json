@@ -1,7 +1,7 @@
 {
   "bloque": 3,
   "titulo": "Examen del Bloque 3 — Desarrollo de habilidades para la cocina",
-  "config": { "preguntasPorExamen": 20, "minutos": 30 },
+  "config": { "preguntasPorExamen": 20, "minutos": 50 },
   "reactivos": [
 
     { "id": "3-001", "subtema": "3.1", "origen": "actividad", "tipo": "opcion_multiple",
@@ -379,7 +379,79 @@
         "Porque se hidrata y pierde toda su intensidad aromática",
         "Porque su color oscurece el líquido de la preparación"
       ], "correcta": 0,
-      "explicacion": "Es una especia robusta: pide tiempo. Pero la hoja permanece rígida y no es agradable en boca, así que se retira. Aporta y se va." }
+      "explicacion": "Es una especia robusta: pide tiempo. Pero la hoja permanece rígida y no es agradable en boca, así que se retira. Aporta y se va." },
+
+    { "id": "3-041", "subtema": "3.2.3", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué la quinoa se clasifica como pseudocereal y no como cereal?",
+      "opciones": [
+        "Porque no pertenece botánicamente a la familia de las gramíneas, aunque se cocine y use como un cereal",
+        "Porque tiene menor contenido de almidón que el arroz o el trigo",
+        "Porque requiere remojo previo como las leguminosas",
+        "Porque su tiempo de cocción es más corto que el de los cereales"
+      ], "correcta": 0,
+      "explicacion": "Los cereales son gramíneas (arroz, trigo, maíz). La quinoa no lo es botánicamente, aunque se cocine y se use de forma muy similar a un cereal." },
+
+    { "id": "3-042", "subtema": "3.2.3", "tipo": "relacionar",
+      "pregunta": "Relaciona cada grupo de semillas comestibles con un rasgo que lo distingue.",
+      "pares": [
+        { "izquierda": "Cereal (gramínea)", "derecha": "Arroz, trigo, maíz — ricos sobre todo en almidón" },
+        { "izquierda": "Pseudocereal", "derecha": "Quinoa, amaranto — no es gramínea pero se cocina igual" },
+        { "izquierda": "Leguminosa", "derecha": "Frijol, lenteja, garbanzo — más proteína y fibra, suele requerir remojo" },
+        { "izquierda": "Grano refinado", "derecha": "Se le retiró salvado y germen; cuece más rápido que el integral" }
+      ],
+      "explicacion": "El criterio de clasificación es botánico y de composición, no solo cómo se usan en el plato: por eso la quinoa y el arroz se cocinan parecido pero pertenecen a familias distintas." },
+
+    { "id": "3-043", "subtema": "3.2.3", "tipo": "completar",
+      "pregunta": "Completa: «Un grano integral conserva salvado, germen y ________, mientras que el grano refinado solo conserva esta última parte».",
+      "opciones": [ "endospermo", "cáscara", "raíz", "vaina" ],
+      "correcta": 0,
+      "explicacion": "El endospermo —almidón, la mayor parte del grano— es lo único que queda tras refinar. El salvado (fibra) y el germen (grasas y nutrientes) se retiran en ese proceso." },
+
+    { "id": "3-044", "subtema": "3.2.3", "tipo": "opcion_multiple",
+      "pregunta": "¿Por qué el arroz integral se enrancia más rápido que el arroz blanco durante su almacenamiento?",
+      "opciones": [
+        "Porque conserva el germen, que contiene grasas que se oxidan con el tiempo",
+        "Porque su mayor contenido de fibra atrae más humedad ambiental",
+        "Porque su cáscara exterior es más porosa y absorbe olores",
+        "Porque su proceso de secado industrial es menos completo"
+      ], "correcta": 0,
+      "explicacion": "El refinado elimina precisamente el germen graso. Por eso el arroz blanco se conserva años en un lugar seco y fresco, mientras que el integral se enrancia en pocos meses." },
+
+    { "id": "3-045", "subtema": "3.2.3", "tipo": "opcion_multiple",
+      "pregunta": "Un cocinero en un clima cálido y húmedo compra un lote grande de arroz integral para varios meses. ¿Cuál es la recomendación correcta?",
+      "opciones": [
+        "Comprarlo en cantidades que se consuman en pocos meses, o refrigerarlo si el clima es cálido y húmedo",
+        "Congelarlo de inmediato, igual que se haría con un cárnico fresco",
+        "No hay riesgo relevante: el arroz integral se conserva igual que el blanco",
+        "Guardarlo en un recipiente hermético es suficiente sin importar el clima"
+      ], "correcta": 0,
+      "explicacion": "El germen graso del integral se enrancia con más facilidad ante calor o humedad. En climas como el de Campeche, comprar en menor cantidad o refrigerar reduce ese riesgo." },
+
+    { "id": "3-046", "subtema": "3.2.4", "tipo": "opcion_multiple",
+      "pregunta": "¿Cuál es la diferencia técnica entre una hierba y una especia?",
+      "opciones": [
+        "La hierba es la parte verde y frondosa de la planta; la especia proviene de otras partes como semilla, corteza, raíz o flor",
+        "La hierba se usa siempre fresca y la especia siempre seca",
+        "La hierba aporta aroma y la especia aporta color",
+        "La hierba es de origen local y la especia es de origen importado"
+      ], "correcta": 0,
+      "explicacion": "El criterio es qué parte de la planta se usa, no si está fresca o seca ni su origen geográfico: muchas hierbas también se secan y muchas especias son locales, como el achiote." },
+
+    { "id": "3-047", "subtema": "3.2.4", "tipo": "completar",
+      "pregunta": "Completa: «El recado rojo y el recado negro de la cocina de Campeche son, en esencia, especias robustas convertidas en ________ para dosificarse con precisión».",
+      "opciones": [ "pasta", "infusión", "polvo fino", "salmuera" ],
+      "correcta": 0,
+      "explicacion": "El achiote molido o el chile tatemado se concentran en forma de pasta, siguiendo la misma lógica de las especias robustas que se agregan al inicio de la cocción." },
+
+    { "id": "3-048", "subtema": "3.2.4", "tipo": "opcion_multiple",
+      "pregunta": "El epazote se usa tradicionalmente en frijoles y tamales. ¿En qué momento de la cocción debe agregarse y por qué?",
+      "opciones": [
+        "Hacia el final, porque es una hierba fresca delicada y el calor prolongado destruye su aroma",
+        "Al inicio, porque es una especia robusta que necesita tiempo para liberar su sabor",
+        "En cualquier momento, porque su aroma no se ve afectado por el calor",
+        "Solo crudo, al momento de servir, porque no tolera ningún grado de cocción"
+      ], "correcta": 0,
+      "explicacion": "Aunque su sabor es intenso, el epazote es una hierba fresca y sigue la misma regla que la albahaca o el cilantro: se agrega hacia el final para no perder su aroma característico." }
 
   ]
 }
