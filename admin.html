@@ -69,6 +69,7 @@
     <button class="tab-btn" data-tab="examenes">Exámenes</button>
     <button class="tab-btn" data-tab="enlinea">Examen en línea</button>
     <button class="tab-btn" data-tab="avisos">Avisos</button>
+    <button class="tab-btn" data-tab="ajuste">Ajuste manual</button>
   </nav>
 
   <div id="tab-alumnos" class="tab-panel active">
@@ -245,6 +246,47 @@
     <h3 class="section-title">Avisos publicados</h3>
     <div id="avisos-lista"></div>
     <p id="avisos-empty" class="empty-state" hidden>Aún no has publicado avisos en este grupo.</p>
+  </div>
+
+  <div id="tab-ajuste" class="tab-panel">
+    <p class="field-hint">Ajusta manualmente cualquier rubro por imprevistos (trabajo extra, inasistencia justificada, algún detalle técnico, etc.). Un valor manual siempre tiene prioridad sobre el cálculo automático.</p>
+
+    <label for="ajuste-alumno-select" class="field-label">Alumno</label>
+    <select id="ajuste-alumno-select"><option value="">— Elige un alumno —</option></select>
+    <p id="ajuste-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+
+    <div id="ajuste-form" hidden>
+      <label for="ajuste-bloque-select" class="field-label">Bloque</label>
+      <select id="ajuste-bloque-select">
+        <option value="1">Bloque 1</option>
+        <option value="2">Bloque 2</option>
+        <option value="3">Bloque 3</option>
+      </select>
+
+      <h3 class="section-title">Ajuste manual — Bloque <span id="ajuste-bloque-num">1</span></h3>
+
+      <label for="ajuste-participacion" class="field-label">Participación (tope 20)</label>
+      <input id="ajuste-participacion" type="number" min="0" max="20" step="0.1">
+
+      <label for="ajuste-practicas" class="field-label">Prácticas de cocina (tope 10)</label>
+      <input id="ajuste-practicas" type="number" min="0" max="10" step="0.1">
+
+      <label for="ajuste-ensayos" class="field-label">Ensayos (tope 30)</label>
+      <input id="ajuste-ensayos" type="number" min="0" max="30" step="0.1">
+
+      <label for="ajuste-asistencia" class="field-label">Asistencia (tope 10)</label>
+      <input id="ajuste-asistencia" type="number" min="0" max="10" step="0.1">
+
+      <label for="ajuste-examen" class="field-label">Examen — puntos del bloque (tope 30)</label>
+      <input id="ajuste-examen" type="number" min="0" max="30" step="0.1">
+      <p class="field-hint">Este es el mismo dato que tu pestaña "Exámenes" — cambiarlo aquí lo cambia allá también, y viceversa.</p>
+
+      <div class="score-display" id="ajuste-total-display">Suma actual: — / 100 pts</div>
+
+      <button id="btn-guardar-ajuste" class="btn btn-primary btn-block">Guardar ajustes manuales</button>
+      <button id="btn-quitar-ajuste" class="btn btn-ghost-dark btn-block" style="margin-top:8px;">Quitar ajustes (volver a automático)</button>
+      <p id="ajuste-msg" class="save-msg" hidden></p>
+    </div>
   </div>
 
 </section>
