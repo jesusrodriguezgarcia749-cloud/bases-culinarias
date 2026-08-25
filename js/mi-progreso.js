@@ -99,7 +99,7 @@ async function cargarGruposEnSelect() {
 // Carga UNA sola vez todos los datos del alumno y los deja en datosCache.
 async function cargarDatos() {
   const base = ['grupos', sesion.grupoId, 'alumnos', sesion.alumnoId];
-  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, intSnap, preguntasSnap] = await Promise.all([
+  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, intSnap, preguntasSnap, ajusSnap] = await Promise.all([
     getDocs(collection(db, ...base, 'actividades')).catch(() => null),
     getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
     getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
@@ -110,6 +110,9 @@ async function cargarDatos() {
     // docente en el panel), no por alumno — todos los alumnos del grupo
     // ven las mismas preguntas de la semana que esté activa.
     getDocs(collection(db, 'grupos', sesion.grupoId, 'ensayos_preguntas')).catch(() => null),
+    // Ajustes manuales del docente (Participación, Prácticas, Ensayos,
+    // Asistencia) — el Examen manual sigue viniendo de "examenes" arriba.
+    getDocs(collection(db, ...base, 'ajustes')).catch(() => null),
   ]);
 
   const ensayos = {};
@@ -120,6 +123,8 @@ async function cargarDatos() {
   if (intSnap) intSnap.docs.forEach(d => { intentos[d.id] = d.data(); });
   const ensayosPreguntas = {};
   if (preguntasSnap) preguntasSnap.docs.forEach(d => { ensayosPreguntas[d.id] = d.data(); });
+  const ajustes = {};
+  if (ajusSnap) ajusSnap.docs.forEach(d => { ajustes[d.id] = d.data(); });
 
   datosCache = {
     idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
@@ -129,6 +134,7 @@ async function cargarDatos() {
     asistencias: asisSnap ? asisSnap.docs.map(d => d.data()) : [],
     examenes,
     intentos,
+    ajustes,
   };
 }
 
