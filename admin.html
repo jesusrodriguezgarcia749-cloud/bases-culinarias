@@ -66,7 +66,6 @@
     <button class="tab-btn" data-tab="participacion">Participación</button>
     <button class="tab-btn" data-tab="asistencia">Asistencia</button>
     <button class="tab-btn" data-tab="ensayos">Ensayos</button>
-    <button class="tab-btn" data-tab="examenes">Exámenes</button>
     <button class="tab-btn" data-tab="enlinea">Examen en línea</button>
     <button class="tab-btn" data-tab="avisos">Avisos</button>
     <button class="tab-btn" data-tab="ajuste">Ajuste manual</button>
@@ -124,6 +123,11 @@
         <option value="grupo">Todo el grupo</option>
         <option value="alumno">Por alumno</option>
       </select>
+
+      <div id="hist-alumno-wrap" hidden>
+        <label for="hist-alumno-select" class="field-label">Alumno</label>
+        <select id="hist-alumno-select"><option value="">— Elige un alumno —</option></select>
+      </div>
 
       <label class="field-label">Bloques a incluir</label>
       <div id="hist-bloques" class="asis-list"></div>
@@ -195,21 +199,6 @@
     <p id="ensayos-empty" class="empty-state" hidden>Elige un grupo primero.</p>
     <button id="btn-guardar-ensayos" class="btn btn-primary btn-block">Guardar ensayos de esta semana</button>
     <p id="ens-msg" class="save-msg" hidden></p>
-  </div>
-
-  <div id="tab-examenes" class="tab-panel">
-    <label for="exa-select" class="field-label">Examen</label>
-    <select id="exa-select">
-      <option value="1">Examen Bloque 1</option>
-      <option value="2">Examen Bloque 2</option>
-      <option value="3">Examen Bloque 3</option>
-      <option value="final">Examen Final — Semana 16</option>
-    </select>
-    <p class="field-hint">El examen vale <strong>30 puntos</strong> del bloque. Captura la calificación de 0 a 10 (se convierte automáticamente).</p>
-    <div id="examenes-lista" class="asis-list"></div>
-    <p id="examenes-empty" class="empty-state" hidden>Elige un grupo primero.</p>
-    <button id="btn-guardar-examenes" class="btn btn-primary btn-block">Guardar calificaciones</button>
-    <p id="exa-msg" class="save-msg" hidden></p>
   </div>
 
   <div id="tab-enlinea" class="tab-panel">
