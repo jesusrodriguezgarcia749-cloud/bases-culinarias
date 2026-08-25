@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/progreso.css">
 <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
@@ -175,6 +176,19 @@
     <p id="asistencia-empty" class="empty-state" hidden>Elige un grupo primero.</p>
     <button id="btn-guardar-asistencia" class="btn btn-primary btn-block">Guardar asistencia del día</button>
     <p id="asis-msg" class="save-msg" hidden></p>
+
+    <div class="bloques-activos-card" style="margin-top:24px;">
+      <h3 class="section-title" style="margin-top:0;">Historial de asistencia</h3>
+      <p class="field-hint">Calendario de días registrados por alumno — toca a un alumno para desplegarlo.</p>
+      <label for="hist-asis-bloque" class="field-label">Bloque</label>
+      <select id="hist-asis-bloque">
+        <option value="1">Bloque 1</option>
+        <option value="2">Bloque 2</option>
+        <option value="3">Bloque 3</option>
+      </select>
+      <div id="hist-asis-lista" style="margin-top:12px;"></div>
+      <p id="hist-asis-empty" class="empty-state" hidden>Elige un grupo primero.</p>
+    </div>
   </div>
 
   <div id="tab-ensayos" class="tab-panel">
