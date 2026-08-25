@@ -61,7 +61,7 @@
 
 <section class="search-band">
   <div class="wrap">
-    <form class="search-form">
+    <form class="search-form" id="home-search-form">
       <label for="search-input" class="sr-only">Buscar en el compendio</label>
       <input id="search-input" type="text" placeholder="Busca un tema, por ejemplo: mise en place, temperaturas, cortes…">
       <button type="submit">Buscar</button>
@@ -155,5 +155,15 @@
 <button id="bg-music-toggle" class="music-toggle" aria-label="Activar música de fondo" aria-pressed="false">🎵</button>
 
 <script src="js/app.js"></script>
+<script>
+  // Conecta el buscador de la portada con el filtro que ya existe en
+  // compendio.js — al buscar aquí, te manda a Compendio con el resultado
+  // ya filtrado (compendio.js lee el parámetro ?buscar= de la URL).
+  document.getElementById('home-search-form')?.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const termino = document.getElementById('search-input').value.trim();
+    window.location.href = 'compendio.html' + (termino ? '?buscar=' + encodeURIComponent(termino) : '');
+  });
+</script>
 </body>
 </html>
