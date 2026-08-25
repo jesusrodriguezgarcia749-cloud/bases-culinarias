@@ -237,8 +237,8 @@ export async function reporteGrupo({ nombreGrupo, alumnos, bloques }) {
         <table>
           <thead><tr>
             <th>Alumno</th>
-            <th class="num">Particip.<br>/20</th><th class="num">Ensayos<br>/20</th>
-            <th class="num">Prácticas<br>/20</th><th class="num">Asist.<br>/10</th>
+            <th class="num">Particip.<br>/20</th><th class="num">Ensayos<br>/30</th>
+            <th class="num">Prácticas<br>/10</th><th class="num">Asist.<br>/10</th>
             <th class="num">Faltas</th><th class="num">Examen<br>/30</th>
             <th class="num">Total<br>/100</th><th class="num">Calif.</th>
           </tr></thead>
@@ -329,10 +329,10 @@ export async function reporteAlumno({ nombreGrupo, alumno, datos }) {
     ensayosHTML += `
       <h2>Bitácoras de ensayo — Bloque ${r.bloque}</h2>
       <table>
-        <thead><tr><th class="num">Semana</th><th>Tema</th><th class="num">Entregada</th><th class="num">Puntos /4</th></tr></thead>
+        <thead><tr><th class="num">Semana</th><th>Tema</th><th class="num">Entregada</th><th class="num">Puntos /6</th></tr></thead>
         <tbody>${filas}
           <tr class="fila-total"><td colspan="3">Subtotal Bloque ${r.bloque}</td>
-          <td class="num">${r.ensayos.pts.toFixed(1)} / 20</td></tr>
+          <td class="num">${r.ensayos.pts.toFixed(1)} / 30</td></tr>
         </tbody>
       </table>`;
   });
@@ -356,8 +356,8 @@ export async function reporteAlumno({ nombreGrupo, alumno, datos }) {
       <table>
         <thead><tr>
           <th>Bloque</th>
-          <th class="num">Particip.<br>/20</th><th class="num">Ensayos<br>/20</th>
-          <th class="num">Prácticas<br>/20</th><th class="num">Asist.<br>/10</th>
+          <th class="num">Particip.<br>/20</th><th class="num">Ensayos<br>/30</th>
+          <th class="num">Prácticas<br>/10</th><th class="num">Asist.<br>/10</th>
           <th class="num">Examen<br>/30</th><th class="num">Total<br>/100</th><th class="num">Calif.</th>
         </tr></thead>
         <tbody>${filasBloque}</tbody>
