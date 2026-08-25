@@ -149,6 +149,18 @@ on('btn-exportar', 'click', exportarCalificaciones);
 on('btn-pdf', 'click', generarPDF);
 on('hist-modo', 'change', renderBloquesReporte);
 
+on('ajuste-alumno-select', 'change', () => {
+  const tieneAlumno = !!document.getElementById('ajuste-alumno-select').value;
+  document.getElementById('ajuste-form').hidden = !tieneAlumno;
+  if (tieneAlumno) cargarAjusteAlumnoBloque();
+});
+on('ajuste-bloque-select', 'change', cargarAjusteAlumnoBloque);
+['ajuste-participacion', 'ajuste-practicas', 'ajuste-ensayos', 'ajuste-asistencia', 'ajuste-examen'].forEach(id => {
+  on(id, 'input', actualizarSumaAjuste);
+});
+on('btn-guardar-ajuste', 'click', guardarAjusteManual);
+on('btn-quitar-ajuste', 'click', quitarAjusteManual);
+
 renderRubrica();
 renderChecklist();
 
@@ -174,6 +186,7 @@ function cargarTabActiva() {
   if (tab === 'examenes') cargarExamenes();
   if (tab === 'enlinea') { cargarExamenesAbiertos(); cargarIntentos(); }
   if (tab === 'avisos') cargarAvisos();
+  if (tab === 'ajuste') mostrarEstadoAjusteManual();
 }
 
 // ---------- GRUPOS ----------
@@ -227,7 +240,7 @@ async function eliminarGrupo() {
   const alumnosSnap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos'));
   for (const alumnoDoc of alumnosSnap.docs) {
     const base = ['grupos', grupoActivo, 'alumnos', alumnoDoc.id];
-    for (const sub of ['actividades', 'evaluaciones', 'ensayos', 'asistencias', 'examenes']) {
+    for (const sub of ['actividades', 'evaluaciones', 'ensayos', 'asistencias', 'examenes', 'ajustes']) {
       const subSnap = await getDocs(collection(db, ...base, sub)).catch(() => null);
       if (subSnap) {
         await Promise.all(subSnap.docs.map(d => deleteDoc(doc(db, ...base, sub, d.id))));
@@ -285,13 +298,14 @@ function renderBloquesReporte() {
 // Lee de Firestore todo lo necesario para calcular las calificaciones de un alumno.
 async function datosDeAlumno(alumnoId) {
   const base = ['grupos', grupoActivo, 'alumnos', alumnoId];
-  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, intSnap] = await Promise.all([
+  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, intSnap, ajusSnap] = await Promise.all([
     getDocs(collection(db, ...base, 'actividades')).catch(() => null),
     getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
     getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
     getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
     getDocs(collection(db, ...base, 'examenes')).catch(() => null),
     getDocs(collection(db, ...base, 'intentos')).catch(() => null),
+    getDocs(collection(db, ...base, 'ajustes')).catch(() => null),
   ]);
 
   const ensayos = {};
@@ -300,6 +314,8 @@ async function datosDeAlumno(alumnoId) {
   if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
   const intentos = {};
   if (intSnap) intSnap.docs.forEach(d => { intentos[d.id] = d.data(); });
+  const ajustes = {};
+  if (ajusSnap) ajusSnap.docs.forEach(d => { ajustes[d.id] = d.data(); });
 
   return {
     idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
@@ -308,6 +324,7 @@ async function datosDeAlumno(alumnoId) {
     asistencias: asisSnap ? asisSnap.docs.map(d => d.data()) : [],
     examenes,
     intentos,
+    ajustes,
   };
 }
 
@@ -390,18 +407,21 @@ async function exportarCalificaciones() {
 
   for (const alumno of aExportar) {
     const base = ['grupos', grupoActivo, 'alumnos', alumno.id];
-    const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap] = await Promise.all([
+    const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, ajusSnap] = await Promise.all([
       getDocs(collection(db, ...base, 'actividades')).catch(() => null),
       getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
       getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
       getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
       getDocs(collection(db, ...base, 'examenes')).catch(() => null),
+      getDocs(collection(db, ...base, 'ajustes')).catch(() => null),
     ]);
 
     const ensayos = {};
     if (ensSnap) ensSnap.docs.forEach(d => { ensayos[d.id] = d.data(); });
     const examenes = {};
     if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
+    const ajustes = {};
+    if (ajusSnap) ajusSnap.docs.forEach(d => { ajustes[d.id] = d.data(); });
     const asistencias = asisSnap ? asisSnap.docs.map(d => d.data()) : [];
 
     const datos = {
@@ -410,6 +430,7 @@ async function exportarCalificaciones() {
       practicas: evalSnap ? evalSnap.docs.map(d => d.data()) : [],
       asistencias,
       examenes,
+      ajustes,
     };
 
     [1, 2, 3].forEach(b => {
@@ -516,7 +537,18 @@ function renderAlumnos(lista) {
 }
 
 function renderSelectAlumnos() {
-  // Los selects de alumno se eliminaron a favor de listas tocables.
+  const select = document.getElementById('ajuste-alumno-select');
+  if (!select) return;
+  const actual = select.value;
+  select.innerHTML = '<option value="">— Elige un alumno —</option>';
+  alumnosCache.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a.id;
+    opt.textContent = a.nombre;
+    select.appendChild(opt);
+  });
+  // Conserva la selección si el alumno sigue en la lista tras recargar.
+  if (actual && alumnosCache.some(a => a.id === actual)) select.value = actual;
 }
 
 async function agregarAlumno(e) {
@@ -1581,4 +1613,132 @@ function escaparHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+// ---------- AJUSTE MANUAL (override por alumno y bloque de cualquier rubro) ----------
+// Participación, Prácticas, Ensayos y Asistencia se guardan en
+// grupos/{id}/alumnos/{id}/ajustes/{bloque}. El campo Examen de esta pantalla
+// NO usa esa colección: lee y escribe directamente en
+// grupos/{id}/alumnos/{id}/examenes/{bloque}, el mismo dato que la pestaña
+// "Exámenes" — así hay un solo lugar para ese valor, nunca dos.
+
+function mostrarEstadoAjusteManual() {
+  const empty = document.getElementById('ajuste-empty');
+  const select = document.getElementById('ajuste-alumno-select');
+  const form = document.getElementById('ajuste-form');
+  if (!empty || !select) return;
+
+  if (!grupoActivo) {
+    empty.hidden = false; empty.textContent = 'Elige un grupo primero.';
+    select.hidden = true; form.hidden = true;
+    return;
+  }
+  empty.hidden = true;
+  select.hidden = false;
+
+  // Si ya había un alumno elegido de antes, vuelve a cargar sus datos
+  // (por ejemplo, al regresar a esta pestaña tras editar otra cosa).
+  if (select.value) {
+    form.hidden = false;
+    cargarAjusteAlumnoBloque();
+  } else {
+    form.hidden = true;
+  }
+}
+
+// Trae el valor EFECTIVO actual (automático o ya-manual, el que esté vigente)
+// de los 5 rubros para el alumno y bloque elegidos, usando la misma fórmula
+// que todo el resto del sistema — así lo que se precarga aquí es idéntico a
+// lo que ya se ve en Historial y en el panel del alumno.
+async function cargarAjusteAlumnoBloque() {
+  const alumnoId = document.getElementById('ajuste-alumno-select').value;
+  const bloque = parseInt(document.getElementById('ajuste-bloque-select').value, 10);
+  if (!alumnoId || !grupoActivo) return;
+
+  document.getElementById('ajuste-bloque-num').textContent = bloque;
+  const msg = document.getElementById('ajuste-msg');
+  if (msg) msg.hidden = true;
+
+  const datos = await datosDeAlumno(alumnoId);
+  const r = calcularBloque(bloque, datos);
+
+  document.getElementById('ajuste-participacion').value = r.participacion.pts;
+  document.getElementById('ajuste-practicas').value = r.practicas.pts.toFixed(1);
+  document.getElementById('ajuste-ensayos').value = r.ensayos.pts.toFixed(1);
+  document.getElementById('ajuste-asistencia').value = r.asistencia.pts.toFixed(2);
+  document.getElementById('ajuste-examen').value = r.examen.pts.toFixed(1);
+
+  actualizarSumaAjuste();
+}
+
+// Suma en vivo de lo que esté escrito en los 5 campos, para que el docente
+// vea de inmediato cómo va quedando el total mientras edita.
+function actualizarSumaAjuste() {
+  const ids = ['ajuste-participacion', 'ajuste-practicas', 'ajuste-ensayos', 'ajuste-asistencia', 'ajuste-examen'];
+  const suma = ids.reduce((s, id) => {
+    const el = document.getElementById(id);
+    const v = el ? parseFloat(el.value) : NaN;
+    return s + (isNaN(v) ? 0 : v);
+  }, 0);
+  const display = document.getElementById('ajuste-total-display');
+  if (display) display.textContent = `Suma actual: ${suma.toFixed(1)} / 100 pts`;
+}
+
+// Guarda TODO lo que esté escrito en pantalla en ese momento como manual —
+// aunque no lo hayas tocado. Es la forma más simple y predecible: si no
+// quieres fijar un rubro, usa "Quitar ajustes" después, o simplemente no
+// entres a esta pantalla para ese alumno.
+async function guardarAjusteManual() {
+  const alumnoId = document.getElementById('ajuste-alumno-select').value;
+  if (!grupoActivo || !alumnoId) { alert('Elige un alumno primero.'); return; }
+  const bloque = document.getElementById('ajuste-bloque-select').value;
+
+  const participacion = parseFloat(document.getElementById('ajuste-participacion').value) || 0;
+  const practicas = parseFloat(document.getElementById('ajuste-practicas').value) || 0;
+  const ensayos = parseFloat(document.getElementById('ajuste-ensayos').value) || 0;
+  const asistencia = parseFloat(document.getElementById('ajuste-asistencia').value) || 0;
+  const examenPts = parseFloat(document.getElementById('ajuste-examen').value) || 0;
+
+  await setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ajustes', bloque), {
+    participacion, practicas, ensayos, asistencia,
+    actualizado: serverTimestamp(),
+  });
+
+  // El campo Examen se guarda en su propio lugar (el mismo que usa la
+  // pestaña "Exámenes"): puntos del bloque (0-30) → calificación 0-10.
+  await setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', bloque), {
+    examen: bloque,
+    calificacion: examenPts / 3,
+    origen: 'ajuste del docente',
+    actualizado: serverTimestamp(),
+  });
+
+  const msg = document.getElementById('ajuste-msg');
+  msg.textContent = '\u2713 Ajustes guardados.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+
+  cargarAjusteAlumnoBloque();
+}
+
+// Borra el ajuste manual de los 5 rubros de este alumno y bloque, y regresa
+// todo al cálculo automático (incluido el Examen, si tenía un ajuste ahí).
+async function quitarAjusteManual() {
+  const alumnoId = document.getElementById('ajuste-alumno-select').value;
+  if (!grupoActivo || !alumnoId) { alert('Elige un alumno primero.'); return; }
+  const bloque = document.getElementById('ajuste-bloque-select').value;
+
+  const alumno = alumnosCache.find(a => a.id === alumnoId);
+  const ok = confirm(`¿Quitar los ajustes manuales de ${alumno?.nombre || 'este alumno'} en el Bloque ${bloque}?\n\nVolverá a calcularse automáticamente en los 5 rubros, incluido el Examen.`);
+  if (!ok) return;
+
+  await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ajustes', bloque)).catch(() => {});
+  await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', bloque)).catch(() => {});
+
+  const msg = document.getElementById('ajuste-msg');
+  msg.textContent = '\u2713 Ajustes quitados — vuelve a calcular automático.';
+  msg.hidden = false;
+  setTimeout(() => { msg.hidden = true; }, 3000);
+
+  cargarAjusteAlumnoBloque();
 }
