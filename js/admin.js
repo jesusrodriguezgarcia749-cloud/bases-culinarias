@@ -61,11 +61,16 @@ onAuthStateChanged(auth, async user => {
     document.getElementById('login-screen').hidden = true;
     document.getElementById('app-screen').hidden = false;
     await cargarGrupos();
-    // Si el navegador restauró una opción de grupo ya seleccionada (sin
-    // disparar 'change'), forzamos la carga de alumnos igual.
+    // Recupera el último grupo elegido (guardado en este dispositivo) para no
+    // tener que reseleccionarlo cada vez que se recarga la página.
     const select = document.getElementById('grupo-select');
+    const guardado = localStorage.getItem('bc_grupo_activo');
+    if (guardado && [...select.options].some(o => o.value === guardado)) {
+      select.value = guardado;
+    }
     if (select.value) {
       grupoActivo = select.value;
+      localStorage.setItem('bc_grupo_activo', grupoActivo);
       await cargarAlumnos();
       cargarTabActiva();
     }
@@ -108,12 +113,14 @@ on('btn-nuevo-grupo', 'click', crearGrupo);
 on('grupo-select', 'change', async (e) => {
   grupoActivo = e.target.value || null;
   if (grupoActivo) {
+    localStorage.setItem('bc_grupo_activo', grupoActivo);
     await cargarAlumnos();
     // Si ya estábamos parados en otra pestaña (Ensayos, Práctica de cocina,
     // etc.), cargarAlumnos() por sí solo NO la refresca — hay que forzarlo,
     // o se queda pegada mostrando "Elige un grupo primero" aunque ya elegiste uno.
     cargarTabActiva();
   } else {
+    localStorage.removeItem('bc_grupo_activo');
     renderAlumnos([]);
   }
 });
@@ -139,15 +146,17 @@ on('btn-agregar-pregunta', 'click', () => {
 });
 on('btn-guardar-preguntas', 'click', guardarPreguntasSemana);
 on('btn-publicar-aviso', 'click', publicarAviso);
-on('exa-select', 'change', cargarExamenes);
-on('btn-guardar-examenes', 'click', guardarExamenes);
 on('btn-guardar-bloques', 'click', guardarBloquesActivos);
 on('btn-guardar-examenes-abiertos', 'click', guardarExamenesAbiertos);
 on('enlinea-bloque', 'change', cargarIntentos);
 on('btn-eliminar-grupo', 'click', eliminarGrupo);
 on('btn-exportar', 'click', exportarCalificaciones);
 on('btn-pdf', 'click', generarPDF);
-on('hist-modo', 'change', renderBloquesReporte);
+on('hist-modo', 'change', () => {
+  const esAlumno = document.getElementById('hist-modo').value === 'alumno';
+  document.getElementById('hist-alumno-wrap').hidden = !esAlumno;
+  renderBloquesReporte();
+});
 
 on('ajuste-alumno-select', 'change', () => {
   const tieneAlumno = !!document.getElementById('ajuste-alumno-select').value;
@@ -183,7 +192,6 @@ function cargarTabActiva() {
   if (tab === 'participacion') { cargarBloquesActivos(); cargarParticipacion(); }
   if (tab === 'asistencia') cargarAsistencia();
   if (tab === 'ensayos') { poblarSelectSemanas(); cargarPreguntasSemana(); cargarEnsayos(); }
-  if (tab === 'examenes') cargarExamenes();
   if (tab === 'enlinea') { cargarExamenesAbiertos(); cargarIntentos(); }
   if (tab === 'avisos') cargarAvisos();
   if (tab === 'ajuste') mostrarEstadoAjusteManual();
@@ -209,6 +217,7 @@ async function crearGrupo() {
   await cargarGrupos();
   document.getElementById('grupo-select').value = ref.id;
   grupoActivo = ref.id;
+  localStorage.setItem('bc_grupo_activo', grupoActivo);
   cargarAlumnos();
 }
 
@@ -261,6 +270,7 @@ async function eliminarGrupo() {
   alert(`Grupo "${nombreGrupo}" eliminado.`);
   grupoActivo = null;
   alumnosCache = [];
+  localStorage.removeItem('bc_grupo_activo');
   await cargarGrupos();
   renderAlumnos([]);
 }
@@ -345,12 +355,11 @@ async function generarPDF() {
 
   try {
     if (modo === 'alumno') {
-      const nombres = alumnosCache.map((a, i) => `${i + 1}. ${a.nombre}`).join('\n');
-      const elegido = prompt(`¿De qué alumno?\n\n${nombres}\n\nEscribe el número:`);
-      const idx = parseInt(elegido, 10) - 1;
-      if (isNaN(idx) || idx < 0 || idx >= alumnosCache.length) { msg.hidden = true; return; }
+      const alumnoId = document.getElementById('hist-alumno-select').value;
+      if (!alumnoId) { alert('Elige un alumno de la lista.'); msg.hidden = true; return; }
+      const alumno = alumnosCache.find(a => a.id === alumnoId);
+      if (!alumno) { msg.hidden = true; return; }
 
-      const alumno = alumnosCache[idx];
       const datos = await datosDeAlumno(alumno.id);
       await reporteAlumno({ nombreGrupo: nombreDelGrupo(), alumno, datos });
     } else {
@@ -383,11 +392,11 @@ async function exportarCalificaciones() {
 
   let aExportar = alumnosCache;
   if (modo === 'alumno') {
-    const nombres = alumnosCache.map((a, i) => `${i + 1}. ${a.nombre}`).join('\n');
-    const elegido = prompt(`¿De qué alumno?\n\n${nombres}\n\nEscribe el número:`);
-    const idx = parseInt(elegido, 10) - 1;
-    if (isNaN(idx) || idx < 0 || idx >= alumnosCache.length) return;
-    aExportar = [alumnosCache[idx]];
+    const alumnoId = document.getElementById('hist-alumno-select').value;
+    if (!alumnoId) { alert('Elige un alumno de la lista.'); return; }
+    const alumno = alumnosCache.find(a => a.id === alumnoId);
+    if (!alumno) return;
+    aExportar = [alumno];
   }
 
   const msg = document.getElementById('export-msg');
@@ -538,17 +547,31 @@ function renderAlumnos(lista) {
 
 function renderSelectAlumnos() {
   const select = document.getElementById('ajuste-alumno-select');
-  if (!select) return;
-  const actual = select.value;
-  select.innerHTML = '<option value="">— Elige un alumno —</option>';
-  alumnosCache.forEach(a => {
-    const opt = document.createElement('option');
-    opt.value = a.id;
-    opt.textContent = a.nombre;
-    select.appendChild(opt);
-  });
-  // Conserva la selección si el alumno sigue en la lista tras recargar.
-  if (actual && alumnosCache.some(a => a.id === actual)) select.value = actual;
+  if (select) {
+    const actual = select.value;
+    select.innerHTML = '<option value="">— Elige un alumno —</option>';
+    alumnosCache.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.id;
+      opt.textContent = a.nombre;
+      select.appendChild(opt);
+    });
+    // Conserva la selección si el alumno sigue en la lista tras recargar.
+    if (actual && alumnosCache.some(a => a.id === actual)) select.value = actual;
+  }
+
+  const selectHist = document.getElementById('hist-alumno-select');
+  if (selectHist) {
+    const actualHist = selectHist.value;
+    selectHist.innerHTML = '<option value="">— Elige un alumno —</option>';
+    alumnosCache.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.id;
+      opt.textContent = a.nombre;
+      selectHist.appendChild(opt);
+    });
+    if (actualHist && alumnosCache.some(a => a.id === actualHist)) selectHist.value = actualHist;
+  }
 }
 
 async function agregarAlumno(e) {
@@ -714,27 +737,31 @@ async function guardarEvaluacion() {
     return x.fecha === fecha && Number(x.bloque) === bloque;
   });
 
-  if (duplicada) {
-    const anterior = (duplicada.data().calificacion || 0).toFixed(1);
-    const alumnoNombre = (alumnosCache.find(a => a.id === alumnoId) || {}).nombre || 'este alumno';
-    const reemplazar = confirm(
-      `Ya calificaste a ${alumnoNombre} el ${fecha} (Bloque ${bloque}) con ${anterior}/10.\n\n` +
-      `¿Quieres REEMPLAZAR esa calificación por ${calificacion.toFixed(1)}/10?\n\n` +
-      `Si eliges Cancelar, no se guarda nada y se conserva la anterior.`
-    );
-    if (!reemplazar) return;
-    await setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'evaluaciones', duplicada.id), {
-      fecha, bloque, criterios, checklist, calificacion, notas, creado: serverTimestamp(),
-    });
-  } else {
-    await addDoc(collection(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'evaluaciones'), {
-      fecha, bloque, criterios, checklist, calificacion, notas, creado: serverTimestamp(),
-    });
+  try {
+    if (duplicada) {
+      const anterior = (duplicada.data().calificacion || 0).toFixed(1);
+      const alumnoNombre = (alumnosCache.find(a => a.id === alumnoId) || {}).nombre || 'este alumno';
+      const reemplazar = confirm(
+        `Ya calificaste a ${alumnoNombre} el ${fecha} (Bloque ${bloque}) con ${anterior}/10.\n\n` +
+        `¿Quieres REEMPLAZAR esa calificación por ${calificacion.toFixed(1)}/10?\n\n` +
+        `Si eliges Cancelar, no se guarda nada y se conserva la anterior.`
+      );
+      if (!reemplazar) return;
+      await setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'evaluaciones', duplicada.id), {
+        fecha, bloque, criterios, checklist, calificacion, notas, creado: serverTimestamp(),
+      });
+    } else {
+      await addDoc(collection(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'evaluaciones'), {
+        fecha, bloque, criterios, checklist, calificacion, notas, creado: serverTimestamp(),
+      });
+    }
+  } catch (err) {
+    console.error('Error guardando evaluación:', err);
+    marcarResultado('btn-guardar-eval', 'eval-msg', false, '', 'No se pudo guardar: ' + (err.message || err));
+    return;
   }
 
-  msg.textContent = '✓ Evaluación guardada.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 3000);
+  marcarResultado('btn-guardar-eval', 'eval-msg', true, '✓ Evaluación guardada.', '');
   resetRubricaYChecklist();
   alumnoEvaluandoId = null;
   document.getElementById('eval-form').hidden = true;
@@ -773,38 +800,14 @@ async function mostrarResumenAlumno(alumno) {
   resumen.innerHTML = `<p class="eval-alumno-activo">Resumen de: ${escaparHTML(alumno.nombre)}</p><p class="empty-inline">Cargando…</p>`;
   resumen.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  const base = ['grupos', grupoActivo, 'alumnos', alumno.id];
-
-  const [actSnap, evalSnap, ensSnap, asisSnap, exaSnap, intSnap] = await Promise.all([
-    getDocs(collection(db, ...base, 'actividades')).catch(() => null),
-    getDocs(collection(db, ...base, 'evaluaciones')).catch(() => null),
-    getDocs(collection(db, ...base, 'ensayos')).catch(() => null),
-    getDocs(collection(db, ...base, 'asistencias')).catch(() => null),
-    getDocs(collection(db, ...base, 'examenes')).catch(() => null),
-    getDocs(collection(db, ...base, 'intentos')).catch(() => null),
-  ]);
-
-  const ensayos = {};
-  if (ensSnap) ensSnap.docs.forEach(d => { ensayos[d.id] = d.data(); });
-  const examenes = {};
-  if (exaSnap) exaSnap.docs.forEach(d => { examenes[d.id] = d.data(); });
-  const intentos = {};
-  if (intSnap) intSnap.docs.forEach(d => { intentos[d.id] = d.data(); });
-
-  const datos = {
-    idsActividades: actSnap ? actSnap.docs.map(d => d.id) : [],
-    ensayos,
-    practicas: evalSnap ? evalSnap.docs.map(d => d.data()) : [],
-    asistencias: asisSnap ? asisSnap.docs.map(d => d.data()) : [],
-    examenes,
-    intentos,
-  };
-
+  // Usa la misma función que el PDF y el CSV, para que los tres SIEMPRE
+  // coincidan (incluye automáticamente los ajustes manuales del docente).
+  const datos = await datosDeAlumno(alumno.id);
   const bloques = [1, 2, 3].map(b => calcularBloque(b, datos));
 
   const fila = (etiqueta, r, extra) => `
     <div class="res-row">
-      <span>${etiqueta}${extra ? ` <small class="res-extra">${extra}</small>` : ''}</span>
+      <span>${etiqueta}${extra ? ` <small class="res-extra">${extra}</small>` : ''}${r.manual ? ' <small class="res-extra">· ajuste manual</small>' : ''}</span>
       <strong>${r.pts.toFixed(1)} / ${r.tope}</strong>
     </div>`;
 
@@ -938,14 +941,17 @@ function renderBloquesActivos() {
 
 async function guardarBloquesActivos() {
   if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
-  await setDoc(doc(db, 'grupos', grupoActivo, 'config', 'bloques'), {
-    activos: bloquesActivos,
-    actualizado: serverTimestamp(),
-  });
-  const msg = document.getElementById('bloques-msg');
-  msg.textContent = '\u2713 Guardado. Los alumnos solo pueden responder los bloques abiertos.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 4000);
+  try {
+    await setDoc(doc(db, 'grupos', grupoActivo, 'config', 'bloques'), {
+      activos: bloquesActivos,
+      actualizado: serverTimestamp(),
+    });
+  } catch (err) {
+    console.error('Error guardando bloques abiertos:', err);
+    marcarResultado('btn-guardar-bloques', 'bloques-msg', false, '', 'No se pudo guardar: ' + (err.message || err));
+    return;
+  }
+  marcarResultado('btn-guardar-bloques', 'bloques-msg', true, '\u2713 Guardado. Los alumnos solo pueden responder los bloques abiertos.', '');
 }
 
 // ---------- ASISTENCIA ----------
@@ -1008,16 +1014,19 @@ async function guardarAsistencia() {
   const fecha = document.getElementById('asis-fecha').value;
   if (!fecha) { alert('Elige una fecha.'); return; }
 
-  const msg = document.getElementById('asis-msg');
-  await Promise.all(alumnosCache.map(a => {
-    const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
-    const bloque = parseInt(document.getElementById('asis-bloque').value, 10);
-    return setDoc(ref, { estado: asistenciaEstados[a.id] || 'presente', fecha, bloque, actualizado: serverTimestamp() });
-  }));
+  try {
+    await Promise.all(alumnosCache.map(a => {
+      const ref = doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias', fecha);
+      const bloque = parseInt(document.getElementById('asis-bloque').value, 10);
+      return setDoc(ref, { estado: asistenciaEstados[a.id] || 'presente', fecha, bloque, actualizado: serverTimestamp() });
+    }));
+  } catch (err) {
+    console.error('Error guardando asistencia:', err);
+    marcarResultado('btn-guardar-asistencia', 'asis-msg', false, '', 'No se pudo guardar: ' + (err.message || err));
+    return;
+  }
 
-  msg.textContent = '✓ Asistencia guardada.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 3000);
+  marcarResultado('btn-guardar-asistencia', 'asis-msg', true, '✓ Asistencia guardada.', '');
 }
 
 // ---------- ENSAYOS (bitácoras semanales manuscritas) ----------
@@ -1223,24 +1232,24 @@ async function guardarPreguntasSemana() {
   const activaEl = document.getElementById('ens-preguntas-activa');
   const activo = activaEl ? activaEl.checked : false;
 
-  await setDoc(doc(db, 'grupos', grupoActivo, 'ensayos_preguntas', String(semana)), {
-    semana: parseInt(semana, 10),
-    preguntas,
-    activo,
-    actualizado: serverTimestamp(),
-  });
+  try {
+    await setDoc(doc(db, 'grupos', grupoActivo, 'ensayos_preguntas', String(semana)), {
+      semana: parseInt(semana, 10),
+      preguntas,
+      activo,
+      actualizado: serverTimestamp(),
+    });
+  } catch (err) {
+    console.error('Error guardando preguntas:', err);
+    marcarResultado('btn-guardar-preguntas', 'ens-preguntas-msg', false, '', 'No se pudo guardar: ' + (err.message || err));
+    return;
+  }
 
   preguntasSemanaActual = preguntas;
   renderPreguntasSemana();
 
-  const msg = document.getElementById('ens-preguntas-msg');
-  if (msg) {
-    msg.textContent = activo
-      ? '✓ Preguntas guardadas y activas para los alumnos.'
-      : '✓ Preguntas guardadas (todavía no activas para los alumnos).';
-    msg.hidden = false;
-    setTimeout(() => { msg.hidden = true; }, 4000);
-  }
+  marcarResultado('btn-guardar-preguntas', 'ens-preguntas-msg', true,
+    activo ? '✓ Preguntas guardadas y activas para los alumnos.' : '✓ Preguntas guardadas (todavía no activas para los alumnos).', '');
 }
 
 async function cargarEnsayos() {
@@ -1304,72 +1313,14 @@ async function guardarEnsayos() {
     }));
   });
 
-  await Promise.all(escrituras);
-  const msg = document.getElementById('ens-msg');
-  msg.textContent = '✓ Ensayos guardados.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 3000);
-}
-
-// ---------- EXÁMENES (3 parciales + final) ----------
-async function cargarExamenes() {
-  const cont = document.getElementById('examenes-lista');
-  const empty = document.getElementById('examenes-empty');
-  if (!cont) return;
-  cont.innerHTML = '';
-
-  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
-  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
-  empty.hidden = true;
-
-  const cual = document.getElementById('exa-select').value;
-
-  const datos = {};
-  await Promise.all(alumnosCache.map(async (a) => {
-    try {
-      const snap = await getDoc(doc(db, 'grupos', grupoActivo, 'alumnos', a.id, 'examenes', String(cual)));
-      datos[a.id] = snap.exists() ? snap.data() : { calificacion: '' };
-    } catch { datos[a.id] = { calificacion: '' }; }
-  }));
-
-  alumnosCache.forEach(a => {
-    const d = datos[a.id] || {};
-    const val = (d.calificacion !== null && d.calificacion !== undefined && d.calificacion !== '') ? d.calificacion : '';
-    const row = document.createElement('div');
-    row.className = 'ens-row';
-    row.dataset.alumnoId = a.id;
-    row.innerHTML = `
-      <span class="ens-check"><span class="student-name">${escaparHTML(a.nombre)}</span></span>
-      <input type="number" min="0" max="10" step="0.1" class="exa-calif" value="${val}" placeholder="Calif.">
-    `;
-    cont.appendChild(row);
-  });
-}
-
-async function guardarExamenes() {
-  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
-  const cual = document.getElementById('exa-select').value;
-
-  const filas = document.querySelectorAll('#examenes-lista .ens-row');
-  await Promise.all([...filas].map(row => {
-    const alumnoId = row.dataset.alumnoId;
-    const num = row.querySelector('.exa-calif');
-    const ref = doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', String(cual));
-    // Campo vacío = quitar el ajuste manual y dejar que mande la nota del
-    // examen en línea (si la hay).
-    if (num.value === '') return deleteDoc(ref).catch(() => {});
-    return setDoc(ref, {
-      examen: cual,
-      calificacion: parseFloat(num.value),
-      origen: 'ajuste del docente',
-      actualizado: serverTimestamp(),
-    });
-  }));
-
-  const msg = document.getElementById('exa-msg');
-  msg.textContent = '\u2713 Calificaciones guardadas.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 3000);
+  try {
+    await Promise.all(escrituras);
+  } catch (err) {
+    console.error('Error guardando ensayos:', err);
+    marcarResultado('btn-guardar-ensayos', 'ens-msg', false, '', 'No se pudo guardar: ' + (err.message || err));
+    return;
+  }
+  marcarResultado('btn-guardar-ensayos', 'ens-msg', true, '✓ Ensayos guardados.', '');
 }
 
 // ---------- EXAMEN EN LÍNEA ----------
@@ -1411,13 +1362,16 @@ function renderExamenesAbiertos() {
 
 async function guardarExamenesAbiertos() {
   if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
-  await setDoc(doc(db, 'grupos', grupoActivo, 'config', 'examenes'), {
-    abiertos: examenesAbiertos, actualizado: serverTimestamp(),
-  });
-  const msg = document.getElementById('abiertos-msg');
-  msg.textContent = '\u2713 Guardado.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 3000);
+  try {
+    await setDoc(doc(db, 'grupos', grupoActivo, 'config', 'examenes'), {
+      abiertos: examenesAbiertos, actualizado: serverTimestamp(),
+    });
+  } catch (err) {
+    console.error('Error guardando exámenes abiertos:', err);
+    marcarResultado('btn-guardar-examenes-abiertos', 'abiertos-msg', false, '', 'No se pudo guardar: ' + (err.message || err));
+    return;
+  }
+  marcarResultado('btn-guardar-examenes-abiertos', 'abiertos-msg', true, '\u2713 Guardado.', '');
 }
 
 async function cargarIntentos() {
@@ -1596,16 +1550,19 @@ async function publicarAviso() {
   const texto = document.getElementById('aviso-texto').value.trim();
   if (!titulo && !texto) { alert('Escribe al menos un título o contenido.'); return; }
 
-  await addDoc(collection(db, 'grupos', grupoActivo, 'avisos'), {
-    titulo, texto, creado: serverTimestamp(),
-  });
+  try {
+    await addDoc(collection(db, 'grupos', grupoActivo, 'avisos'), {
+      titulo, texto, creado: serverTimestamp(),
+    });
+  } catch (err) {
+    console.error('Error publicando aviso:', err);
+    marcarResultado('btn-publicar-aviso', 'aviso-msg', false, '', 'No se pudo publicar: ' + (err.message || err));
+    return;
+  }
 
   document.getElementById('aviso-titulo').value = '';
   document.getElementById('aviso-texto').value = '';
-  const msg = document.getElementById('aviso-msg');
-  msg.textContent = '\u2713 Aviso publicado.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 3000);
+  marcarResultado('btn-publicar-aviso', 'aviso-msg', true, '\u2713 Aviso publicado.', '');
   cargarAvisos();
 }
 
@@ -1613,6 +1570,27 @@ function escaparHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+// Da retroalimentación visual inmediata tras un guardado: el botón se pone
+// verde un instante (éxito) o rojo (no se pudo), además del texto de siempre.
+function marcarResultado(botonId, msgId, exito, textoExito, textoError) {
+  const boton = document.getElementById(botonId);
+  if (boton) {
+    boton.style.transition = 'background-color .15s ease, color .15s ease';
+    boton.style.backgroundColor = exito ? '#4A5D3C' : '#A63D2F';
+    boton.style.color = '#fff';
+    setTimeout(() => {
+      boton.style.backgroundColor = '';
+      boton.style.color = '';
+    }, 1100);
+  }
+  const msg = document.getElementById(msgId);
+  if (msg) {
+    msg.textContent = exito ? textoExito : textoError;
+    msg.hidden = false;
+    setTimeout(() => { msg.hidden = true; }, exito ? 3000 : 6000);
+  }
 }
 
 // ---------- AJUSTE MANUAL (override por alumno y bloque de cualquier rubro) ----------
@@ -1699,25 +1677,27 @@ async function guardarAjusteManual() {
   const asistencia = parseFloat(document.getElementById('ajuste-asistencia').value) || 0;
   const examenPts = parseFloat(document.getElementById('ajuste-examen').value) || 0;
 
-  await setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ajustes', bloque), {
-    participacion, practicas, ensayos, asistencia,
-    actualizado: serverTimestamp(),
-  });
+  try {
+    await setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ajustes', bloque), {
+      participacion, practicas, ensayos, asistencia,
+      actualizado: serverTimestamp(),
+    });
 
-  // El campo Examen se guarda en su propio lugar (el mismo que usa la
-  // pestaña "Exámenes"): puntos del bloque (0-30) → calificación 0-10.
-  await setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', bloque), {
-    examen: bloque,
-    calificacion: examenPts / 3,
-    origen: 'ajuste del docente',
-    actualizado: serverTimestamp(),
-  });
+    // El campo Examen se guarda en su propio lugar (el mismo que usa la
+    // pestaña "Exámenes"): puntos del bloque (0-30) → calificación 0-10.
+    await setDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', bloque), {
+      examen: bloque,
+      calificacion: examenPts / 3,
+      origen: 'ajuste del docente',
+      actualizado: serverTimestamp(),
+    });
+  } catch (err) {
+    console.error('Error guardando ajuste manual:', err);
+    marcarResultado('btn-guardar-ajuste', 'ajuste-msg', false, '', 'No se pudo guardar: ' + (err.message || err));
+    return;
+  }
 
-  const msg = document.getElementById('ajuste-msg');
-  msg.textContent = '\u2713 Ajustes guardados.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 3000);
-
+  marcarResultado('btn-guardar-ajuste', 'ajuste-msg', true, '\u2713 Ajustes guardados.', '');
   cargarAjusteAlumnoBloque();
 }
 
@@ -1732,13 +1712,15 @@ async function quitarAjusteManual() {
   const ok = confirm(`¿Quitar los ajustes manuales de ${alumno?.nombre || 'este alumno'} en el Bloque ${bloque}?\n\nVolverá a calcularse automáticamente en los 5 rubros, incluido el Examen.`);
   if (!ok) return;
 
-  await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ajustes', bloque)).catch(() => {});
-  await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', bloque)).catch(() => {});
+  try {
+    await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'ajustes', bloque));
+    await deleteDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'examenes', bloque));
+  } catch (err) {
+    console.error('Error quitando ajustes:', err);
+    marcarResultado('btn-quitar-ajuste', 'ajuste-msg', false, '', 'No se pudo quitar el ajuste: ' + (err.message || err));
+    return;
+  }
 
-  const msg = document.getElementById('ajuste-msg');
-  msg.textContent = '\u2713 Ajustes quitados — vuelve a calcular automático.';
-  msg.hidden = false;
-  setTimeout(() => { msg.hidden = true; }, 3000);
-
+  marcarResultado('btn-quitar-ajuste', 'ajuste-msg', true, '\u2713 Ajustes quitados — vuelve a calcular automático.', '');
   cargarAjusteAlumnoBloque();
 }
