@@ -49,6 +49,26 @@ function coincide(subtema, termino) {
   return enTitulo || enContenido;
 }
 
+// Recorta un fragmento del párrafo donde aparece el término, con un poco de
+// contexto antes y después, para que el resultado se entienda sin tener que
+// entrar al subtema. Si el término solo aparece en el título, no hay
+// fragmento que mostrar (devuelve '').
+function fragmentoCoincidente(subtema, termino, contexto = 70) {
+  if (!termino) return '';
+  const t = termino.toLowerCase();
+  const parrafo = (subtema.contenido || []).find(p => p.toLowerCase().includes(t));
+  if (!parrafo) return '';
+
+  const idx = parrafo.toLowerCase().indexOf(t);
+  const inicio = Math.max(0, idx - contexto);
+  const fin = Math.min(parrafo.length, idx + termino.length + contexto);
+
+  let frag = parrafo.slice(inicio, fin);
+  if (inicio > 0) frag = '…' + frag;
+  if (fin < parrafo.length) frag = frag + '…';
+  return frag;
+}
+
 function render(termino) {
   const root = document.getElementById('blocks-root');
   const noResults = document.getElementById('no-results');
@@ -76,12 +96,18 @@ function render(termino) {
     const list = document.createElement('ul');
     list.className = 'comp-topic-list';
     visibles.forEach(s => {
+      const fragmento = fragmentoCoincidente(s, termino);
+      // Pasamos el término de búsqueda a tema.html para que, si ahí también
+      // se implementa, pueda saltar directo al párrafo exacto.
+      const href = `tema.html?id=${encodeURIComponent(s.id)}` +
+        (termino ? `&buscar=${encodeURIComponent(termino)}` : '');
       const li = document.createElement('li');
       li.innerHTML = `
-        <a href="tema.html?id=${encodeURIComponent(s.id)}">
+        <a href="${href}">
           <span class="topic-id">${s.id}</span>
           <span>${resaltar(s.titulo, termino)}</span>
         </a>
+        ${fragmento ? `<p class="search-snippet" style="margin:2px 0 10px; font-size:.85em; color:#5C544A; line-height:1.4;">${resaltar(fragmento, termino)}</p>` : ''}
       `;
       list.appendChild(li);
     });
