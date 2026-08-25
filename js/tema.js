@@ -4,6 +4,10 @@
 // línea: "§ " = título de sección corta, "RECUERDA/IMPORTANTE/NOTA:" = caja
 // destacada, "• " = punto de una lista (se agrupan en un solo <ul>), y
 // cualquier otra línea = párrafo normal.
+//
+// Si se llega aquí con ?buscar=término (por ejemplo, desde un resultado de
+// compendio.html), ese término se resalta en todo el contenido y la página
+// salta automáticamente al primer párrafo donde aparece.
 
 const DATA_FILES = ['data/bloque1.json', 'data/bloque2.json', 'data/bloque3.json'];
 
@@ -13,6 +17,17 @@ function escaparHTML(str) {
   return div.innerHTML;
 }
 
+// Igual que escaparHTML, pero además envuelve en <mark> las coincidencias
+// del término buscado (si lo hay). Siempre escapa primero, así que es seguro
+// aunque el texto traiga caracteres especiales.
+function resaltarTexto(texto, termino) {
+  const escapado = escaparHTML(texto);
+  if (!termino) return escapado;
+  const seguro = termino.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`(${seguro})`, 'ig');
+  return escapado.replace(re, '<mark class="tema-highlight">$1</mark>');
+}
+
 function tipoDeLinea(linea) {
   if (linea.startsWith('§ ')) return 'titulo';
   if (/^(RECUERDA|IMPORTANTE|NOTA):/i.test(linea)) return 'callout';
@@ -20,13 +35,13 @@ function tipoDeLinea(linea) {
   return 'parrafo';
 }
 
-function renderContenido(contenido) {
+function renderContenido(contenido, termino) {
   let html = '';
   let bulletBuffer = [];
 
   const cerrarLista = () => {
     if (bulletBuffer.length) {
-      html += `<ul class="tema-bullet-list">${bulletBuffer.map(b => `<li>${escaparHTML(b)}</li>`).join('')}</ul>`;
+      html += `<ul class="tema-bullet-list">${bulletBuffer.map(b => `<li>${resaltarTexto(b, termino)}</li>`).join('')}</ul>`;
       bulletBuffer = [];
     }
   };
@@ -41,14 +56,14 @@ function renderContenido(contenido) {
     cerrarLista();
 
     if (tipo === 'titulo') {
-      html += `<h3 class="tema-section-title">${escaparHTML(linea.slice(2))}</h3>`;
+      html += `<h3 class="tema-section-title">${resaltarTexto(linea.slice(2), termino)}</h3>`;
     } else if (tipo === 'callout') {
       const m = linea.match(/^(RECUERDA|IMPORTANTE|NOTA):\s*(.*)$/i);
       const etiqueta = m[1].toUpperCase();
       const resto = m[2];
-      html += `<div class="tema-callout"><span class="tema-callout-tag">${etiqueta}</span><p>${escaparHTML(resto)}</p></div>`;
+      html += `<div class="tema-callout"><span class="tema-callout-tag">${etiqueta}</span><p>${resaltarTexto(resto, termino)}</p></div>`;
     } else {
-      html += `<p>${escaparHTML(linea)}</p>`;
+      html += `<p>${resaltarTexto(linea, termino)}</p>`;
     }
   });
 
@@ -59,6 +74,7 @@ function renderContenido(contenido) {
 async function init() {
   const params = new URLSearchParams(window.location.search);
   const idBuscado = params.get('id');
+  const termino = (params.get('buscar') || '').trim();
   const root = document.getElementById('tema-root');
   const pager = document.getElementById('tema-pager');
 
@@ -88,16 +104,33 @@ async function init() {
 
   document.title = `${s.titulo} — Bases Culinarias`;
 
+  const notaBusqueda = termino
+    ? `<p class="tema-buscar-nota" style="margin:0 0 16px; font-size:.85em; color:#8A8177;">
+        Resultado para "<strong>${escaparHTML(termino)}</strong>" —
+        <a href="compendio.html?buscar=${encodeURIComponent(termino)}">ver todos los resultados</a>
+      </p>`
+    : '';
+
   root.innerHTML = `
     <article class="tema-card">
       <p class="tema-block-label">Bloque ${actual.bloqueNum} · ${escaparHTML(actual.bloqueNombre)}</p>
       <div class="tema-head">
         <span class="tema-id">${escaparHTML(s.id)}</span>
-        <h1>${escaparHTML(s.titulo)}</h1>
+        <h1>${resaltarTexto(s.titulo, termino)}</h1>
       </div>
-      ${renderContenido(s.contenido)}
+      ${notaBusqueda}
+      ${renderContenido(s.contenido, termino)}
     </article>
   `;
+
+  // Si venimos de una búsqueda, salta directo al primer párrafo donde
+  // aparece el término (en vez de dejar al alumno a buscarlo a mano).
+  if (termino) {
+    requestAnimationFrame(() => {
+      const marca = root.querySelector('mark.tema-highlight');
+      if (marca) marca.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
 
   // Pager anterior / siguiente
   const anterior = idx > 0 ? plano[idx - 1] : null;
