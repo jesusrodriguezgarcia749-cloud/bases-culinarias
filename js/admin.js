@@ -137,6 +137,7 @@ const _hoy = new Date();
 on('asis-fecha', 'change', cargarAsistencia);
 on('asis-bloque', 'change', cargarAsistencia);
 on('btn-guardar-asistencia', 'click', guardarAsistencia);
+on('hist-asis-bloque', 'change', cargarHistorialAsistencia);
 on('ens-semana-select', 'change', () => { cargarPreguntasSemana(); cargarEnsayos(); });
 on('btn-guardar-ensayos', 'click', guardarEnsayos);
 on('btn-agregar-pregunta', 'click', () => {
@@ -190,7 +191,7 @@ function cargarTabActiva() {
   if (tab === 'evaluar') renderListaEvaluar();
   if (tab === 'historial') { renderBloquesReporte(); cargarHistorial(); }
   if (tab === 'participacion') { cargarBloquesActivos(); cargarParticipacion(); }
-  if (tab === 'asistencia') cargarAsistencia();
+  if (tab === 'asistencia') { cargarAsistencia(); cargarHistorialAsistencia(); }
   if (tab === 'ensayos') { poblarSelectSemanas(); cargarPreguntasSemana(); cargarEnsayos(); }
   if (tab === 'enlinea') { cargarExamenesAbiertos(); cargarIntentos(); }
   if (tab === 'avisos') cargarAvisos();
@@ -820,6 +821,10 @@ async function mostrarResumenAlumno(alumno) {
         ${fila('Ensayos', x.ensayos, `${x.ensayos.entregados}/${x.ensayos.deTotal} bitácoras`)}
         ${fila('Prácticas de cocina', x.practicas, `${x.practicas.cuantas}/${x.practicas.deTotal} prácticas`)}
         ${fila('Asistencia', x.asistencia, `${x.asistencia.clases}/${x.asistencia.deTotal} clases · ${x.asistencia.conteo.falta} faltas`)}
+        <details class="prog-detalle-bloque" style="margin:-4px 0 10px;">
+          <summary>Ver días — Bloque ${x.bloque}</summary>
+          ${diasCalendarioHTML((datos.asistencias || []).filter(a => Number(a.bloque) === x.bloque).sort((a, b) => (a.fecha || '').localeCompare(b.fecha || '')))}
+        </details>
         ${fila('Examen', x.examen, x.examen.calificacion !== null ? `${x.examen.calificacion}/10 · ${x.examen.origen}` : 'sin presentar')}
         <div class="res-row res-total">
           <span>Total Bloque ${x.bloque}</span>
@@ -1027,6 +1032,75 @@ async function guardarAsistencia() {
   }
 
   marcarResultado('btn-guardar-asistencia', 'asis-msg', true, '✓ Asistencia guardada.', '');
+}
+
+// Dibuja la leyenda de colores + la fila de días (reutilizado tanto por el
+// historial grupal de aquí abajo como por el resumen individual de
+// Historial). Mismo diseño visual que ya usa "Mi progreso" del alumno.
+function diasCalendarioHTML(dias) {
+  if (dias.length === 0) return '<p class="empty-inline">Sin días registrados en este bloque.</p>';
+  return `
+    <div class="prog-cal-leyenda">
+      <span><i class="cal-dot cal-presente"></i> Presente</span>
+      <span><i class="cal-dot cal-justificado"></i> Justificado</span>
+      <span><i class="cal-dot cal-retardo"></i> Retardo</span>
+      <span><i class="cal-dot cal-falta"></i> Falta</span>
+    </div>
+    <div class="prog-calendario">
+      ${dias.map(a => {
+        const estado = a.estado || 'presente';
+        const f = (a.fecha || '').split('-');
+        const dia = f.length === 3 ? `${f[2]}/${f[1]}` : (a.fecha || '?');
+        return `<div class="cal-dia cal-${estado}" title="${a.fecha || ''} — ${ETIQUETA_ESTADO[estado] || estado}"><span class="cal-fecha">${dia}</span></div>`;
+      }).join('')}
+    </div>`;
+}
+
+// Historial de asistencia de TODO el grupo: un calendario desplegable por
+// alumno, para ver de un vistazo quién ha faltado sin tener que generar PDF.
+async function cargarHistorialAsistencia() {
+  const cont = document.getElementById('hist-asis-lista');
+  const empty = document.getElementById('hist-asis-empty');
+  if (!cont) return;
+  cont.innerHTML = '';
+
+  if (!grupoActivo) { empty.hidden = false; empty.textContent = 'Elige un grupo primero.'; return; }
+  if (alumnosCache.length === 0) { empty.hidden = false; empty.textContent = 'Este grupo aún no tiene alumnos.'; return; }
+  empty.hidden = true;
+
+  const bloque = parseInt(document.getElementById('hist-asis-bloque').value, 10);
+  cont.innerHTML = '<p class="empty-inline">Cargando…</p>';
+
+  const filas = [];
+  for (const a of alumnosCache) {
+    let asistencias = [];
+    try {
+      const snap = await getDocs(collection(db, 'grupos', grupoActivo, 'alumnos', a.id, 'asistencias'));
+      asistencias = snap.docs.map(d => d.data());
+    } catch { /* sin registros */ }
+    filas.push({ alumno: a, asistencias });
+  }
+
+  cont.innerHTML = filas.map(({ alumno, asistencias }) => {
+    const delBloque = asistencias
+      .filter(x => Number(x.bloque) === bloque)
+      .sort((a, b) => (a.fecha || '').localeCompare(b.fecha || ''));
+
+    const conteo = { presente: 0, retardo: 0, justificado: 0, falta: 0 };
+    delBloque.forEach(a => { const e = a.estado || 'presente'; if (conteo[e] !== undefined) conteo[e]++; });
+    const resumen = [
+      conteo.presente ? `${conteo.presente} asist.` : null,
+      conteo.retardo ? `${conteo.retardo} retardo${conteo.retardo !== 1 ? 's' : ''}` : null,
+      conteo.justificado ? `${conteo.justificado} justif.` : null,
+      conteo.falta ? `${conteo.falta} falta${conteo.falta !== 1 ? 's' : ''}` : null,
+    ].filter(Boolean).join(' · ') || 'Sin registros';
+
+    return `
+      <details class="prog-detalle-bloque" style="margin-bottom:10px;">
+        <summary><strong>${escaparHTML(alumno.nombre)}</strong> — ${resumen}</summary>
+        ${diasCalendarioHTML(delBloque)}
+      </details>`;
+  }).join('');
 }
 
 // ---------- ENSAYOS (bitácoras semanales manuscritas) ----------
