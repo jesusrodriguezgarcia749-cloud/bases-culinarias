@@ -14,7 +14,7 @@ import {
 
 import { firebaseConfig } from "./firebase-config.js";
 import { calcularBloque, PTS_POR_ENSAYO } from "./calculo.js";
-import { reporteGrupo, reporteAlumno } from "./reporte.js";
+import { reporteGrupo, reporteAlumno, reporteExamenAlumno, reporteExamenGrupo } from "./reporte.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -1400,6 +1400,19 @@ async function guardarEnsayos() {
 // ---------- EXAMEN EN LÍNEA ----------
 var examenesAbiertos = [];
 
+// Caché de bancos de reactivos por bloque — evita volver a descargar el JSON
+// cada vez que el docente descarga otro examen del mismo bloque.
+var bancosExamenCache = {};
+
+async function cargarBancoExamen(bloque) {
+  if (bancosExamenCache[bloque]) return bancosExamenCache[bloque];
+  const res = await fetch(`data/examen_bloque${bloque}.json`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`No se encontró el banco de reactivos del Bloque ${bloque} (HTTP ${res.status})`);
+  const banco = await res.json();
+  bancosExamenCache[bloque] = banco;
+  return banco;
+}
+
 async function cargarExamenesAbiertos() {
   const cont = document.getElementById('examenes-abiertos-lista');
   if (!cont) return;
@@ -1459,6 +1472,22 @@ async function cargarIntentos() {
   empty.hidden = true;
 
   const bloque = document.getElementById('enlinea-bloque').value;
+
+  // Botón "descargar todos", insertado una sola vez arriba de la lista.
+  // Se hace por JS (no vive en admin.html) para no depender de tocar ese
+  // archivo — el botón se crea la primera vez y luego solo se reutiliza.
+  let btnTodos = document.getElementById('btn-descargar-examenes-grupo');
+  if (!btnTodos) {
+    btnTodos = document.createElement('button');
+    btnTodos.id = 'btn-descargar-examenes-grupo';
+    btnTodos.type = 'button';
+    btnTodos.className = 'btn btn-ghost-dark btn-small';
+    btnTodos.style.marginBottom = '14px';
+    cont.parentNode.insertBefore(btnTodos, cont);
+  }
+  btnTodos.textContent = `Descargar todos los exámenes del Bloque ${bloque} (PDF)`;
+  btnTodos.onclick = () => descargarExamenesGrupo(bloque);
+
   cont.innerHTML = '<p class="empty-inline">Cargando…</p>';
 
   const filas = [];
@@ -1488,7 +1517,10 @@ async function cargarIntentos() {
           <span class="student-name">${escaparHTML(alumno.nombre)}</span>
           <span class="intento-estado est-ok">${Number(est.calificacion).toFixed(1)} / 10</span>
         </div>
-        <p class="intento-detalle">${est.aciertos}/${est.total} correctas${est.automatico ? ' · se acabó el tiempo' : ''}${est.salidas ? ` · ${est.salidas} salida(s) previas` : ''}</p>`;
+        <p class="intento-detalle">${est.aciertos}/${est.total} correctas${est.automatico ? ' · se acabó el tiempo' : ''}${est.salidas ? ` · ${est.salidas} salida(s) previas` : ''}</p>
+        <div class="intento-acciones">
+          <button class="btn btn-ghost-dark btn-small" data-descargar-examen="${alumno.id}">Descargar examen (PDF)</button>
+        </div>`;
     } else if (est.estado === 'bloqueado') {
       div.innerHTML = `
         <div class="intento-top">
@@ -1522,6 +1554,60 @@ async function cargarIntentos() {
   cont.querySelectorAll('[data-extra]').forEach(b => {
     b.addEventListener('click', () => darTiempoExtra(b.dataset.extra, bloque));
   });
+  cont.querySelectorAll('[data-descargar-examen]').forEach(b => {
+    b.addEventListener('click', () => descargarExamenAlumno(b.dataset.descargarExamen, bloque));
+  });
+}
+
+// Descarga el examen resuelto de UN alumno (pregunta por pregunta, con su
+// respuesta y la correcta) en una ventana lista para imprimir o guardar PDF.
+async function descargarExamenAlumno(alumnoId, bloque) {
+  const alumno = alumnosCache.find(a => a.id === alumnoId);
+  if (!alumno) return;
+
+  try {
+    const [snap, banco] = await Promise.all([
+      getDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumnoId, 'intentos', String(bloque))),
+      cargarBancoExamen(bloque),
+    ]);
+    if (!snap.exists()) { alert('Este alumno no tiene un examen registrado en este bloque.'); return; }
+    const intento = snap.data();
+    await reporteExamenAlumno({ nombreGrupo: nombreDelGrupo(), alumno, bloque, intento, banco });
+  } catch (err) {
+    console.error('Error generando el PDF del examen:', err);
+    alert('No se pudo generar el examen: ' + (err.message || err));
+  }
+}
+
+// Descarga en un solo PDF el examen resuelto de TODOS los alumnos del grupo
+// para el bloque elegido (uno por página). Los que no hayan entregado
+// aparecen con una nota, para dejar constancia de que no presentaron.
+async function descargarExamenesGrupo(bloque) {
+  if (!grupoActivo) { alert('Elige un grupo primero.'); return; }
+  if (alumnosCache.length === 0) { alert('Este grupo no tiene alumnos.'); return; }
+
+  const btnTodos = document.getElementById('btn-descargar-examenes-grupo');
+  const textoOriginal = btnTodos ? btnTodos.textContent : '';
+  if (btnTodos) { btnTodos.disabled = true; btnTodos.textContent = 'Generando…'; }
+
+  try {
+    const banco = await cargarBancoExamen(bloque);
+    const entregas = [];
+    for (const alumno of alumnosCache) {
+      let intento = null;
+      try {
+        const snap = await getDoc(doc(db, 'grupos', grupoActivo, 'alumnos', alumno.id, 'intentos', String(bloque)));
+        intento = snap.exists() ? snap.data() : null;
+      } catch { /* sin intento */ }
+      entregas.push({ alumno, intento });
+    }
+    await reporteExamenGrupo({ nombreGrupo: nombreDelGrupo(), bloque, entregas, banco });
+  } catch (err) {
+    console.error('Error generando el PDF de exámenes del grupo:', err);
+    alert('No se pudo generar el PDF: ' + (err.message || err));
+  } finally {
+    if (btnTodos) { btnTodos.disabled = false; btnTodos.textContent = textoOriginal; }
+  }
 }
 
 // Reabre un examen cerrado por salida de pantalla. Conserva respuestas y le
